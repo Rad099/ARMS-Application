@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "filename" : "DALL·E 2024-01-02 20.46.34 - Create a modern, borderless logo for an air quality monitoring app, using contemporary color schemes with a clear, transparent background. The logo sh 2.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "DALL·E 2024-01-02 20.46.34 - Create a modern, borderless logo for an air quality monitoring app, using contemporary color schemes with a clear, transparent background. The logo sh 1.png",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "DALL·E 2024-01-02 20.46.34 - Create a modern, borderless logo for an air quality monitoring app, using contemporary color schemes with a clear, transparent background. The logo sh.png",
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

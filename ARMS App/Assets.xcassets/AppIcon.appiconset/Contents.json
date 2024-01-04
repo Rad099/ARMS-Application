@@ -1,0 +1,14 @@
+{
+  "images" : [
+    {
+      "filename" : "DALL·E 2024-01-02 20.36.58 - A modern, borderless logo for an air quality monitoring app, using contemporary color schemes. The logo should feature a meter-like design to emphasiz.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "size" : "1024x1024"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
