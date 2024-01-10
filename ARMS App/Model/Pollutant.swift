@@ -10,7 +10,7 @@ import Foundation
 
 
 // store constant breakpoints
-struct Breakpoints {
+struct Breakpoints: Codable {
     var bpLow: Double
     var bpHigh: Double
     var indexHigh: Double
@@ -18,10 +18,10 @@ struct Breakpoints {
 }
 
 // pollutant class to populate pollutant values
-class pollutant {
+class pollutant: Codable {
     var name: String
-    var hourbreakpoints: [Breakpoints]?
-    var indoorBreakpoints: [Breakpoints]? // TODO: confirm implementation (indoor AQI or concentration) UPDATE: indoorAQI likley
+    private var hourbreakpoints: [Breakpoints]?
+    private var indoorBreakpoints: [Breakpoints]? // TODO: confirm implementation (indoor AQI or concentration) UPDATE: indoorAQI likley
     
     var currentHourIndex = 0
     var currentIndoorIndex = 0

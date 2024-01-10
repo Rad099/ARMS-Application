@@ -19,6 +19,13 @@ class HomeViewController: UIViewController, BLEManagerDelegate {
     var co: pollutant?
    
    
+    // labels
+    @IBOutlet weak var typeLabel: UILabel!
+    @IBOutlet weak var uvLabel: UILabel!
+    @IBOutlet weak var aqLabel: UILabel!
+    @IBOutlet weak var modeSwitch: UISwitch!
+    @IBOutlet weak var timeLabel: UILabel!
+    
     
     // outlets for progress bars
     @IBOutlet weak var UVProgressView: CircularProgressBar!
@@ -35,25 +42,10 @@ class HomeViewController: UIViewController, BLEManagerDelegate {
         print("App started")
         bleManager = BLEManager()
         bleManager.delegate = self
+        updateMode()
         
         
-        // init progress view Max values
-        UVProgressView.maxValue = 11
-        PM1ProgressView.maxValue = 500
-        PM2_5ProgressView.maxValue = 500
-        PM10ProgressView.maxValue = 500
-        VOCProgressView.maxValue = 500
-        COProgressView.maxValue = 500
-        
-        // For testing: apply hard coded values
-        UVProgressView.progressValue = 0
-        PM1ProgressView.progressValue = CGFloat(50)
-        PM2_5ProgressView.progressValue = CGFloat(200)
-        PM10ProgressView.progressValue = CGFloat(400)
-        VOCProgressView.progressValue = CGFloat(50)
-        COProgressView.progressValue = CGFloat(100)
 
-        
     }
     
     func didUpdateValue(_ uvIndex: Float) {
@@ -61,6 +53,53 @@ class HomeViewController: UIViewController, BLEManagerDelegate {
             guard let strongSelf = self else { return }
                 strongSelf.UVProgressView.progressValue = CGFloat(uvIndex)
             }
+    }
+    
+    @IBAction func updateAQIOnPressed(_ sender: UISwitch) {
+        updateMode()
+    }
+    
+    func updateMode() {
+       if modeSwitch.isOn {
+           
+           typeLabel.text = "1-Hour AQI Index"
+           aqLabel.text = "AQI"
+           timeLabel.text = "New data in... 1 hour"
+            // init progress view Max values
+            UVProgressView.maxValue = 11
+            PM1ProgressView.maxValue = 500
+            PM2_5ProgressView.maxValue = 500
+            PM10ProgressView.maxValue = 500
+            VOCProgressView.maxValue = 500
+            COProgressView.maxValue = 500
+            
+            // For testing: apply hard coded values
+            UVProgressView.progressValue = 0
+            PM1ProgressView.progressValue = CGFloat(pm1!.currentHourIndex)
+            PM2_5ProgressView.progressValue = CGFloat(pm2_5!.currentHourIndex)
+            PM10ProgressView.progressValue = CGFloat(pm10!.currentHourIndex)
+            VOCProgressView.progressValue = CGFloat(0)
+            COProgressView.progressValue = CGFloat(co!.currentHourIndex)
+       } else {
+           // init progress view Max values
+           typeLabel.text = "Indoor AQI Index"
+           aqLabel.text = "IAQI"
+           timeLabel.text = "New data in... 3 minutes"
+           UVProgressView.maxValue = 11
+           PM1ProgressView.maxValue = 100
+           PM2_5ProgressView.maxValue = 100
+           PM10ProgressView.maxValue = 100
+           VOCProgressView.maxValue = 100
+           COProgressView.maxValue = 100
+           
+           // For testing: apply hard coded values
+           UVProgressView.progressValue = 0
+           PM1ProgressView.progressValue = CGFloat(pm1!.currentIndoorIndex)
+           PM2_5ProgressView.progressValue = CGFloat(pm2_5!.currentIndoorIndex)
+           PM10ProgressView.progressValue = CGFloat(pm10!.currentIndoorIndex)
+           VOCProgressView.progressValue = CGFloat(50)
+           COProgressView.progressValue = CGFloat(co!.currentIndoorIndex)
+       }
     }
     
     

@@ -119,6 +119,8 @@
 			children = (
 				51A4B9EF2B450F1800CCF637 /* View */,
 				51A4B9ED2B450EDA00CCF637 /* Controllers */,
+				51A4B9EE2B450EFE00CCF637 /* Model */,
+				516232CD2B41657700186E99 /* Main.storyboard */,
 				516232D02B41657800186E99 /* Assets.xcassets */,
 				516232D22B41657800186E99 /* LaunchScreen.storyboard */,
 				516232D52B41657800186E99 /* Info.plist */,
@@ -150,8 +152,6 @@
 				516232CB2B41657700186E99 /* HomeViewController.swift */,
 				51A4B9F22B468AF700CCF637 /* ExposureViewController.swift */,
 				51A4B9F02B46859700CCF637 /* SettingsViewController.swift */,
-				51A4B9EE2B450EFE00CCF637 /* Model */,
-				516232CD2B41657700186E99 /* Main.storyboard */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";

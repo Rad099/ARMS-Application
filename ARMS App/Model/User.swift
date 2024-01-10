@@ -21,7 +21,8 @@ struct thresholds: Codable {
 
 // user class
 class user: Codable {
-    // user specifics
+    
+    // user properties
     var age: Int
     var heartDisease: Bool
     var asthma: Bool
@@ -40,7 +41,13 @@ class user: Codable {
     }
     
     // SECTION: set thresholds algorithm
-    
+    private func setHourThresholds() {
+        
+    }
+ 
+    private func setIndoorThresholds() {
+        
+    }
     
     // SECTION: get methods
     func getPM() -> (pm1: Int, pm2_5: Int, pm10: Int) {
@@ -102,6 +109,8 @@ class user: Codable {
 
 }
 
+
+// Manager class for UserDefault store and load
 class userManager {
     static func saveUser(user: user) {
         let encoder = JSONEncoder()

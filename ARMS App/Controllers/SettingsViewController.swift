@@ -8,7 +8,7 @@
 import UIKit
 
 class SettingsViewController: UIViewController, UITextFieldDelegate {
-    var User: user?
+    var User: user!
     
     // initialize shared classes
     var pm1: pollutant?
@@ -35,12 +35,12 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         lungText.delegate = self
         asthmaText.delegate = self
     
-        nameLabel.text = ("Name: \(User!.name)")
-        nameText.text = ("\(User!.name)")
-        ageText.text = ("\(User!.age)")
-        heartText.text = ("\(User!.heartDisease)")
-        lungText.text = ("\(User!.lungDisease)")
-        asthmaText.text = ("\(User!.asthma)")
+        nameLabel.text = ("Name: \(User.name)")
+        nameText.text = ("\(User.name)")
+        ageText.text = ("\(User.age)")
+        heartText.text = ("\(User.heartDisease)")
+        lungText.text = ("\(User.lungDisease)")
+        asthmaText.text = ("\(User.asthma)")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -50,12 +50,16 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func confirmUpdateTapped(_ sender: UIButton) {
-        updateUser()
-        userManager.saveUser(user: User!)
-        updateButton.setTitle("User Updated!", for: .normal)
+        if updateUser() == 0 {
+            userManager.saveUser(user: User!)
+            updateButton.setTitle("User Updated!", for: .normal)
+        } else {
+            updateButton.setTitle("Error Updating!", for: .normal)
+        }
+
     }
     
-    private func updateUser() {
+    private func updateUser() -> Int {
         let newName = nameText.text ?? ""
         let newAge = ageText.text ?? ""
         let newHeartStatus = heartText.text ?? ""
@@ -68,17 +72,20 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
            verfiy = 0
         } else if newAge == "" {
            verfiy = 0
-        } else if (newHeartStatus == "True" || newHeartStatus == "False") {
+        } else if (newHeartStatus != "true" || newHeartStatus != "false") {
             verfiy = 0
-        } else if (newLungStatus == "True" || newLungStatus == "False") {
+        } else if (newLungStatus != "true" || newLungStatus != "false") {
             verfiy = 0
-        } else if (newAsthmaStatus == "True" || newAsthmaStatus == "False") {
-          verfiy = 0
+        } else if (newAsthmaStatus != "true" || newAsthmaStatus != "false") {
+            verfiy = 0
         }
         
         if (verfiy == 1) {
-            User?.setUpdates(name: newName, age: Int(newAge)!, heart: Bool(newHeartStatus)!, lung: Bool(newLungStatus)!, asthma: Bool(newAsthmaStatus)!)
+            User.setUpdates(name: newName, age: Int(newAge)!, heart: Bool(newHeartStatus)!, lung: Bool(newLungStatus)!, asthma: Bool(newAsthmaStatus)!)
+            return 0
         }
+        
+        return 1
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
