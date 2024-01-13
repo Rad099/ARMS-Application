@@ -17,14 +17,21 @@ struct Breakpoints: Codable {
     var indexLow: Double
 }
 
+protocol PollutantDelegate: AnyObject {
+    func didUpdateHourIndex(_ index: Int, _ name: String)
+    func didUpdateIndoorIndex(_ index: Int, _ name: String)
+}
+
 // pollutant class to populate pollutant values
 class pollutant: Codable {
+    weak var delegate: PollutantDelegate?
     var name: String
     private var hourbreakpoints: [Breakpoints]?
     private var indoorBreakpoints: [Breakpoints]? // TODO: confirm implementation (indoor AQI or concentration) UPDATE: indoorAQI likley
     
     var currentHourIndex = 0
     var currentIndoorIndex = 0
+    
     
     init(name: String) {
         self.name = name
@@ -75,8 +82,10 @@ class pollutant: Codable {
         
         if index == "hour" {
             self.currentHourIndex = Int(ceil(currIndex))
+            delegate?.didUpdateHourIndex(self.currentHourIndex, self.name)
         } else if (index == "indoor") {
             self.currentIndoorIndex = Int(ceil(currIndex))
+            delegate?.didUpdateIndoorIndex(self.currentIndoorIndex, self.name)
         }
     }
     
@@ -84,11 +93,40 @@ class pollutant: Codable {
     func getHourIndex() -> Int {
         return self.currentHourIndex
     }
-    
     func getIndoorIndex() -> Int {
         return self.currentIndoorIndex
     }
+    
+    // MARK: - Codable
+       enum CodingKeys: String, CodingKey {
+           case name
+           case hourbreakpoints
+           case indoorBreakpoints
+           case currentHourIndex
+           case currentIndoorIndex
+       }
+
+       // Implement custom init(from:) and encode(to:) if needed
+       required init(from decoder: Decoder) throws {
+           let container = try decoder.container(keyedBy: CodingKeys.self)
+           name = try container.decode(String.self, forKey: .name)
+           hourbreakpoints = try container.decodeIfPresent([Breakpoints].self, forKey: .hourbreakpoints)
+           indoorBreakpoints = try container.decodeIfPresent([Breakpoints].self, forKey: .indoorBreakpoints)
+           currentHourIndex = try container.decode(Int.self, forKey: .currentHourIndex)
+           currentIndoorIndex = try container.decode(Int.self, forKey: .currentIndoorIndex)
+       }
+
+       func encode(to encoder: Encoder) throws {
+           var container = encoder.container(keyedBy: CodingKeys.self)
+           try container.encode(name, forKey: .name)
+           try container.encodeIfPresent(hourbreakpoints, forKey: .hourbreakpoints)
+           try container.encodeIfPresent(indoorBreakpoints, forKey: .indoorBreakpoints)
+           try container.encode(currentHourIndex, forKey: .currentHourIndex)
+           try container.encode(currentIndoorIndex, forKey: .currentIndoorIndex)
+       }
 }
+
+
 
 
 // special case: uv

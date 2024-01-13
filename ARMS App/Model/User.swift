@@ -7,49 +7,129 @@
 //  Includes the user class
 
 import Foundation
+import CloudKit
 
-
-// thresholds struct
-struct thresholds: Codable {
-    var pm1Thresh = 0
-    var pm2_5Thresh = 0
-    var pm10Thresh = 0
-    var vocThresh = 0
-    var coThresh = 0
-    var uvThresh = 0
-}
 
 // user class
-class user: Codable {
-    
+class User {
     // user properties
+    var recordID: CKRecord.ID?
     var age: Int
     var heartDisease: Bool
     var asthma: Bool
     var lungDisease: Bool
     var name: String
+    var resporatoryDisease: Bool
+
     
-    // threshold instance
-    var userThresholds = thresholds()
+    // threshold instances
+    var AmbientThresholds = defaultAmbientThresholds
+    var ageType = "Not Set"
+    //var IndoorThresholds = thresholds()
     
-    init(name: String, age: Int, heart: Bool, asthma: Bool, lung: Bool) {
+    init(name: String, age: Int, heart: Bool, asthma: Bool, lung: Bool, resp: Bool) {
         self.age = age
         self.heartDisease = heart
         self.asthma = asthma
         self.lungDisease = lung
         self.name = name
+        self.resporatoryDisease = resp
+        self.AmbientThresholds = setHourThresholds()
+        self.ageType = setAgeRange(age: age)
     }
     
     // SECTION: set thresholds algorithm
-    private func setHourThresholds() {
+    private func setHourThresholds() -> pollutantThresholds {
+        var thresholds = defaultAmbientThresholds
+        if self.heartDisease {
+            decreaseThreshold(thresh: &thresholds, AQItype: .co)
+        }
         
-    }
- 
-    private func setIndoorThresholds() {
+        if self.lungDisease {
+            decreaseThreshold(thresh: &thresholds, AQItype: .pm1)
+            decreaseThreshold(thresh: &thresholds, AQItype: .pm2_5)
+        }
+        
+        return thresholds
         
     }
     
+    //private func setIndoorThresholds() {
+        
+    //}
+    
+    private func setAgeRange(age: Int) -> String {
+        var type: String
+        if age < 18 && age > 0 {
+            type = "young"
+        } else if age > 18 && age < 55 {
+            type = "middle"
+        } else {
+            type = "elderly"
+        }
+        
+        return type
+        
+    }
+    
+    // CloudKit loading and Storing
+    init(record: CKRecord) {
+        self.recordID = record.recordID
+        self.name = record["name"] as? String ?? ""
+        self.age = record["age"] as? Int ?? 0
+        self.heartDisease = record["heartDisease"] as? Bool ?? false
+        self.asthma = record["asthma"] as? Bool ?? false
+        self.lungDisease = record["lungDisease"] as? Bool ?? false
+        self.resporatoryDisease = record["lungDisease"] as? Bool ?? false
+        saveAgeRangeToCloud(range: self.ageType)
+        
+    }
+    
+    func convertAgeRangeToCkRecord(range: String) -> CKRecord {
+        let record = CKRecord(recordType: "AgeRange")
+        if range == "young" {
+            record["young"] = range as CKRecordValue
+        }
+        if range ==  "middle" {
+            record["middle-aged"] = range as CKRecordValue
+        }
+        if range == "elderly" {
+            record["elderly"] = range as CKRecordValue
+        }
+        if range == "not set" {
+            record["Not Set"] = range as CKRecordValue
+        }
+        
+        return record
+       
+    }
+    
+    func saveAgeRangeToCloud(range: String) {
+        let record = convertAgeRangeToCkRecord(range: self.ageType)
+        CKContainer.default().publicCloudDatabase.save(record) {savedRecord, error in
+            if let error = error {
+                print("Could not save age range to cloud")
+            } else {
+                print("Age range saved")
+            }
+            
+        }
+    }
+
+    
+    func toCKRecord() -> CKRecord {
+           let record = CKRecord(recordType: "User", recordID: recordID ?? CKRecord.ID())
+           record["name"] = name
+           record["age"] = age
+           record["heartDisease"] = heartDisease
+           record["asthma"] = asthma
+           record["lungDisease"] = lungDisease
+           // Save thresholds to record
+           return record
+       }
+    
     // SECTION: get methods
+    /*
     func getPM() -> (pm1: Int, pm2_5: Int, pm10: Int) {
         print("pm1: \(self.userThresholds.pm1Thresh) pm2.5: \(self.userThresholds.pm2_5Thresh) pm10: \(self.userThresholds.pm10Thresh)")
         return (self.userThresholds.pm1Thresh, self.userThresholds.pm2_5Thresh, self.userThresholds.pm10Thresh)
@@ -69,6 +149,8 @@ class user: Codable {
         print("uv threshold: \(self.userThresholds.uvThresh)")
         return self.userThresholds.uvThresh
     }
+     
+     */
     
     func getAge() -> Int {
         return self.age
@@ -109,24 +191,20 @@ class user: Codable {
 
 }
 
-
-// Manager class for UserDefault store and load
-class userManager {
-    static func saveUser(user: user) {
-        let encoder = JSONEncoder()
-        if let encoded = try? encoder.encode(user) {
-            UserDefaults.standard.set(encoded, forKey: "SavedUser")
+func saveUser(_ user: User) {
+    let record = user.toCKRecord()
+    CKContainer.default().publicCloudDatabase.save(record) { (savedRecord, error) in
+        guard error == nil else {
+            print("Error saving user: \(error!.localizedDescription)")
+            return
         }
-    }
-    
-    static func loadUser() -> user? {
-        if let savedUserData = UserDefaults.standard.object(forKey: "SavedUser") as? Data {
-            let decoder = JSONDecoder()
-            if let loadedUser = try? decoder.decode(user.self, from: savedUserData) {
-                return loadedUser
-            }
-        }
-        
-        return nil
+        print("User saved successfully.")
     }
 }
+
+
+
+
+
+
+

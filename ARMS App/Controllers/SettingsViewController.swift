@@ -8,7 +8,7 @@
 import UIKit
 
 class SettingsViewController: UIViewController, UITextFieldDelegate {
-    var User: user!
+    var User: User!
     
     // initialize shared classes
     var pm1: pollutant?
@@ -50,8 +50,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func confirmUpdateTapped(_ sender: UIButton) {
-        if updateUser() == 0 {
-            userManager.saveUser(user: User!)
+        if updateUser() == 1 {
             updateButton.setTitle("User Updated!", for: .normal)
         } else {
             updateButton.setTitle("Error Updating!", for: .normal)

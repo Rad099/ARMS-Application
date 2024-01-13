@@ -18,6 +18,7 @@ class CircularProgressBar: UIView {
         let label = UILabel()
         label.textAlignment = .center
         label.font = UIFont.boldSystemFont(ofSize: 16)
+        label.textColor = UIColor.white
         return label
     }()
 

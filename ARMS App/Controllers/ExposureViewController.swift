@@ -9,7 +9,7 @@ import UIKit
 
 
 class ExposureViewController: UITableViewController {
-    var User: user?
+    var User: User?
     
     // initialize shared classes
     var pm1: pollutant?

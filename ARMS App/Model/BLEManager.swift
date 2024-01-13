@@ -8,15 +8,22 @@
 import Foundation
 import CoreBluetooth
 
-protocol BLEManagerDelegate: AnyObject {
-    func didUpdateValue(_ uvIndex: Float)
-}
+//protocol BLEManagerDelegate: AnyObject {
+    //func didShareClass()
+//}
 
 class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
-    weak var delegate: BLEManagerDelegate?
+    var uv: pollutant?
+    var pm1: pollutant?
+    var pm2_5: pollutant?
+    var pm10: pollutant?
+    var voc: pollutant?
+    var co: pollutant?
+    //weak var delegate: BLEManagerDelegate?
     var centralManager: CBCentralManager!
     var photon: CBPeripheral!
     var AQIChar: CBCharacteristic!
+    
     
     override init() {
         super.init()
@@ -83,9 +90,10 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
             // Assuming the float is in the first 4 bytes of the 8-byte buffer
             let value = data.withUnsafeBytes { $0.load(as: Float.self) }
             print("Received AQI Index: \(value)")
-            let uv: Int = Int(round(value))
-            
-            delegate?.didUpdateValue(Float(uv))
+            let uvData: Double = Double(value)
+            //delegate?.didShareClass()
+            uv!.setIndex(forConcentration: uvData, forIndex: "Hour")
+        
         }
 
     }
