@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CloudKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -13,15 +14,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        
+      /*
         ICloudManager.checkICloudStatus { isSignedIn, errorMessage in
             if isSignedIn {
                 self.loadMainInterface()
             } else if let message = errorMessage {
-                self.showAlert(message: message)
+                self.postAlertNotification(message: message)
             }
         }
-       
+       */
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
@@ -57,23 +58,33 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
     }
     
-    func showAlert(message: String) {
-        let alert = UIAlertController(title: "ICloud Required", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        if let rootVC = window?.rootViewController {
-            rootVC.present(alert, animated: true, completion: nil)
-        }
-    }
-    
-    func loadMainInterface() {
+
+
+    /*
+    func showMainViewController() {
+        // Load and present the main app interface
         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
-            let mainController = TabViewController()
+            let mainController = TabViewController() // Main app interface
             window.rootViewController = mainController
             self.window = window
             window.makeKeyAndVisible()
         }
     }
+    
+    func showNewUserViewController() {
+        // Present a view controller that collects user data
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+            let window = UIWindow(windowScene: windowScene)
+            let newUserController = NewUserViewController() // ViewController to collect new user data
+            window.rootViewController = newUserController
+            self.window = window
+            window.makeKeyAndVisible()
+        }
+    }
+*/
+   
+
 
 
 }

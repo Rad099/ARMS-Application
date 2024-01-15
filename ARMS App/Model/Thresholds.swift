@@ -15,28 +15,38 @@ enum PollutantType {
     case co
 }
 
-struct AQIRange {
-    var lowerLimit1: Int
-    var upperLimit1: Int
-    var lowerLimit2: Int
-    var upperLimit2: Int
-    var lowerLimit3: Int
-    var upperLimit3: Int
-    var lowerLimit4: Int
-    var upperLimit4: Int
-    var lowerLimit5: Int
-    var upperLimit5: Int
-    var lowerLimit6: Int
-    var upperLimit6: Int
+struct AQIRange: Codable {
+    var lowerLimit1: UInt16
+    var upperLimit1: UInt16
+    var lowerLimit2: UInt16
+    var upperLimit2: UInt16
+    var lowerLimit3: UInt16
+    var upperLimit3: UInt16
+    var lowerLimit4: UInt16
+    var upperLimit4: UInt16
+    var lowerLimit5: UInt16
+    var upperLimit5: UInt16
+    var lowerLimit6: UInt16
+    var upperLimit6: UInt16
 }
 
-struct pollutantThresholds {
+struct pollutantThresholds: Codable {
     var pm1: AQIRange
     var pm2_5: AQIRange
     var pm10: AQIRange
     var voc: AQIRange
     var co: AQIRange
 }
+
+func serializeThresholds(_ thresholds: pollutantThresholds) -> Data? {
+    try? JSONEncoder().encode(thresholds)
+}
+
+func deserializeThresholds(_ data: Data) -> pollutantThresholds? {
+    try? JSONDecoder().decode(pollutantThresholds.self, from: data)
+}
+
+
 
 func decreaseThreshold(thresh: inout pollutantThresholds, AQItype: PollutantType) {
     switch AQItype {
@@ -73,4 +83,3 @@ let defaultAmbientAQI = AQIRange(lowerLimit1: 0, upperLimit1: 50, lowerLimit2: 5
 
 
 let defaultAmbientThresholds = pollutantThresholds(pm1: defaultAmbientAQI, pm2_5: defaultAmbientAQI, pm10: defaultAmbientAQI, voc: defaultAmbientAQI, co: defaultAmbientAQI)
-

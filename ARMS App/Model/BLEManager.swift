@@ -98,6 +98,11 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
 
     }
     
+    func updateValues(v1: UInt16, v2: UInt16, v3: UInt16, v4: UInt16, v5: UInt16, v6: UInt16) {
+        pm1?.currentHourIndex = v1
+        pm2_5?.currentHourIndex = v2
+    }
+    
     
     
     

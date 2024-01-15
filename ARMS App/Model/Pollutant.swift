@@ -28,9 +28,8 @@ class pollutant: Codable {
     var name: String
     private var hourbreakpoints: [Breakpoints]?
     private var indoorBreakpoints: [Breakpoints]? // TODO: confirm implementation (indoor AQI or concentration) UPDATE: indoorAQI likley
-    
-    var currentHourIndex = 0
-    var currentIndoorIndex = 0
+    var currentHourIndex: UInt16 = 0
+    var currentIndoorIndex: UInt16 = 0
     
     
     init(name: String) {
@@ -81,19 +80,19 @@ class pollutant: Codable {
         let currIndex = indexDiff/bpDiff * (concentration - currBreakpoint!.bpLow) + currBreakpoint!.indexLow
         
         if index == "hour" {
-            self.currentHourIndex = Int(ceil(currIndex))
-            delegate?.didUpdateHourIndex(self.currentHourIndex, self.name)
+            self.currentHourIndex = UInt16(ceil(currIndex))
+            delegate?.didUpdateHourIndex(Int(self.currentHourIndex), self.name)
         } else if (index == "indoor") {
-            self.currentIndoorIndex = Int(ceil(currIndex))
-            delegate?.didUpdateIndoorIndex(self.currentIndoorIndex, self.name)
+            self.currentIndoorIndex = UInt16(ceil(currIndex))
+            delegate?.didUpdateIndoorIndex(Int(self.currentIndoorIndex), self.name)
         }
     }
     
     // get methods
-    func getHourIndex() -> Int {
+    func getHourIndex() -> UInt16 {
         return self.currentHourIndex
     }
-    func getIndoorIndex() -> Int {
+    func getIndoorIndex() -> UInt16 {
         return self.currentIndoorIndex
     }
     
@@ -112,8 +111,8 @@ class pollutant: Codable {
            name = try container.decode(String.self, forKey: .name)
            hourbreakpoints = try container.decodeIfPresent([Breakpoints].self, forKey: .hourbreakpoints)
            indoorBreakpoints = try container.decodeIfPresent([Breakpoints].self, forKey: .indoorBreakpoints)
-           currentHourIndex = try container.decode(Int.self, forKey: .currentHourIndex)
-           currentIndoorIndex = try container.decode(Int.self, forKey: .currentIndoorIndex)
+           currentHourIndex = try container.decode(UInt16.self, forKey: .currentHourIndex)
+           currentIndoorIndex = try container.decode(UInt16.self, forKey: .currentIndoorIndex)
        }
 
        func encode(to encoder: Encoder) throws {

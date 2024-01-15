@@ -46,6 +46,7 @@ class HomeViewController: UIViewController, PollutantDelegate {
         // Create the gradient view
         setupInitialGradient()
         print("App started")
+        print("current user: \(User?.recordID)")
         //bleManager.delegate = self
         pm1?.delegate = self
         pm2_5?.delegate = self
@@ -55,9 +56,6 @@ class HomeViewController: UIViewController, PollutantDelegate {
         
 
         updateMode()
-        
-        
-
     }
     
     func setupInitialGradient() {
@@ -142,12 +140,12 @@ class HomeViewController: UIViewController, PollutantDelegate {
             COProgressView.maxValue = 500
             
             // For testing: apply hard coded values
-            UVProgressView.progressValue = CGFloat(uv!.currentHourIndex)
-            PM1ProgressView.progressValue = CGFloat(pm1!.currentHourIndex)
-            PM2_5ProgressView.progressValue = CGFloat(pm2_5!.currentHourIndex)
-            PM10ProgressView.progressValue = CGFloat(pm10!.currentHourIndex)
+           UVProgressView.progressValue = CGFloat(uv!.currentHourIndex)
+           PM1ProgressView.progressValue = CGFloat(pm1?.currentHourIndex ?? 0)
+            PM2_5ProgressView.progressValue = CGFloat(pm2_5?.currentHourIndex ?? 0)
+            PM10ProgressView.progressValue = CGFloat(pm10?.currentHourIndex ?? 0)
             VOCProgressView.progressValue = CGFloat(0)
-            COProgressView.progressValue = CGFloat(co!.currentHourIndex)
+            COProgressView.progressValue = CGFloat(co?.currentHourIndex ?? 0)
             
        } else {
            // init progress view Max values

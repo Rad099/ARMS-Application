@@ -21,9 +21,5 @@
 			</array>
 		</dict>
 	</dict>
-	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Allow this app to use BLE?</string>
-	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>Allow to connect to peripherals?</string>
 </dict>
 </plist>

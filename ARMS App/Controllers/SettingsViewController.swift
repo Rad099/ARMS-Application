@@ -80,7 +80,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         }
         
         if (verfiy == 1) {
-            User.setUpdates(name: newName, age: Int(newAge)!, heart: Bool(newHeartStatus)!, lung: Bool(newLungStatus)!, asthma: Bool(newAsthmaStatus)!)
+           // User.setUpdates(name: newName, age: Int(newAge)!, heart: Bool(newHeartStatus)!, lung: Bool(newLungStatus)!, asthma: Bool(newAsthmaStatus)!)
             return 0
         }
         

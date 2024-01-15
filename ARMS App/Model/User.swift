@@ -20,6 +20,7 @@ class User {
     var lungDisease: Bool
     var name: String
     var resporatoryDisease: Bool
+    var email: String
 
     
     // threshold instances
@@ -27,16 +28,18 @@ class User {
     var ageType = "Not Set"
     //var IndoorThresholds = thresholds()
     
-    init(name: String, age: Int, heart: Bool, asthma: Bool, lung: Bool, resp: Bool) {
+    init(name: String = "", age: Int = 0, heart: Bool = false, asthma: Bool = false, lung: Bool = false, resp: Bool = false, email: String = "") {
         self.age = age
         self.heartDisease = heart
         self.asthma = asthma
         self.lungDisease = lung
         self.name = name
         self.resporatoryDisease = resp
+        self.email = email
         self.AmbientThresholds = setHourThresholds()
         self.ageType = setAgeRange(age: age)
     }
+    
     
     // SECTION: set thresholds algorithm
     private func setHourThresholds() -> pollutantThresholds {
@@ -49,7 +52,6 @@ class User {
             decreaseThreshold(thresh: &thresholds, AQItype: .pm1)
             decreaseThreshold(thresh: &thresholds, AQItype: .pm2_5)
         }
-        
         return thresholds
         
     }
@@ -58,6 +60,17 @@ class User {
         
     //}
     
+    private func storeThresholds(thresholds: pollutantThresholds) {
+        //let thresholds = PollutantThresholds(/* initialize with your data */)
+        if let thresholdsData = serializeThresholds(thresholds) {
+            let record = CKRecord(recordType: "User")
+            record["pollutantThresholds"] = thresholdsData as CKRecordValue
+            // Save the record to CloudKit as usual
+        }
+
+    }
+    
+ 
     private func setAgeRange(age: Int) -> String {
         var type: String
         if age < 18 && age > 0 {
@@ -81,52 +94,11 @@ class User {
         self.asthma = record["asthma"] as? Bool ?? false
         self.lungDisease = record["lungDisease"] as? Bool ?? false
         self.resporatoryDisease = record["lungDisease"] as? Bool ?? false
-        saveAgeRangeToCloud(range: self.ageType)
-        
+        self.email = record["email"] as? String ?? ""
+        //saveAgeRangeToCloud(range: self.ageType)
+        storeThresholds(thresholds: self.AmbientThresholds)
     }
     
-    func convertAgeRangeToCkRecord(range: String) -> CKRecord {
-        let record = CKRecord(recordType: "AgeRange")
-        if range == "young" {
-            record["young"] = range as CKRecordValue
-        }
-        if range ==  "middle" {
-            record["middle-aged"] = range as CKRecordValue
-        }
-        if range == "elderly" {
-            record["elderly"] = range as CKRecordValue
-        }
-        if range == "not set" {
-            record["Not Set"] = range as CKRecordValue
-        }
-        
-        return record
-       
-    }
-    
-    func saveAgeRangeToCloud(range: String) {
-        let record = convertAgeRangeToCkRecord(range: self.ageType)
-        CKContainer.default().publicCloudDatabase.save(record) {savedRecord, error in
-            if let error = error {
-                print("Could not save age range to cloud")
-            } else {
-                print("Age range saved")
-            }
-            
-        }
-    }
-
-    
-    func toCKRecord() -> CKRecord {
-           let record = CKRecord(recordType: "User", recordID: recordID ?? CKRecord.ID())
-           record["name"] = name
-           record["age"] = age
-           record["heartDisease"] = heartDisease
-           record["asthma"] = asthma
-           record["lungDisease"] = lungDisease
-           // Save thresholds to record
-           return record
-       }
     
     // SECTION: get methods
     /*
@@ -165,7 +137,7 @@ class User {
     }
     
     // SECTION: put method
-    func setUpdates(name: String, age: Int, heart: Bool, lung: Bool, asthma: Bool) {
+    func setUpdates(name: String, age: Int, heart: Bool, lung: Bool, asthma: Bool, resp: Bool) {
         if self.name != name {
             self.name = name
         }
@@ -186,21 +158,69 @@ class User {
             self.asthma = asthma
         }
         
+        if self.resporatoryDisease != resporatoryDisease {
+            self.resporatoryDisease = resp
+        }
+        
     }
     
 
 }
 
-func saveUser(_ user: User) {
-    let record = user.toCKRecord()
-    CKContainer.default().publicCloudDatabase.save(record) { (savedRecord, error) in
-        guard error == nil else {
-            print("Error saving user: \(error!.localizedDescription)")
-            return
-        }
-        print("User saved successfully.")
-    }
+extension User {
+    func toCKRecord() -> CKRecord {
+           let record = CKRecord(recordType: "User", recordID: recordID ?? CKRecord.ID())
+           record["Name"] = name
+           record["Age"] = age
+           record["HeartDisease"] = heartDisease
+           record["Asthma"] = asthma
+           record["LungDisease"] = lungDisease
+           record["RespiratoryDisease"] = resporatoryDisease
+           record["Email"] = email
+           //record["AgeType"] = ageType
+
+           //if let thresholdsData = serializeThresholds(AmbientThresholds) {
+             //  record["AmbientPollutantThresholds"] = thresholdsData as CKRecordValue
+           //}
+            
+
+           return record
+       }
+    
+    // Convert CKRecord to User object
+    static func fromCKRecord(_ record: CKRecord) -> User? {
+           print("check here")
+            guard let name = record["Name"] as? String,
+                let age = record["Age"] as? Int64,
+                let heartDiseaseValue = record["HeartDisease"] as? Int64,
+                let asthmaValue = record["Asthma"] as? Int64,
+                let lungDiseaseValue = record["LungDisease"] as? Int64,
+                let resporatoryDiseaseValue = record["RespiratoryDisease"] as? Int64,
+                let email = record["Email"] as? String
+           else {
+                    print("this happened")
+                    return nil
+           }
+         
+          print("here now. heartDisease: \(heartDiseaseValue)")
+          let heartDisease = heartDiseaseValue != 0
+          let asthma = asthmaValue != 0
+          let lungDisease = lungDiseaseValue != 0
+          let resp = resporatoryDiseaseValue != 0
+          
+          let user = User(name: name, age: Int(age), heart: heartDisease, asthma: asthma, lung: lungDisease, resp: resp)
+
+           user.recordID = record.recordID
+
+           //if let thresholdsData = record["AmbientPollutantThresholds"] as? Data {
+            //   user.AmbientThresholds = deserializeThresholds(thresholdsData) ?? defaultAmbientThresholds
+           //}
+
+           return user
+       }
+    
 }
+
 
 
 
