@@ -57,6 +57,7 @@ class TabViewController: UITabBarController {
             DispatchQueue.main.async { [self] in
                 if isSignedIn {
                     // Handle signed-in status
+                    print("signed in to cloud")
                     return
                 } else if let message = errorMessage {
                     // Pass true to suggest closing the app
@@ -82,21 +83,28 @@ class TabViewController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.cloudManager.fetchCurrentUser { user, error in
+        print("are we here?")
+        cloudManager.fetchUserRecord { record, error in
+            print("how about here?")
             DispatchQueue.main.async {
-                if let user = user {
-                    // Use the User object here
-                    self.currentUser = user
+                if let record = record, let user = User.fromCKRecord(record) {
+                    // Record exists and User object is created
                     print("User fetched: \(user.name)")
+                    self.currentUser = user
                     self.updateChildViewControllers()
-                } else if let error = error {
-                    // Handle any errors here
-                    print("Error fetching current user: \(error.localizedDescription)")
+                } else {
+                    // Either record is nil or there was an error fetching the record
+                    if let error = error {
+                        print("Error fetching record: \(error)")
+                    } else {
+                        print("No record found")
+                    }
                     self.presentNewUserViewController()
-                    
+                    self.updateChildViewControllers()
                 }
             }
         }
+
             
 
         

@@ -10,7 +10,7 @@ import CloudKit
 import UIKit
 
 class ICloudManager: ObservableObject {
-    var db = CKContainer(identifier: "iCloud.ARMS-App").privateCloudDatabase
+    let db = CKContainer(identifier: "iCloud.ARMS-App").privateCloudDatabase
     
     func saveUser(user: User, completion: @escaping (_ record: CKRecord?, _ error: Error?) -> Void) {
         let record = user.toCKRecord()
@@ -19,31 +19,37 @@ class ICloudManager: ObservableObject {
         }
     }
     
-    func fetchCurrentUser(completion: @escaping (User?, Error?) -> Void) {
-        let userRecord = CKRecord(recordType: "User")
-        userRecord["Email"] = "userEmail"
-
-        let predicate = NSPredicate(format: "email == %@", userEmail)
+    func fetchUserRecord(completion: @escaping (CKRecord?, Error?) -> Void) {
+        let predicate = NSPredicate(value: true) // Adjust the predicate as needed
         let query = CKQuery(recordType: "User", predicate: predicate)
 
-        db.perform(query, inZoneWith: nil) { (records, error) in
-            DispatchQueue.main.async {
-                if let error = error {
-                    completion(nil, error)
-                    return
-                }
+        let queryOperation = CKQueryOperation(query: query)
+        var fetchedRecord: CKRecord?
 
-                guard let record = records?.first, let user = User.fromCKRecord(record) else {
-                    completion(nil, NSError(domain: "Error converting CKRecord to User", code: 0, userInfo: nil))
-                    return
-                }
-
-                completion(user, nil)
+        queryOperation.recordMatchedBlock = { recordID, result in
+            switch result {
+            case .success(let record):
+                print("did we get a record?")
+                fetchedRecord = record
+            case .failure(let error):
+                print("Error fetching record: \(error)")
             }
         }
+
+        queryOperation.queryResultBlock = { result in
+                switch result {
+                case .success(_):
+                    print("did this succeed?")
+                    print("fetched: \(fetchedRecord)")
+                    completion(fetchedRecord, nil)
+                case .failure(let error):
+                    completion(nil, error)
+                }
+        }
+
+        self.db.add(queryOperation)
     }
-     
-    
+
 
     func checkICloudStatus(completion: @escaping (Bool, String?) -> Void) {
         CKContainer(identifier: "iCloud.ARMS-App").accountStatus { accountStatus, error in

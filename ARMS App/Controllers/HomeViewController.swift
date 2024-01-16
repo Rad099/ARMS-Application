@@ -46,7 +46,7 @@ class HomeViewController: UIViewController, PollutantDelegate {
         // Create the gradient view
         setupInitialGradient()
         print("App started")
-        print("current user: \(User?.recordID)")
+        print("current user: \(String(describing: User?.recordID))")
         //bleManager.delegate = self
         pm1?.delegate = self
         pm2_5?.delegate = self

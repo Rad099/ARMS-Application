@@ -8,7 +8,7 @@
 import UIKit
 import CloudKit
 
-class NewUserViewController: UIViewController {
+class NewUserViewController: UIViewController, UITextFieldDelegate {
     var tempUser = User()
     let cloudManager = ICloudManager()
   
@@ -25,6 +25,8 @@ class NewUserViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        answerField.delegate = self
         showQuestion()
     }
     
@@ -77,7 +79,7 @@ class NewUserViewController: UIViewController {
     @IBAction func submitAction(_ sender: UIButton) {
         let newUser = User(name: tempUser.name, age: tempUser.age, heart: tempUser.heartDisease, asthma: tempUser.asthma, lung: tempUser.lungDisease, resp: tempUser.lungDisease, email: tempUser.email)
         saveUserToiCloud(user: newUser)
-        
+    
         if let handler = completionHandler {
             handler(newUser)
         }

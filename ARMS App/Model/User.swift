@@ -208,7 +208,7 @@ extension User {
           let lungDisease = lungDiseaseValue != 0
           let resp = resporatoryDiseaseValue != 0
           
-          let user = User(name: name, age: Int(age), heart: heartDisease, asthma: asthma, lung: lungDisease, resp: resp)
+          let user = User(name: name, age: Int(age), heart: heartDisease, asthma: asthma, lung: lungDisease, resp: resp, email: email)
 
            user.recordID = record.recordID
 
@@ -220,6 +220,7 @@ extension User {
        }
     
 }
+
 
 
 

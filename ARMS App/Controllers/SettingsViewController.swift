@@ -41,6 +41,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         heartText.text = ("\(User.heartDisease)")
         lungText.text = ("\(User.lungDisease)")
         asthmaText.text = ("\(User.asthma)")
+    
     }
     
     override func viewWillAppear(_ animated: Bool) {
