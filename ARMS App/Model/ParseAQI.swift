@@ -16,6 +16,8 @@ var pm2_5: pollutant?
 var pm10: pollutant?
 var voc: pollutant?
 var co: pollutant?
+var averages: Array<Double> = []
+
 
 /*
 func parseCharacteristic(characteristic: CBCharacteristic) {
@@ -57,4 +59,18 @@ func parseCharacteristic(characteristic: CBCharacteristic) {
     updateValues(v1: value1, v2: value2, v3: value3, v4: value4, v5: value5, v6: value6)
 }
 */
+
+func averageHourConcentration() -> Double {
+    var hourAvg = 0
+    // check if size is 12
+    if averages.count == 12 {
+        let sum = averages.reduce(0, +)
+        hourAvg = Int(sum/12)
+        averages.removeAll()
+        return Double(hourAvg)
+    }
+    
+    return -1
+    
+}
 

@@ -19,7 +19,8 @@ class TabViewController: UITabBarController {
     let pm10 = pollutant(name: "pm10")
     let voc = pollutant(name: "voc")
     let co = pollutant(name: "co")
-    let uv = pollutant(name: "uv")
+    let uv = UV(name: "uv")
+    
 
     func showAlert(message: String, shouldCloseApp: Bool = false) {
         DispatchQueue.main.async {
@@ -83,15 +84,12 @@ class TabViewController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("are we here?")
         cloudManager.fetchUserRecord { record, error in
-            print("how about here?")
             DispatchQueue.main.async {
                 if let record = record, let user = User.fromCKRecord(record) {
                     // Record exists and User object is created
                     print("User fetched: \(user.name)")
                     self.currentUser = user
-                    self.updateChildViewControllers()
                 } else {
                     // Either record is nil or there was an error fetching the record
                     if let error = error {
@@ -100,8 +98,8 @@ class TabViewController: UITabBarController {
                         print("No record found")
                     }
                     self.presentNewUserViewController()
-                    self.updateChildViewControllers()
                 }
+                self.updateChildViewControllers()
             }
         }
 
@@ -124,7 +122,7 @@ class TabViewController: UITabBarController {
         if let viewControllers = self.viewControllers {
             for viewController in viewControllers {
                 if let homeTab = viewController as? HomeViewController  {
-                    homeTab.User = self.currentUser
+                    homeTab.user = self.currentUser
                     homeTab.pm1 = self.pm1
                     homeTab.pm2_5 = self.pm2_5
                     homeTab.pm10 = self.pm10

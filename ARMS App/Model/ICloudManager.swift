@@ -29,7 +29,6 @@ class ICloudManager: ObservableObject {
         queryOperation.recordMatchedBlock = { recordID, result in
             switch result {
             case .success(let record):
-                print("did we get a record?")
                 fetchedRecord = record
             case .failure(let error):
                 print("Error fetching record: \(error)")
@@ -39,7 +38,6 @@ class ICloudManager: ObservableObject {
         queryOperation.queryResultBlock = { result in
                 switch result {
                 case .success(_):
-                    print("did this succeed?")
                     print("fetched: \(fetchedRecord)")
                     completion(fetchedRecord, nil)
                 case .failure(let error):
@@ -78,8 +76,4 @@ class ICloudManager: ObservableObject {
         
         
     }
-    
-    //func checkForExistingUserData(completion: @escaping (Bool) -> Void) {
-    
-    //}
 }

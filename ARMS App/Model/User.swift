@@ -77,8 +77,10 @@ class User {
             type = "young"
         } else if age > 18 && age < 55 {
             type = "middle"
-        } else {
+        } else if age > 55 {
             type = "elderly"
+        } else {
+            type = "not set"
         }
         
         return type
@@ -189,8 +191,7 @@ extension User {
     
     // Convert CKRecord to User object
     static func fromCKRecord(_ record: CKRecord) -> User? {
-           print("check here")
-            guard let name = record["Name"] as? String,
+          guard let name = record["Name"] as? String,
                 let age = record["Age"] as? Int64,
                 let heartDiseaseValue = record["HeartDisease"] as? Int64,
                 let asthmaValue = record["Asthma"] as? Int64,
@@ -198,11 +199,9 @@ extension User {
                 let resporatoryDiseaseValue = record["RespiratoryDisease"] as? Int64,
                 let email = record["Email"] as? String
            else {
-                    print("this happened")
-                    return nil
+                return nil
            }
          
-          print("here now. heartDisease: \(heartDiseaseValue)")
           let heartDisease = heartDiseaseValue != 0
           let asthma = asthmaValue != 0
           let lungDisease = lungDiseaseValue != 0

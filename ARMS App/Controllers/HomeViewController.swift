@@ -15,12 +15,17 @@ class HomeViewController: UIViewController, PollutantDelegate {
     var gradientView: GradientView!
     
     // initialize shared classes
-    var User: User?
+    var user: User? {
+            didSet {
+                // Update the view with new user data
+                updateUserInterface()
+            }
+        }
     var pm1: pollutant?
     var pm2_5 : pollutant?
     var pm10:pollutant?
     var co: pollutant?
-    var uv: pollutant?
+    var uv: UV?
    
    
     // labels
@@ -43,19 +48,9 @@ class HomeViewController: UIViewController, PollutantDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Create the gradient view
         setupInitialGradient()
-        print("App started")
-        print("current user: \(String(describing: User?.recordID))")
-        //bleManager.delegate = self
-        pm1?.delegate = self
-        pm2_5?.delegate = self
-        uv?.delegate = self
-        pm10?.delegate = self
-        co?.delegate = self
-        
-
-        updateMode()
+        // Create the gradient view
+        updateUserInterface()
     }
     
     func setupInitialGradient() {
@@ -69,14 +64,29 @@ class HomeViewController: UIViewController, PollutantDelegate {
        }
     
     
+    func didUpdateUVIndoor(_ index: Double) {
+        if !modeSwitch.isOn {
+            DispatchQueue.main.async { [weak self] in
+                guard let strongSelf = self else {return}
+                strongSelf.UVProgressView.progressValue = CGFloat(index)
+            }
+        }
+    }
+    
+    func didUpdateUVHour(_ index: Double) {
+        if modeSwitch.isOn {
+            DispatchQueue.main.async { [weak self] in
+                guard let strongSelf = self else {return}
+                strongSelf.UVProgressView.progressValue = CGFloat(index)
+            }
+        }
+    }
     // update hour index only when the switch is on
     func didUpdateHourIndex(_ index: Int, _ name: String) {
         if modeSwitch.isOn {
             DispatchQueue.main.async { [weak self] in // Use a weak reference to self to avoid retain cycles
                 guard let strongSelf = self else { return }
-                    if name == "uv" {
-                        strongSelf.UVProgressView.progressValue = CGFloat(index)
-                    } else if name == "pm1" {
+                    if name == "pm1" {
                         strongSelf.PM1ProgressView.progressValue = CGFloat(index)
                     } else if name == "pm2.5" {
                         strongSelf.PM2_5ProgressView.progressValue = CGFloat(index)
@@ -97,9 +107,7 @@ class HomeViewController: UIViewController, PollutantDelegate {
         if !modeSwitch.isOn {
             DispatchQueue.main.async { [weak self] in // Use a weak reference to self to avoid retain cycles
                 guard let strongSelf = self else { return }
-                    if name == "uv" {
-                        strongSelf.UVProgressView.progressValue = CGFloat(index)
-                    } else if name == "pm1" {
+                    if name == "pm1" {
                         strongSelf.PM1ProgressView.progressValue = CGFloat(index)
                     } else if name == "pm2.5" {
                         strongSelf.PM2_5ProgressView.progressValue = CGFloat(index)
@@ -122,6 +130,18 @@ class HomeViewController: UIViewController, PollutantDelegate {
         updateMode()
     }
     
+    func updateUserInterface() {
+        guard isViewLoaded, let user = user else { return }
+        print("App started")
+        //bleManager.delegate = self
+        pm1?.delegate = self
+        pm2_5?.delegate = self
+        uv?.delegate = self
+        pm10?.delegate = self
+        co?.delegate = self
+        updateMode()
+    }
+    
     
     func updateMode() {
        if modeSwitch.isOn {
@@ -140,12 +160,12 @@ class HomeViewController: UIViewController, PollutantDelegate {
             COProgressView.maxValue = 500
             
             // For testing: apply hard coded values
-           UVProgressView.progressValue = CGFloat(uv!.currentHourIndex)
-           PM1ProgressView.progressValue = CGFloat(pm1?.currentHourIndex ?? 0)
+            UVProgressView.progressValue = CGFloat(uv!.currentHourIndex)
+            PM1ProgressView.progressValue = CGFloat(pm1?.currentHourIndex ?? 20)
             PM2_5ProgressView.progressValue = CGFloat(pm2_5?.currentHourIndex ?? 0)
-            PM10ProgressView.progressValue = CGFloat(pm10?.currentHourIndex ?? 0)
-            VOCProgressView.progressValue = CGFloat(0)
-            COProgressView.progressValue = CGFloat(co?.currentHourIndex ?? 0)
+            PM10ProgressView.progressValue = CGFloat(pm10?.currentHourIndex ?? 300)
+            VOCProgressView.progressValue = CGFloat(25)
+            COProgressView.progressValue = CGFloat(co?.currentHourIndex ?? 450)
             
        } else {
            // init progress view Max values

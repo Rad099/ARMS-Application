@@ -13,7 +13,7 @@ import CoreBluetooth
 //}
 
 class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
-    var uv: pollutant?
+    var uv: UV?
     var pm1: pollutant?
     var pm2_5: pollutant?
     var pm10: pollutant?
@@ -89,11 +89,19 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         if let data = characteristic.value {
             // Assuming the float is in the first 4 bytes of the 8-byte buffer
             let value = data.withUnsafeBytes { $0.load(as: Float.self) }
-            print("Received AQI Index: \(value)")
+            print("Received concentration: \(value)")
             let uvData: Double = Double(value)
             //delegate?.didShareClass()
-            uv!.setIndex(forConcentration: uvData, forIndex: "Hour")
-        
+            
+            uv!.setIndoorIndex(index: uvData)
+            averages.append(uvData)
+            let average = averageHourConcentration()
+            if average != -1 {
+                uv!.setHourIndex(index: average)
+                print("recieved hour")
+
+            }
+                
         }
 
     }

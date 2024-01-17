@@ -20,6 +20,8 @@ struct Breakpoints: Codable {
 protocol PollutantDelegate: AnyObject {
     func didUpdateHourIndex(_ index: Int, _ name: String)
     func didUpdateIndoorIndex(_ index: Int, _ name: String)
+    func didUpdateUVIndoor(_ index: Double)
+    func didUpdateUVHour(_ index: Double)
 }
 
 // pollutant class to populate pollutant values
@@ -130,6 +132,17 @@ class pollutant: Codable {
 
 // special case: uv
 class UV: pollutant {
+    var hourIndex: Double = 0
+    var indoorIndex: Double = 0
+    func setHourIndex(index: Double) {
+        self.hourIndex = index
+        delegate?.didUpdateUVHour(self.hourIndex)
+    }
+    
+    func setIndoorIndex(index: Double) {
+        self.indoorIndex = index
+        delegate?.didUpdateUVIndoor(self.indoorIndex)
+    }
     
 }
 

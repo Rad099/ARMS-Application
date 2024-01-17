@@ -16,6 +16,7 @@ class ExposureViewController: UITableViewController {
     var pm2_5 : pollutant?
     var pm10:pollutant?
     var co: pollutant?
+    var uv: UV?
     
     override func viewDidLoad() {
         super.viewDidLoad()

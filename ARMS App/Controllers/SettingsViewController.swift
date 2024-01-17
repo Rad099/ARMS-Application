@@ -15,6 +15,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     var pm2_5 : pollutant?
     var pm10:pollutant?
     var co: pollutant?
+    var uv: UV?
     
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var nameText: UITextField!
@@ -34,7 +35,8 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         heartText.delegate = self
         lungText.delegate = self
         asthmaText.delegate = self
-    
+        
+        print("settings loaded")
         nameLabel.text = ("Name: \(User.name)")
         nameText.text = ("\(User.name)")
         ageText.text = ("\(User.age)")
