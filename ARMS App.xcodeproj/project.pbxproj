@@ -27,7 +27,7 @@
 		516865842B50DC5D0017316B /* ICloudManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516865832B50DC5D0017316B /* ICloudManager.swift */; };
 		516865862B5102640017316B /* Thresholds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516865852B5102640017316B /* Thresholds.swift */; };
 		516865882B53B4BB0017316B /* NewUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516865872B53B4BB0017316B /* NewUserViewController.swift */; };
-		5168658A2B53C5A80017316B /* NotificationExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516865892B53C5A80017316B /* NotificationExtensions.swift */; };
+		5168658A2B53C5A80017316B /* AQINotify.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516865892B53C5A80017316B /* AQINotify.swift */; };
 		51A4B9F12B46859700CCF637 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A4B9F02B46859700CCF637 /* SettingsViewController.swift */; };
 		51A4B9F32B468AF700CCF637 /* ExposureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A4B9F22B468AF700CCF637 /* ExposureViewController.swift */; };
 		51A4B9F52B468E6600CCF637 /* ParseAQI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A4B9F42B468E6600CCF637 /* ParseAQI.swift */; };
@@ -75,7 +75,7 @@
 		516865832B50DC5D0017316B /* ICloudManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICloudManager.swift; sourceTree = "<group>"; };
 		516865852B5102640017316B /* Thresholds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Thresholds.swift; sourceTree = "<group>"; };
 		516865872B53B4BB0017316B /* NewUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewUserViewController.swift; sourceTree = "<group>"; };
-		516865892B53C5A80017316B /* NotificationExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationExtensions.swift; sourceTree = "<group>"; };
+		516865892B53C5A80017316B /* AQINotify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AQINotify.swift; sourceTree = "<group>"; };
 		51A4B9F02B46859700CCF637 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		51A4B9F22B468AF700CCF637 /* ExposureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposureViewController.swift; sourceTree = "<group>"; };
 		51A4B9F42B468E6600CCF637 /* ParseAQI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseAQI.swift; sourceTree = "<group>"; };
@@ -178,7 +178,7 @@
 				516232F92B42832500186E99 /* CircularProgressBarView.swift */,
 				516865832B50DC5D0017316B /* ICloudManager.swift */,
 				5133D4992B4F24DE0024419F /* GradientView.swift */,
-				516865892B53C5A80017316B /* NotificationExtensions.swift */,
+				516865892B53C5A80017316B /* AQINotify.swift */,
 				5134E6152B4B947A00AD9F01 /* BLEManager.swift */,
 				5134E6112B4A57A900AD9F01 /* User.swift */,
 				516865852B5102640017316B /* Thresholds.swift */,
@@ -337,7 +337,7 @@
 				5134E6182B4D331D00AD9F01 /* TabViewController.swift in Sources */,
 				516232CC2B41657700186E99 /* HomeViewController.swift in Sources */,
 				516232C82B41657700186E99 /* AppDelegate.swift in Sources */,
-				5168658A2B53C5A80017316B /* NotificationExtensions.swift in Sources */,
+				5168658A2B53C5A80017316B /* AQINotify.swift in Sources */,
 				516865842B50DC5D0017316B /* ICloudManager.swift in Sources */,
 				516232CA2B41657700186E99 /* SceneDelegate.swift in Sources */,
 				516232F82B420DB500186E99 /* CBUUIDs.swift in Sources */,

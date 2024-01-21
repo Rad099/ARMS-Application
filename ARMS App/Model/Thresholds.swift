@@ -15,19 +15,14 @@ enum PollutantType {
     case co
 }
 
+struct Range: Codable {
+    var lowerLimit: UInt16
+    var upperLimit: UInt16
+}
+
 struct AQIRange: Codable {
-    var lowerLimit1: UInt16
-    var upperLimit1: UInt16
-    var lowerLimit2: UInt16
-    var upperLimit2: UInt16
-    var lowerLimit3: UInt16
-    var upperLimit3: UInt16
-    var lowerLimit4: UInt16
-    var upperLimit4: UInt16
-    var lowerLimit5: UInt16
-    var upperLimit5: UInt16
-    var lowerLimit6: UInt16
-    var upperLimit6: UInt16
+    var range: Array<Range>
+    var modified: Bool = false
 }
 
 struct pollutantThresholds: Codable {
@@ -51,35 +46,48 @@ func deserializeThresholds(_ data: Data) -> pollutantThresholds? {
 func decreaseThreshold(thresh: inout pollutantThresholds, AQItype: PollutantType) {
     switch AQItype {
         case .pm1:
-            thresh.pm1 = limitMod(range: thresh.pm1)
+        if !thresh.pm1.modified {
+            thresh.pm1.range = limitMod(ranges: thresh.pm1.range)
+            thresh.pm1.modified = true
+            }
         case .pm2_5:
-            thresh.pm2_5 = limitMod(range: thresh.pm2_5)
+        if !thresh.pm2_5.modified {
+            thresh.pm2_5.range = limitMod(ranges: thresh.pm2_5.range)
+            thresh.pm2_5.modified = true
+            }
+            
         case .pm10:
-            thresh.pm10 = limitMod(range: thresh.pm10)
+        if !thresh.pm10.modified {
+            thresh.pm10.range = limitMod(ranges: thresh.pm10.range)
+            thresh.pm10.modified = true
+        }
         case .voc:
-            thresh.voc = limitMod(range: thresh.voc)
+        if !thresh.voc.modified {
+            thresh.voc.range = limitMod(ranges: thresh.voc.range)
+            thresh.voc.modified = true
+        }
         case .co:
-            thresh.co = limitMod(range: thresh.co)
+        if !thresh.co.modified {
+            thresh.co.range = limitMod(ranges: thresh.co.range)
+            thresh.co.modified = true
+        }
     }
 }
 
-func limitMod(range: AQIRange) -> AQIRange {
-    var mod = range
-    mod.upperLimit1 -= 20
-    mod.lowerLimit2 -= 20
-    mod.upperLimit2 -= 20
-    mod.lowerLimit3 -= 20
-    mod.upperLimit3 -= 20
-    mod.lowerLimit4 -= 20
-    mod.upperLimit4 -= 20
-    mod.lowerLimit5 -= 20
-    mod.upperLimit5 -= 20
-    mod.lowerLimit6 -= 20
-    
-    return mod
-}
+func limitMod(ranges: Array<Range>) -> (Array<Range>) {
+    var modifiedRanges = ranges
+        for i in 0..<modifiedRanges.count {
+            modifiedRanges[i].lowerLimit -= 20
+            modifiedRanges[i].upperLimit -= 20
+        }
+        return modifiedRanges
+    }
 
-let defaultAmbientAQI = AQIRange(lowerLimit1: 0, upperLimit1: 50, lowerLimit2: 51, upperLimit2: 100, lowerLimit3: 101, upperLimit3: 200, lowerLimit4: 201, upperLimit4: 300, lowerLimit5: 301, upperLimit5: 400, lowerLimit6: 401, upperLimit6: 500)
+
+// defaults
+let defaultRange = [Range(lowerLimit: 0, upperLimit: 50), Range(lowerLimit: 51, upperLimit: 100), Range(lowerLimit: 101, upperLimit: 200), Range(lowerLimit: 201, upperLimit: 300), Range(lowerLimit: 301, upperLimit: 400), Range(lowerLimit: 401, upperLimit: 500)]
+
+let defaultAmbientAQI = AQIRange(range: defaultRange, modified: false)
 
 
 let defaultAmbientThresholds = pollutantThresholds(pm1: defaultAmbientAQI, pm2_5: defaultAmbientAQI, pm10: defaultAmbientAQI, voc: defaultAmbientAQI, co: defaultAmbientAQI)

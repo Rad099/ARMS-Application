@@ -10,12 +10,12 @@
 import Foundation
 import CoreBluetooth
 
-var uv: pollutant?
-var pm1: pollutant?
-var pm2_5: pollutant?
-var pm10: pollutant?
-var voc: pollutant?
-var co: pollutant?
+var uv: Pollutant?
+var pm1: Pollutant?
+var pm2_5: Pollutant?
+var pm10: Pollutant?
+var voc: Pollutant?
+var co: Pollutant?
 var averages: Array<Double> = []
 
 

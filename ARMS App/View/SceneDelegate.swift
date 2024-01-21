@@ -14,30 +14,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-      /*
-        
-       
-       
-       cloudManager.fetchUserRecord { record, error in
-           DispatchQueue.main.async {
-               if let record = record, let user = User.fromCKRecord(record) {
-                   // Record exists and User object is created
-                   print("User fetched: \(user.name)")
-                   self.currentUser = user
-                   self.updateChildViewControllers()
-               } else {
-                   // Either record is nil or there was an error fetching the record
-                   if let error = error {
-                       print("Error fetching record: \(error)")
-                   } else {
-                       print("No record found")
-                   }
-                   self.presentNewUserViewController()
-                   self.updateChildViewControllers()
-               }
-           }
-       }
-       */
+     
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).

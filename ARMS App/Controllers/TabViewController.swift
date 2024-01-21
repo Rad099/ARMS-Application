@@ -14,11 +14,11 @@ class TabViewController: UITabBarController {
     var cloudManager = ICloudManager()
     var pendingAlertMessage: String?
     var currentUser = User()
-    let pm1 = pollutant(name: "pm1")
-    let pm2_5 = pollutant(name: "pm2.5")
-    let pm10 = pollutant(name: "pm10")
-    let voc = pollutant(name: "voc")
-    let co = pollutant(name: "co")
+    let pm1 = Pollutant(name: "pm1")
+    let pm2_5 = Pollutant(name: "pm2.5")
+    let pm10 = Pollutant(name: "pm10")
+    let voc = Pollutant(name: "voc")
+    let co = Pollutant(name: "co")
     let uv = UV(name: "uv")
     
 
@@ -102,10 +102,6 @@ class TabViewController: UITabBarController {
                 self.updateChildViewControllers()
             }
         }
-
-            
-
-        
 
         bleManager = BLEManager()
         bleManager.uv = uv

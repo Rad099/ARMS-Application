@@ -25,7 +25,7 @@ protocol PollutantDelegate: AnyObject {
 }
 
 // pollutant class to populate pollutant values
-class pollutant: Codable {
+class Pollutant: Codable {
     weak var delegate: PollutantDelegate?
     var name: String
     private var hourbreakpoints: [Breakpoints]?
@@ -131,7 +131,7 @@ class pollutant: Codable {
 
 
 // special case: uv
-class UV: pollutant {
+class UV: Pollutant {
     var hourIndex: Double = 0
     var indoorIndex: Double = 0
     func setHourIndex(index: Double) {

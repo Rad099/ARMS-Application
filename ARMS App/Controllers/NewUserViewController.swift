@@ -7,7 +7,7 @@
 
 import UIKit
 import CloudKit
-
+import UserNotifications
 class NewUserViewController: UIViewController, UITextFieldDelegate {
     var tempUser = User()
     let cloudManager = ICloudManager()
@@ -25,9 +25,21 @@ class NewUserViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        requestNotificationPermission()
+        
         
         answerField.delegate = self
         showQuestion()
+    }
+    
+    func requestNotificationPermission() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+            if granted {
+                print("Notification permission granted.")
+            } else {
+                print("Notification permission denied.")
+            }
+        }
     }
     
     func showQuestion() {

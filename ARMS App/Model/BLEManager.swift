@@ -14,11 +14,11 @@ import CoreBluetooth
 
 class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     var uv: UV?
-    var pm1: pollutant?
-    var pm2_5: pollutant?
-    var pm10: pollutant?
-    var voc: pollutant?
-    var co: pollutant?
+    var pm1: Pollutant?
+    var pm2_5: Pollutant?
+    var pm10: Pollutant?
+    var voc: Pollutant?
+    var co: Pollutant?
     //weak var delegate: BLEManagerDelegate?
     var centralManager: CBCentralManager!
     var photon: CBPeripheral!
@@ -107,8 +107,12 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     }
     
     func updateValues(v1: UInt16, v2: UInt16, v3: UInt16, v4: UInt16, v5: UInt16, v6: UInt16) {
-        pm1?.currentHourIndex = v1
-        pm2_5?.currentHourIndex = v2
+        pm1?.setIndex(forConcentration: Double(v1), forIndex: "Indoor")
+        pm2_5?.setIndex(forConcentration: Double(v2), forIndex: "Indoor")
+        pm10?.setIndex(forConcentration: Double(v3), forIndex: "Indoor")
+        voc?.setIndex(forConcentration: Double(v4), forIndex: "Indoor")
+        co?.setIndex(forConcentration: Double(v5), forIndex: "Indoor")
+        uv?.setHourIndex(index: Double(v6))
     }
     
     

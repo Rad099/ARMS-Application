@@ -8,6 +8,7 @@
 
 import Foundation
 import CloudKit
+import UserNotifications
 
 
 // user class
@@ -36,9 +37,35 @@ class User {
         self.name = name
         self.resporatoryDisease = resp
         self.email = email
-        self.AmbientThresholds = setHourThresholds()
         self.ageType = setAgeRange(age: age)
+        self.AmbientThresholds = setHourThresholds()
     }
+    
+    func compareIndexToThreshold(AQIType: PollutantType, thresh: pollutantThresholds, index: UInt16) {
+        let notificationIndexes: [Int] = [
+               findRangeIndexForValue(index, in: self.AmbientThresholds.pm1) ?? 0,
+               findRangeIndexForValue(index, in: self.AmbientThresholds.pm2_5) ?? 0,
+               findRangeIndexForValue(index, in: self.AmbientThresholds.pm10) ?? 0,
+               findRangeIndexForValue(index, in: self.AmbientThresholds.voc) ?? 0,
+               findRangeIndexForValue(index, in: self.AmbientThresholds.co) ?? 0
+           ]
+
+           for notifyIndex in notificationIndexes where notifyIndex >= 2 {
+               scheduleNotification(withMessage: messageForRangeIndex(notifyIndex))
+           }
+       }
+        
+        
+    func findRangeIndexForValue(_ value: UInt16, in aqiType: AQIRange) -> Int? {
+        for (index, range) in aqiType.range.enumerated() {
+            if value >= range.lowerLimit && value <= range.upperLimit {
+                return index + 1  // Adding 1 to make it 1-indexed
+            }
+        }
+        // Return nil if no range contains the value
+        return nil
+    }
+    
     
     
     // SECTION: set thresholds algorithm
@@ -46,12 +73,27 @@ class User {
         var thresholds = defaultAmbientThresholds
         if self.heartDisease {
             decreaseThreshold(thresh: &thresholds, AQItype: .co)
-        }
-        
-        if self.lungDisease {
             decreaseThreshold(thresh: &thresholds, AQItype: .pm1)
             decreaseThreshold(thresh: &thresholds, AQItype: .pm2_5)
         }
+        
+        if self.resporatoryDisease {
+            decreaseThreshold(thresh: &thresholds, AQItype: .pm1)
+            decreaseThreshold(thresh: &thresholds, AQItype: .pm2_5)
+            decreaseThreshold(thresh: &thresholds, AQItype: .pm10)
+            decreaseThreshold(thresh: &thresholds, AQItype: .voc)
+        }
+        
+        if self.asthma {
+            decreaseThreshold(thresh: &thresholds, AQItype: .voc)
+        }
+        
+        if self.ageType == "young" || self.ageType == "elderly" {
+            decreaseThreshold(thresh: &thresholds, AQItype: .pm1)
+            decreaseThreshold(thresh: &thresholds, AQItype: .pm2_5)
+            decreaseThreshold(thresh: &thresholds, AQItype: .voc)
+        }
+        
         return thresholds
         
     }

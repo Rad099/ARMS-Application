@@ -11,10 +11,10 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     var User: User!
     
     // initialize shared classes
-    var pm1: pollutant?
-    var pm2_5 : pollutant?
-    var pm10:pollutant?
-    var co: pollutant?
+    var pm1: Pollutant?
+    var pm2_5: Pollutant?
+    var pm10: Pollutant?
+    var co: Pollutant?
     var uv: UV?
     
     @IBOutlet weak var nameLabel: UILabel!
