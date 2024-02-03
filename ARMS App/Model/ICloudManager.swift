@@ -38,7 +38,7 @@ class ICloudManager: ObservableObject {
         queryOperation.queryResultBlock = { result in
                 switch result {
                 case .success(_):
-                    print("fetched: \(fetchedRecord)")
+                    print("fetched: \(String(describing: fetchedRecord))")
                     completion(fetchedRecord, nil)
                 case .failure(let error):
                     completion(nil, error)

@@ -22,6 +22,8 @@ class User {
     var name: String
     var resporatoryDisease: Bool
     var email: String
+    
+    static let shared = User()
 
     
     // threshold instances
@@ -207,6 +209,7 @@ class User {
         }
         
     }
+    
     
 
 }

@@ -8,11 +8,16 @@
 import UIKit
 import CoreBluetooth
 
-class HomeViewController: UIViewController, PollutantDelegate {
+class HomeViewController: UIViewController /*, PollutantDelegate */ {
+    var pageViewController: PageViewController!
+   
+
+    
+    
     
     //var PollutantManager: pollutant!
     
-    var gradientView: GradientView!
+    //ar gradientView: GradientView!
     
     // initialize shared classes
     var user: User? {
@@ -29,39 +34,37 @@ class HomeViewController: UIViewController, PollutantDelegate {
    
    
     // labels
-    @IBOutlet weak var typeLabel: UILabel!
-    @IBOutlet weak var uvLabel: UILabel!
-    @IBOutlet weak var aqLabel: UILabel!
-    @IBOutlet weak var modeSwitch: UISwitch!
-    @IBOutlet weak var timeLabel: UILabel!
+    //@IBOutlet weak var pageContainerView: UIView!
+    //@IBOutlet weak var shadowView: UIView!
+    @IBOutlet weak var welcomeLabel: UILabel!
+    @IBOutlet weak var topView: UIView!
+    @IBOutlet weak var pageContainerView: UIView!
+    @IBOutlet weak var shadowView: UIView!
     
-    
-    // outlets for progress bars
-    @IBOutlet weak var UVProgressView: CircularProgressBar!
-    @IBOutlet weak var PM1ProgressView: CircularProgressBar!
-    @IBOutlet weak var PM2_5ProgressView: CircularProgressBar!
-    @IBOutlet weak var PM10ProgressView: CircularProgressBar!
-    @IBOutlet weak var VOCProgressView: CircularProgressBar!
-    @IBOutlet weak var COProgressView: CircularProgressBar!
-    
-    
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupInitialGradient()
-        // Create the gradient view
         updateUserInterface()
+
+        
+        pageViewController = PageViewController()
+        addChild(pageViewController)
+        
+        pageViewController.view.translatesAutoresizingMaskIntoConstraints = false
+        pageContainerView.addSubview(pageViewController.view)
+        
+        NSLayoutConstraint.activate([
+                pageViewController.view.topAnchor.constraint(equalTo: pageContainerView.topAnchor, constant: 0.0),
+                pageViewController.view.bottomAnchor.constraint(equalTo: pageContainerView.bottomAnchor, constant: 0.0),
+                pageViewController.view.leadingAnchor.constraint(equalTo: pageContainerView.leadingAnchor, constant: 0.0),
+                pageViewController.view.trailingAnchor.constraint(equalTo: pageContainerView.trailingAnchor, constant: 0.0),
+            ])
+        
+        pageViewController.didMove(toParent: self)
     }
     
-    func setupInitialGradient() {
-           // Create an initial gradient view, for example with the first mode's colors
-           let initialColors = [UIColor.red, UIColor.blue] // Change as per your first mode colors
-           gradientView = GradientView(colors: initialColors, locations: [0.0, 0.4])
-           gradientView?.frame = self.view.bounds
-           if let gradient = gradientView {
-               self.view.insertSubview(gradient, at: 0)
-           }
-       }
+   /*
+   
     
     
     func didUpdateUVIndoor(_ index: Double) {
@@ -119,7 +122,7 @@ class HomeViewController: UIViewController, PollutantDelegate {
                         strongSelf.COProgressView.progressValue = CGFloat(index)
                     }
                     
-                }
+            }
         }
     }
 
@@ -127,76 +130,31 @@ class HomeViewController: UIViewController, PollutantDelegate {
     
     
     @IBAction func updateAQIOnPressed(_ sender: UISwitch) {
-        updateMode()
+        
     }
+    */
+    
     
     func updateUserInterface() {
         guard isViewLoaded, let user = user else { return }
         print("App started")
         //bleManager.delegate = self
-        pm1?.delegate = self
-        pm2_5?.delegate = self
-        uv?.delegate = self
-        pm10?.delegate = self
-        co?.delegate = self
-        updateMode()
-    }
-    
-    
-    func updateMode() {
-       if modeSwitch.isOn {
-           
-           let AQIcolor = [UIColor.blue, UIColor.black]
-           gradientView?.updateGradient(colors: AQIcolor)
-           typeLabel.text = "Ambient AQI Index"
-           aqLabel.text = "AQI"
-           timeLabel.text = "New data in... 1 hour"
-            // init progress view Max values
-            UVProgressView.maxValue = 11
-            PM1ProgressView.maxValue = 500
-            PM2_5ProgressView.maxValue = 500
-            PM10ProgressView.maxValue = 500
-            VOCProgressView.maxValue = 500
-            COProgressView.maxValue = 500
-            
-            // For testing: apply hard coded values
-            UVProgressView.progressValue = CGFloat(uv!.currentHourIndex)
-            PM1ProgressView.progressValue = CGFloat(pm1?.currentHourIndex ?? 20)
-            PM2_5ProgressView.progressValue = CGFloat(pm2_5?.currentHourIndex ?? 0)
-            PM10ProgressView.progressValue = CGFloat(pm10?.currentHourIndex ?? 300)
-            VOCProgressView.progressValue = CGFloat(25)
-            COProgressView.progressValue = CGFloat(co?.currentHourIndex ?? 450)
-            
-       } else {
-           // init progress view Max values
-           let IAQIcolor = [UIColor.orange, UIColor.black]
-           gradientView?.updateGradient(colors: IAQIcolor)
-           
+        welcomeLabel.text = "Hi, \(user.name)!"
+        pageContainerView.layer.cornerRadius = 20
+        pageContainerView.clipsToBounds = true
+        topView.layer.cornerRadius = 40
+        topView.clipsToBounds = true
         
-           
-           typeLabel.text = "Indoor AQI Index"
-           aqLabel.text = "IAQI"
-           timeLabel.text = "New data in... 3 minutes"
-           UVProgressView.maxValue = 11
-           PM1ProgressView.maxValue = 100
-           PM2_5ProgressView.maxValue = 100
-           PM10ProgressView.maxValue = 100
-           VOCProgressView.maxValue = 100
-           COProgressView.maxValue = 100
-           
-           // For testing: apply hard coded values
-           UVProgressView.progressValue = CGFloat(uv!.currentIndoorIndex)
-           PM1ProgressView.progressValue = CGFloat(pm1!.currentIndoorIndex)
-           PM2_5ProgressView.progressValue = CGFloat(pm2_5!.currentIndoorIndex)
-           PM10ProgressView.progressValue = CGFloat(pm10!.currentIndoorIndex)
-           VOCProgressView.progressValue = CGFloat(50)
-           COProgressView.progressValue = CGFloat(co!.currentIndoorIndex)
-       }
+        shadowView.layer.shadowColor = UIColor.black.cgColor
+        shadowView.layer.shadowOffset = CGSize(width: 0, height: 7)
+        shadowView.layer.shadowOpacity = 0.7
+        shadowView.layer.shadowRadius = 5
+        shadowView.layer.masksToBounds = false
+        
     }
-    
-    
-
     
 }
+     
+     
 
 

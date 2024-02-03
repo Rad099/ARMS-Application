@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreData
 
 
 // store constant breakpoints
@@ -25,18 +26,26 @@ protocol PollutantDelegate: AnyObject {
 }
 
 // pollutant class to populate pollutant values
-class Pollutant: Codable {
+class Pollutant {
     weak var delegate: PollutantDelegate?
     var name: String
     private var hourbreakpoints: [Breakpoints]?
     private var indoorBreakpoints: [Breakpoints]? // TODO: confirm implementation (indoor AQI or concentration) UPDATE: indoorAQI likley
-    var currentHourIndex: UInt16 = 0
-    var currentIndoorIndex: UInt16 = 0
+    var currentHourIndex: Int = 0
+    var currentIndoorIndex: Int = 0
     
-    
+    //let context: NSManagedObjectContext
     init(name: String) {
         self.name = name
     }
+    /*
+    init(name: String, context: NSManagedObjectContext) {
+        self.name = name
+        self.context = context
+    }
+     
+     */
+    
     
     // method for storing breakpoints
     func addHourBp(hourbreakpoints: [Breakpoints]) {
@@ -82,53 +91,62 @@ class Pollutant: Codable {
         let currIndex = indexDiff/bpDiff * (concentration - currBreakpoint!.bpLow) + currBreakpoint!.indexLow
         
         if index == "hour" {
-            self.currentHourIndex = UInt16(ceil(currIndex))
+            self.currentHourIndex = Int(ceil(currIndex))
+            //saveIndexRecord(type: self.name, index: self.currentHourIndex, interval: "hour")
             delegate?.didUpdateHourIndex(Int(self.currentHourIndex), self.name)
         } else if (index == "indoor") {
-            self.currentIndoorIndex = UInt16(ceil(currIndex))
+            self.currentIndoorIndex = Int(ceil(currIndex))
+            //saveIndexRecord(type: self.name, index: self.currentIndoorIndex, interval: "indoor")
             delegate?.didUpdateIndoorIndex(Int(self.currentIndoorIndex), self.name)
         }
     }
     
     // get methods
-    func getHourIndex() -> UInt16 {
+    func getHourIndex() -> Int {
         return self.currentHourIndex
     }
-    func getIndoorIndex() -> UInt16 {
+    func getIndoorIndex() -> Int {
         return self.currentIndoorIndex
     }
+   
+/*
+    // Save a new index record
+    func saveIndexRecord(type: String, index: UInt16, interval: String) {
+            let newRecord = IndexRecord(context: self.context)
+            newRecord.indexValue = Int32(index)
+            newRecord.timestamp = Date()
+            newRecord.type = type
+            newRecord.interval = interval
+
+            do {
+                try self.context.save()
+            } catch {
+                print("Failed to save index record: \(error)")
+            }
+        }
+
+        // Retrieve index history
+        func fetchIndexHistory(type: String) -> [IndexRecord] {
+            let fetchRequest: NSFetchRequest<IndexRecord> = IndexRecord.fetchRequest()
+            fetchRequest.predicate = NSPredicate(format: "type == %@", type)
+
+            do {
+                return try self.context.fetch(fetchRequest)
+            } catch {
+                print("Failed to fetch index records: \(error)")
+                return []
+            }
+        }
     
-    // MARK: - Codable
-       enum CodingKeys: String, CodingKey {
-           case name
-           case hourbreakpoints
-           case indoorBreakpoints
-           case currentHourIndex
-           case currentIndoorIndex
-       }
 
-       // Implement custom init(from:) and encode(to:) if needed
-       required init(from decoder: Decoder) throws {
-           let container = try decoder.container(keyedBy: CodingKeys.self)
-           name = try container.decode(String.self, forKey: .name)
-           hourbreakpoints = try container.decodeIfPresent([Breakpoints].self, forKey: .hourbreakpoints)
-           indoorBreakpoints = try container.decodeIfPresent([Breakpoints].self, forKey: .indoorBreakpoints)
-           currentHourIndex = try container.decode(UInt16.self, forKey: .currentHourIndex)
-           currentIndoorIndex = try container.decode(UInt16.self, forKey: .currentIndoorIndex)
-       }
 
-       func encode(to encoder: Encoder) throws {
-           var container = encoder.container(keyedBy: CodingKeys.self)
-           try container.encode(name, forKey: .name)
-           try container.encodeIfPresent(hourbreakpoints, forKey: .hourbreakpoints)
-           try container.encodeIfPresent(indoorBreakpoints, forKey: .indoorBreakpoints)
-           try container.encode(currentHourIndex, forKey: .currentHourIndex)
-           try container.encode(currentIndoorIndex, forKey: .currentIndoorIndex)
-       }
+    */
 }
 
 
 
+
+ 
 
 // special case: uv
 class UV: Pollutant {
@@ -145,4 +163,24 @@ class UV: Pollutant {
     }
     
 }
+
+class PollutantManager {
+    static let shared = PollutantManager()
+    
+    private var pollutants: [String: Pollutant]
+    
+    private init() {
+        pollutants = ["pm1": Pollutant(name: "pm1"), "pm2_5": Pollutant(name: "pm2_5"), "pm10": Pollutant(name: "pm10"),
+                      "voc": Pollutant(name: "voc"), "co": Pollutant(name: "co"), "uv": UV(name: "uv")]
+        
+    }
+    
+    func getPollutant(named name: String) -> Pollutant? {
+            return pollutants[name]
+        }
+    
+
+}
+
+
 

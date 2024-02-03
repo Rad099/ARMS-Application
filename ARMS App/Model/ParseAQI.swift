@@ -4,22 +4,23 @@
 //
 //  Created by Radwan Alrefai on 1/4/24.
 //  Used for parsing Bluetooth Characteristic
-//  holding all AQI/UVI values
+//  holding all AQI/UVI values and storing in classes
 //
 
 import Foundation
 import CoreBluetooth
 
-var uv: Pollutant?
+var uv: UV?
 var pm1: Pollutant?
 var pm2_5: Pollutant?
 var pm10: Pollutant?
 var voc: Pollutant?
 var co: Pollutant?
+var user: User?
 var averages: Array<Double> = []
 
 
-/*
+
 func parseCharacteristic(characteristic: CBCharacteristic) {
     // Update your class values
     var value1: UInt16 = 0
@@ -58,7 +59,16 @@ func parseCharacteristic(characteristic: CBCharacteristic) {
     // Here you can call any functions to further process these values or update UI
     updateValues(v1: value1, v2: value2, v3: value3, v4: value4, v5: value5, v6: value6)
 }
-*/
+
+func updateValues(v1: UInt16, v2: UInt16, v3: UInt16, v4: UInt16, v5: UInt16, v6: UInt16) {
+    pm1?.setIndex(forConcentration: Double(v1), forIndex: "Indoor")
+    pm2_5?.setIndex(forConcentration: Double(v2), forIndex: "Indoor")
+    pm10?.setIndex(forConcentration: Double(v3), forIndex: "Indoor")
+    voc?.setIndex(forConcentration: Double(v4), forIndex: "Indoor")
+    co?.setIndex(forConcentration: Double(v5), forIndex: "Indoor")
+    uv?.setIndoorIndex(index: Double(v6))
+}
+
 
 func averageHourConcentration() -> Double {
     var hourAvg = 0

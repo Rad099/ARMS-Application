@@ -1,113 +1,92 @@
-//
-//  CircularProgressBarView.swift
-//  ARMS App
-//
-//  Created by Radwan Alrefai on 12/31/23.
-//
-
-import Foundation
 import UIKit
 
-class CircularProgressBar: UIView {
-    // Layers for the circular progress bar
-    private var circleLayer = CAShapeLayer()
+class CustomProgressView: UIView {
     private var progressLayer = CAShapeLayer()
+    private var backgroundLayer = CAShapeLayer()
+    private var triangleImageView = UIImageView()
+    private var progress: CGFloat = 0.3
+    private var degrees: CGFloat = -110
 
-    // Label to display the current value
-    private var valueLabel: UILabel = {
-        let label = UILabel()
-        label.textAlignment = .center
-        label.font = UIFont.boldSystemFont(ofSize: 16)
-        label.textColor = UIColor.white
-        return label
-    }()
-
-    // Maximum value for the progress
-    var maxValue: CGFloat = 500  // Default maximum value
-
-    // Current progress value
-    var progressValue: CGFloat = 0 {
-        didSet {
-            updateProgressBar()
-        }
-    }
-
-    // Initializer with frame and maximum value
-    init(frame: CGRect, maxValue: CGFloat) {
-        self.maxValue = maxValue
+    override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayers()
+        setupTriangleImageView()
     }
-
-    // Required initializer for Interface Builder
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
         setupLayers()
+        setupTriangleImageView()
     }
 
-    // Common setup for layers
     private func setupLayers() {
-        // Circle Layer
-        circleLayer.lineCap = .round
-        circleLayer.lineWidth = 10
-        circleLayer.fillColor = nil
-        circleLayer.strokeColor = UIColor.lightGray.cgColor
+        backgroundLayer.strokeColor = UIColor.gray.withAlphaComponent(0.3).cgColor
+        backgroundLayer.fillColor = nil
+        backgroundLayer.lineWidth = 12
+        layer.addSublayer(backgroundLayer)
 
-        // Progress Layer
-        progressLayer.lineCap = .round
-        progressLayer.lineWidth = 10
+        progressLayer.strokeColor = UIColor.red.cgColor // Use a gradient for actual implementation
         progressLayer.fillColor = nil
-        progressLayer.strokeEnd = 0
-
-        layer.addSublayer(circleLayer)
+        progressLayer.lineWidth = 12
         layer.addSublayer(progressLayer)
-        addSubview(valueLabel)
     }
 
-    // Layout subviews
-    // Layout subviews
+    private func setupTriangleImageView() {
+        triangleImageView.image = UIImage(named: "triangle") // Replace with your triangle image
+        addSubview(triangleImageView)
+    }
+
     override func layoutSubviews() {
         super.layoutSubviews()
-        circleLayer.frame = bounds
+        backgroundLayer.frame = bounds
         progressLayer.frame = bounds
-
-        // Circle path with updated arcCenter calculation
-        let circularPath = UIBezierPath(arcCenter: CGPoint(x: bounds.midX, y: bounds.midY), radius: bounds.size.width / 2 - progressLayer.lineWidth, startAngle: -(.pi / 2), endAngle: .pi * 1.5, clockwise: true)
-        circleLayer.path = circularPath.cgPath
-        progressLayer.path = circularPath.cgPath
-
-        // Positioning the label
-        valueLabel.frame = CGRect(x: 0, y: 0, width: bounds.size.width, height: bounds.size.height)
-        valueLabel.center = CGPoint(x: bounds.midX, y: bounds.midY)
+        triangleImageView.center = CGPoint(x: bounds.midX, y: bounds.midY)
+        
+        configureLayers()
     }
 
-    // Update the progress bar based on the current value
-    private func updateProgressBar() {
-        // Normalize progress for animation (0.0 to 1.0)
-        let normalizedProgress = min(max(progressValue / maxValue, 0), 1)
+    private func configureLayers() {
+        let center = CGPoint(x: bounds.midX, y: bounds.midY)
+        let radius = min(bounds.width, bounds.height) / 2 - progressLayer.lineWidth / 2
+        let startAngle = CGFloat(-0.5 * .pi)
+        let endAngle = CGFloat(1.5 * .pi)
 
-        // Update progress layer
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
-        progressLayer.strokeEnd = normalizedProgress
+        let path = UIBezierPath(arcCenter: center, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
+        backgroundLayer.path = path.cgPath
+        progressLayer.path = path.cgPath
+        updateProgressLayer()
+    }
 
-        // Update color based on value
-        if progressValue < 200 {
-            progressLayer.strokeColor = UIColor.green.cgColor
-        } else if progressValue < 400 {
-            progressLayer.strokeColor = UIColor.yellow.cgColor
+    private func updateProgressLayer() {
+        progressLayer.strokeEnd = progress
+        triangleImageView.transform = CGAffineTransform(rotationAngle: degrees * (.pi / 180))
+    }
+
+    func setProgress(_ progress: CGFloat, animated: Bool) {
+        self.progress = progress
+        if animated {
+            let animation = CABasicAnimation(keyPath: "strokeEnd")
+            animation.duration = 0.35
+            animation.toValue = progress
+            animation.fillMode = .forwards
+            animation.isRemovedOnCompletion = false
+            progressLayer.add(animation, forKey: "progress")
         } else {
-            progressLayer.strokeColor = UIColor.red.cgColor
+            updateProgressLayer()
         }
+    }
 
-        // Update label text with actual integer value
-        let displayValue = Int(progressValue)
-        valueLabel.text = "\(displayValue)"
-        
-        CATransaction.commit()
+    func setRotationDegrees(_ degrees: CGFloat, animated: Bool) {
+        self.degrees = degrees
+        if animated {
+            UIView.animate(withDuration: 0.35) {
+                self.triangleImageView.transform = CGAffineTransform(rotationAngle: degrees * (.pi / 180))
+            }
+        } else {
+            updateProgressLayer()
+        }
     }
 }
-
 
 
 

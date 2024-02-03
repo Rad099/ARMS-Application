@@ -8,10 +8,6 @@
 import Foundation
 import CoreBluetooth
 
-//protocol BLEManagerDelegate: AnyObject {
-    //func didShareClass()
-//}
-
 class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     var uv: UV?
     var pm1: Pollutant?
@@ -88,7 +84,7 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
 
         if let data = characteristic.value {
             // Assuming the float is in the first 4 bytes of the 8-byte buffer
-            let value = data.withUnsafeBytes { $0.load(as: Float.self) }
+            let value = data.withUnsafeBytes { $0.load(as: Int.self) }
             print("Received concentration: \(value)")
             let uvData: Double = Double(value)
             //delegate?.didShareClass()
@@ -105,21 +101,5 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         }
 
     }
-    
-    func updateValues(v1: UInt16, v2: UInt16, v3: UInt16, v4: UInt16, v5: UInt16, v6: UInt16) {
-        pm1?.setIndex(forConcentration: Double(v1), forIndex: "Indoor")
-        pm2_5?.setIndex(forConcentration: Double(v2), forIndex: "Indoor")
-        pm10?.setIndex(forConcentration: Double(v3), forIndex: "Indoor")
-        voc?.setIndex(forConcentration: Double(v4), forIndex: "Indoor")
-        co?.setIndex(forConcentration: Double(v5), forIndex: "Indoor")
-        uv?.setHourIndex(index: Double(v6))
-    }
-    
-    
-    
-    
-    
-    
-    
     
 }

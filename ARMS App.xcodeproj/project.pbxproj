@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		510AA4292B64E07A00D3A78B /* UVSubviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510AA4282B64E07A00D3A78B /* UVSubviewController.swift */; };
+		510AA42B2B64E96C00D3A78B /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510AA42A2B64E96C00D3A78B /* PageViewController.swift */; };
 		5133D49A2B4F24DE0024419F /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5133D4992B4F24DE0024419F /* GradientView.swift */; };
 		5134E6122B4A57A900AD9F01 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5134E6112B4A57A900AD9F01 /* User.swift */; };
 		5134E6142B4A5B7700AD9F01 /* Pollutant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5134E6132B4A5B7700AD9F01 /* Pollutant.swift */; };
@@ -28,9 +30,15 @@
 		516865862B5102640017316B /* Thresholds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516865852B5102640017316B /* Thresholds.swift */; };
 		516865882B53B4BB0017316B /* NewUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516865872B53B4BB0017316B /* NewUserViewController.swift */; };
 		5168658A2B53C5A80017316B /* AQINotify.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516865892B53C5A80017316B /* AQINotify.swift */; };
+		518039582B5D12DB00F536E7 /* AQINotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518039572B5D12DB00F536E7 /* AQINotificationViewController.swift */; };
+		518D8AE52B60DBAE0052E354 /* AQISubviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518D8AE42B60DBAE0052E354 /* AQISubviewController.swift */; };
+		518D8AE82B60E34A0052E354 /* PollutantData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 518D8AE62B60E34A0052E354 /* PollutantData.xcdatamodeld */; };
+		51A313E22B6996CB00B71041 /* progressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A313E12B6996CB00B71041 /* progressView.swift */; };
 		51A4B9F12B46859700CCF637 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A4B9F02B46859700CCF637 /* SettingsViewController.swift */; };
 		51A4B9F32B468AF700CCF637 /* ExposureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A4B9F22B468AF700CCF637 /* ExposureViewController.swift */; };
 		51A4B9F52B468E6600CCF637 /* ParseAQI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A4B9F42B468E6600CCF637 /* ParseAQI.swift */; };
+		51C57AE42B6A0C0C00B114AF /* UVMeter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C57AE32B6A0C0C00B114AF /* UVMeter.swift */; };
+		51C57AE62B6D8EEF00B114AF /* FullAQIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C57AE52B6D8EEF00B114AF /* FullAQIView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +59,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		510AA4282B64E07A00D3A78B /* UVSubviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UVSubviewController.swift; sourceTree = "<group>"; };
+		510AA42A2B64E96C00D3A78B /* PageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
 		5133D4992B4F24DE0024419F /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		5134E6112B4A57A900AD9F01 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		5134E6132B4A5B7700AD9F01 /* Pollutant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pollutant.swift; sourceTree = "<group>"; };
@@ -76,9 +86,15 @@
 		516865852B5102640017316B /* Thresholds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Thresholds.swift; sourceTree = "<group>"; };
 		516865872B53B4BB0017316B /* NewUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewUserViewController.swift; sourceTree = "<group>"; };
 		516865892B53C5A80017316B /* AQINotify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AQINotify.swift; sourceTree = "<group>"; };
+		518039572B5D12DB00F536E7 /* AQINotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AQINotificationViewController.swift; sourceTree = "<group>"; };
+		518D8AE42B60DBAE0052E354 /* AQISubviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AQISubviewController.swift; sourceTree = "<group>"; };
+		518D8AE72B60E34A0052E354 /* PollutantData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PollutantData.xcdatamodel; sourceTree = "<group>"; };
+		51A313E12B6996CB00B71041 /* progressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = progressView.swift; sourceTree = "<group>"; };
 		51A4B9F02B46859700CCF637 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		51A4B9F22B468AF700CCF637 /* ExposureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposureViewController.swift; sourceTree = "<group>"; };
 		51A4B9F42B468E6600CCF637 /* ParseAQI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseAQI.swift; sourceTree = "<group>"; };
+		51C57AE32B6A0C0C00B114AF /* UVMeter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UVMeter.swift; sourceTree = "<group>"; };
+		51C57AE52B6D8EEF00B114AF /* FullAQIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullAQIView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,10 +147,12 @@
 			isa = PBXGroup;
 			children = (
 				516865822B50BB150017316B /* ARMS App.entitlements */,
+				51A313E32B69A45F00B71041 /* SwiftUI */,
 				51A4B9EF2B450F1800CCF637 /* View */,
 				51A4B9ED2B450EDA00CCF637 /* Controllers */,
 				51A4B9EE2B450EFE00CCF637 /* Model */,
 				516232CD2B41657700186E99 /* Main.storyboard */,
+				518D8AE62B60E34A0052E354 /* PollutantData.xcdatamodeld */,
 				516232D02B41657800186E99 /* Assets.xcassets */,
 				516232D22B41657800186E99 /* LaunchScreen.storyboard */,
 				516232D52B41657800186E99 /* Info.plist */,
@@ -159,14 +177,28 @@
 			path = "ARMS AppUITests";
 			sourceTree = "<group>";
 		};
+		51A313E32B69A45F00B71041 /* SwiftUI */ = {
+			isa = PBXGroup;
+			children = (
+				51A313E12B6996CB00B71041 /* progressView.swift */,
+				51C57AE52B6D8EEF00B114AF /* FullAQIView.swift */,
+				51C57AE32B6A0C0C00B114AF /* UVMeter.swift */,
+			);
+			path = SwiftUI;
+			sourceTree = "<group>";
+		};
 		51A4B9ED2B450EDA00CCF637 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
 				5134E6172B4D331D00AD9F01 /* TabViewController.swift */,
+				518039572B5D12DB00F536E7 /* AQINotificationViewController.swift */,
 				516232CB2B41657700186E99 /* HomeViewController.swift */,
 				516865872B53B4BB0017316B /* NewUserViewController.swift */,
 				51A4B9F22B468AF700CCF637 /* ExposureViewController.swift */,
 				51A4B9F02B46859700CCF637 /* SettingsViewController.swift */,
+				518D8AE42B60DBAE0052E354 /* AQISubviewController.swift */,
+				510AA4282B64E07A00D3A78B /* UVSubviewController.swift */,
+				510AA42A2B64E96C00D3A78B /* PageViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -334,15 +366,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				51C57AE42B6A0C0C00B114AF /* UVMeter.swift in Sources */,
+				510AA4292B64E07A00D3A78B /* UVSubviewController.swift in Sources */,
+				51C57AE62B6D8EEF00B114AF /* FullAQIView.swift in Sources */,
 				5134E6182B4D331D00AD9F01 /* TabViewController.swift in Sources */,
+				518D8AE52B60DBAE0052E354 /* AQISubviewController.swift in Sources */,
 				516232CC2B41657700186E99 /* HomeViewController.swift in Sources */,
+				518D8AE82B60E34A0052E354 /* PollutantData.xcdatamodeld in Sources */,
+				51A313E22B6996CB00B71041 /* progressView.swift in Sources */,
 				516232C82B41657700186E99 /* AppDelegate.swift in Sources */,
+				518039582B5D12DB00F536E7 /* AQINotificationViewController.swift in Sources */,
 				5168658A2B53C5A80017316B /* AQINotify.swift in Sources */,
 				516865842B50DC5D0017316B /* ICloudManager.swift in Sources */,
 				516232CA2B41657700186E99 /* SceneDelegate.swift in Sources */,
 				516232F82B420DB500186E99 /* CBUUIDs.swift in Sources */,
 				5134E6162B4B947A00AD9F01 /* BLEManager.swift in Sources */,
 				5134E6142B4A5B7700AD9F01 /* Pollutant.swift in Sources */,
+				510AA42B2B64E96C00D3A78B /* PageViewController.swift in Sources */,
 				5134E6122B4A57A900AD9F01 /* User.swift in Sources */,
 				51A4B9F32B468AF700CCF637 /* ExposureViewController.swift in Sources */,
 				516232FA2B42832500186E99 /* CircularProgressBarView.swift in Sources */,
@@ -730,6 +770,19 @@
 			productName = SQLite;
 		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		518D8AE62B60E34A0052E354 /* PollutantData.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				518D8AE72B60E34A0052E354 /* PollutantData.xcdatamodel */,
+			);
+			currentVersion = 518D8AE72B60E34A0052E354 /* PollutantData.xcdatamodel */;
+			path = PollutantData.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 516232BC2B41657700186E99 /* Project object */;
 }
