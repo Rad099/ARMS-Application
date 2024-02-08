@@ -6,19 +6,19 @@
 //
 
 import UIKit
+import SwiftUI
 
-class UVSubviewController: UIViewController {
-    // outlets for progress bars
-    @IBOutlet weak var statusBar: UIImageView!
-    // outlets for progress bars
+class UVSubviewController: UIHostingController<UVContentView> {
     
-    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder, rootView: UVContentView())
+        self.view.backgroundColor = .clear
+        self.view.isOpaque = false
+    }
 
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Make sure statusBar is not nil by checking if it's loaded
+    
     
 
     }

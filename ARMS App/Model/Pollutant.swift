@@ -19,32 +19,47 @@ struct Breakpoints: Codable {
 }
 
 protocol PollutantDelegate: AnyObject {
-    func didUpdateHourIndex(_ index: Int, _ name: String)
-    func didUpdateIndoorIndex(_ index: Int, _ name: String)
+    func didUpdateHourIndex(_ index: Int, _ name: PollutantType)
+    func didUpdateIndoorIndex(_ index: Int, _ name: PollutantType)
     func didUpdateUVIndoor(_ index: Double)
     func didUpdateUVHour(_ index: Double)
+    func didUpdateConcentration(_ concentration: Int)
 }
 
 // pollutant class to populate pollutant values
-class Pollutant {
+
+class Pollutant: ObservableObject {
     weak var delegate: PollutantDelegate?
-    var name: String
-    private var hourbreakpoints: [Breakpoints]?
-    private var indoorBreakpoints: [Breakpoints]? // TODO: confirm implementation (indoor AQI or concentration) UPDATE: indoorAQI likley
-    var currentHourIndex: Int = 0
-    var currentIndoorIndex: Int = 0
+    var context: NSManagedObjectContext
     
-    //let context: NSManagedObjectContext
-    init(name: String) {
-        self.name = name
+    @Published var type: PollutantType
+    
+    // properties
+    private var average: Array<Int> = []
+    private var hourbreakpoints: [Breakpoints]?
+    private var customBreakpoints: [Breakpoints]?
+    
+   @Published var currentHourIndex: Int = 0
+   @Published var currentIndoorIndex: Int = 0 {
+        didSet {
+            saveHourIndex(for: self.currentHourIndex, context: context)
+        }
     }
-    /*
-    init(name: String, context: NSManagedObjectContext) {
-        self.name = name
+    
+    
+    @Published var concentration: Int = 0 {
+        didSet {
+            saveConcentration(for: self.concentration, context: context)
+        }
+    }
+
+    
+
+    init(type: PollutantType, context: NSManagedObjectContext) {
+        self.type = type
         self.context = context
     }
-     
-     */
+   
     
     
     // method for storing breakpoints
@@ -52,29 +67,35 @@ class Pollutant {
         self.hourbreakpoints = hourbreakpoints
     }
     
-    // method for storing breakpoints
-    func addIndoorBp(indoorBreakpoints: [Breakpoints]) {
-        self.indoorBreakpoints = indoorBreakpoints
+    
+    private func averageHourConcentration()  {
+        var hourAvg = 0
+        // check if size is 12
+        if self.average.count == 12 {
+            let sum = self.average.reduce(0, +)
+            hourAvg = Int(sum/12)
+            let currBreakpoint = findBreakpoints(forConcentration: hourAvg)
+            let bpDiff = (currBreakpoint!.indexHigh - currBreakpoint!.indexLow)
+            let indexDiff = (currBreakpoint!.bpHigh - currBreakpoint!.bpLow)
+            let currIndex = indexDiff/bpDiff * (Double(hourAvg) - currBreakpoint!.bpLow) + currBreakpoint!.indexLow
+            self.currentHourIndex = Int(currIndex)
+            delegate?.didUpdateHourIndex(Int(self.currentHourIndex), self.type)
+            self.average.removeAll()
+        }
     }
     
     
     // method for finding the breakpoints given concentration. Used only within class
-    private func findBreakpoints(forConcentration concentration: Double, forAQIType AQIType: String) -> Breakpoints? {
+    private func findBreakpoints(forConcentration concentration: Int) -> Breakpoints? {
         var breakpoints: [Breakpoints]
-        if AQIType == "hour" {
-            breakpoints = hourbreakpoints!
-        } else if (AQIType == "indoor") {
-            breakpoints = indoorBreakpoints!
-        } else {
-            return nil
-        }
+        breakpoints = hourbreakpoints!
         
         if (breakpoints.isEmpty) {
             return nil
         }
         
         for breakpoint in breakpoints {
-            if concentration > breakpoint.bpLow && concentration <= breakpoint.bpHigh {
+            if concentration > Int(breakpoint.bpLow) && concentration <= Int(breakpoint.bpHigh) {
                 return breakpoint
             }
         }
@@ -84,21 +105,15 @@ class Pollutant {
     
     // method for setting currentIndex after calculation
     // uses AQI equation and breakpoint search
-    func setIndex(forConcentration concentration: Double, forIndex index: String) {
-        let currBreakpoint = findBreakpoints(forConcentration: concentration, forAQIType: index)
-        let bpDiff = (currBreakpoint!.indexHigh - currBreakpoint!.indexLow)
-        let indexDiff = (currBreakpoint!.bpHigh - currBreakpoint!.bpLow)
-        let currIndex = indexDiff/bpDiff * (concentration - currBreakpoint!.bpLow) + currBreakpoint!.indexLow
-        
-        if index == "hour" {
-            self.currentHourIndex = Int(ceil(currIndex))
-            //saveIndexRecord(type: self.name, index: self.currentHourIndex, interval: "hour")
-            delegate?.didUpdateHourIndex(Int(self.currentHourIndex), self.name)
-        } else if (index == "indoor") {
-            self.currentIndoorIndex = Int(ceil(currIndex))
-            //saveIndexRecord(type: self.name, index: self.currentIndoorIndex, interval: "indoor")
-            delegate?.didUpdateIndoorIndex(Int(self.currentIndoorIndex), self.name)
-        }
+    func setIndex(forConcentration concentration: Int) {
+        average.append(concentration)
+        averageHourConcentration()
+    }
+    
+    func setConcentration(for concentration: Int) {
+        self.concentration = concentration
+        //setIndex(forConcentration: concentration, forIndex: "hour")
+        //delegate?.didUpdateConcentration(self.concentration)
     }
     
     // get methods
@@ -108,39 +123,11 @@ class Pollutant {
     func getIndoorIndex() -> Int {
         return self.currentIndoorIndex
     }
-   
-/*
-    // Save a new index record
-    func saveIndexRecord(type: String, index: UInt16, interval: String) {
-            let newRecord = IndexRecord(context: self.context)
-            newRecord.indexValue = Int32(index)
-            newRecord.timestamp = Date()
-            newRecord.type = type
-            newRecord.interval = interval
-
-            do {
-                try self.context.save()
-            } catch {
-                print("Failed to save index record: \(error)")
-            }
-        }
-
-        // Retrieve index history
-        func fetchIndexHistory(type: String) -> [IndexRecord] {
-            let fetchRequest: NSFetchRequest<IndexRecord> = IndexRecord.fetchRequest()
-            fetchRequest.predicate = NSPredicate(format: "type == %@", type)
-
-            do {
-                return try self.context.fetch(fetchRequest)
-            } catch {
-                print("Failed to fetch index records: \(error)")
-                return []
-            }
-        }
     
-
-
-    */
+    func getConcentration() -> Int {
+        return self.concentration
+    }
+   
 }
 
 
@@ -164,23 +151,103 @@ class UV: Pollutant {
     
 }
 
-class PollutantManager {
-    static let shared = PollutantManager()
+// Core Data Section
+extension Pollutant {
+    // Assume this function replaces your existing setConcentration method
+    func saveConcentration(for concentration: Int, context: NSManagedObjectContext) {
+        let newRecord = ConcentrationRecord(context: context)
+        newRecord.type = self.type.rawValue // Assuming PollutantType conforms to RawRepresentable
+        newRecord.concentration = Int32(concentration)
+        newRecord.timestamp = Date()
+        do {
+            try context.save()
+        } catch {
+            print("Failed to save pollutant record: \(error)")
+        }
+    }
     
-    private var pollutants: [String: Pollutant]
-    
-    private init() {
-        pollutants = ["pm1": Pollutant(name: "pm1"), "pm2_5": Pollutant(name: "pm2_5"), "pm10": Pollutant(name: "pm10"),
-                      "voc": Pollutant(name: "voc"), "co": Pollutant(name: "co"), "uv": UV(name: "uv")]
+    func saveHourIndex(for index: Int, context: NSManagedObjectContext) {
+        let newRecord = HourIndexRecord(context: context)
+        newRecord.type = self.type.rawValue
+        newRecord.hourIndex = Int32(index)
+        newRecord.timestamp = Date()
         
     }
     
-    func getPollutant(named name: String) -> Pollutant? {
+    func fetchMostRecentConcentrationRecord(ofType type: PollutantType, context: NSManagedObjectContext) -> ConcentrationRecord? {
+        let fetchRequest: NSFetchRequest<ConcentrationRecord> = ConcentrationRecord.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "type == %@", type.rawValue)
+        fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \ConcentrationRecord.timestamp, ascending: false)]
+        fetchRequest.fetchLimit = 1
+
+        do {
+            return try context.fetch(fetchRequest).first
+        } catch {
+            print("Error fetching latest pollutant record: \(error)")
+            return nil
+        }
+    }
+    
+    func fetchMostRecentHourIndexRecord(ofType type: PollutantType, context: NSManagedObjectContext) -> HourIndexRecord? {
+        let fetchRequest: NSFetchRequest<HourIndexRecord> = HourIndexRecord.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "type == %@", type.rawValue)
+        fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \HourIndexRecord.timestamp, ascending: false)]
+        fetchRequest.fetchLimit = 1
+        
+        do {
+            return try context.fetch(fetchRequest).first
+        } catch {
+            print("Error fetching latest pollutant record: \(error)")
+            return nil
+        }
+    }
+}
+
+
+
+// Singleton Class Manager
+class PollutantManager: ObservableObject {
+    let context = PersistenceController.shared.container.viewContext
+    static let shared = PollutantManager()
+    
+   @Published private var pollutants: [PollutantType: Pollutant]
+    
+    private init() {
+        pollutants = [.pm1: Pollutant(type: .pm1, context: context), .pm2_5: Pollutant(type: .pm2_5, context: context), .pm10: Pollutant(type: .pm10, context: context),
+                      .voc: Pollutant(type: .voc, context: context), .co: Pollutant(type: .co, context: context), .co2: Pollutant(type: .co2, context: context)]
+        
+    }
+    
+    func getPollutant(named name: PollutantType) -> Pollutant? {
             return pollutants[name]
+    }
+    
+    func fetchAllPollutantData() {
+            for (type, pollutant) in pollutants {
+                // Assuming fetchMostRecentConcentrationRecord and fetchMostRecentHourIndexRecord are instance methods
+                if let recentConcentrationRecord = pollutant.fetchMostRecentConcentrationRecord(ofType: type, context: context) {
+                    // Handle the fetched concentration record
+                    print("Most recent concentration for \(type.rawValue): \(recentConcentrationRecord.concentration)")
+                }
+
+                if let recentHourIndexRecord = pollutant.fetchMostRecentHourIndexRecord(ofType: type, context: context) {
+                    // Handle the fetched hour index record
+                    print("Most recent hour index for \(type.rawValue): \(recentHourIndexRecord.hourIndex)")
+                }
+            }
         }
     
 
 }
+
+// Globally Defined
+var pm1 = PollutantManager.shared.getPollutant(named: .pm1)!
+var pm2_5 = PollutantManager.shared.getPollutant(named: .pm2_5)!
+var pm10 = PollutantManager.shared.getPollutant(named: .pm10)!
+var voc =  PollutantManager.shared.getPollutant(named: .voc)!
+var co =  PollutantManager.shared.getPollutant(named: .co)!
+var co2 = PollutantManager.shared.getPollutant(named: .co2)!
+
 
 
 

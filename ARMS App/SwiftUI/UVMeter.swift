@@ -23,50 +23,98 @@ struct UVIndexMeter: View {
     ]
 
     var body: some View {
-        GeometryReader { geometry in
-            VStack(spacing: 0) {
-                ForEach(zones, id: \.range) { zone in
-                    Rectangle()
-                        .fill(zone.color)
-                        .frame(height: geometry.size.height * (zone.range.upperBound - zone.range.lowerBound + 1) / 11)
-                       // .overlay(
-                          //  uvIndex >= zone.range.lowerBound && uvIndex <= zone.range.upperBound
-                           //     ? Rectangle().stroke(Color.black, lineWidth: 2)
-                          //      : nil
-                       // )
-                    
-                }
-                
-                .overlay(
-                        Circle()
-                            .fill(Color.white)
-                            .frame(height: 2)
-                            .offset(y: -(geometry.size.height * (1 - (uvIndex / 11))))
-                                , alignment: .bottom
-                            )
-                
-            }
         
+            ZStack {
+                RoundedRectangle(cornerRadius: 20) // Soft edges
+                    .fill(
+                        LinearGradient(
+                            gradient: Gradient(colors: [Color.init(hex: "ED4D4D"), Color.init(hex: "E59148"), Color.init(hex: "EFBF39"),  Color.init(hex: "EEED56"), Color.init(hex: "32E1A0")]), // Multiple colors
+                            startPoint: .top, // Start of the gradient
+                            endPoint: .bottom // End of the gradient
+                        )
+                    )
+                    .frame(width: 30, height: 300) // Specific dimensions
         }
-        .frame(width: 50, height: 400)
-        .border(Color.black, width: 1)
-        .cornerRadius(10)
+                
+                
+        }
     }
+
+struct cutLines: View {
+    var body: some View {
+        ZStack {
+            Rectangle()
+                .frame(width: 2, height: 100, alignment: .center).rotationEffect(.degrees(90)).padding(.leading, 54)
+            
+        }
+    }
+    
 }
 
 struct UVContentView: View {
     @State private var uvIndex: CGFloat = 0
+    var progress: Int = 9
 
     var body: some View {
         VStack {
-            UVIndexMeter(uvIndex: uvIndex)
-
-            Slider(value: $uvIndex, in: 0...11)
+            Text("Personalized UV Meter")
+                    .font(Font.system(size: 18))
+                    .bold()
+                    .foregroundColor(.white)
+                    .padding(.top, 25)
+                    .padding(.bottom, 20)
+            
+            ZStack {
+                HStack(spacing: 100) {
+                        UVIndexMeter(uvIndex: uvIndex).padding(.trailing).overlay(VStack {
+                            cutLines().offset(CGSize(width: 0, height: 50))
+                            cutLines().offset(CGSize(width: 0, height: 10))
+ 
+                            cutLines().offset(CGSize(width: 0, height: -20))
+                            cutLines().offset(CGSize(width: 0, height: -60))
+                        }
+                )
+                    VStack(spacing: 30) {
+                        Text("UV Index:").font(Font.system(size: 30))
+                            .bold()
+                            .foregroundColor(.white)
+                        Text("\(Int(progress))")
+                            .font(Font.system(size: 60))
+                            .bold()
+                           .foregroundColor(Color.init(.white))
+                           .offset(CGSize(width: 0, height: -20))
+                           
+                        if progress >= 0 && progress <= 2 {
+                            Text("Safe UV exposure.")
+                                .bold()
+                                .foregroundColor(Color.init(hex: "32E1A0"))
+                        } else if progress <= 5 && progress > 2 {
+                            Text("Mild exposure.")
+                                .bold()
+                                .foregroundColor(Color.init(.mint))
+                        } else if progress > 5 && progress <= 7 {
+                            Text("unsafe UV exposure.")
+                                .bold()
+                                .foregroundColor(Color.init(.yellow))
+                            
+                        } else if progress > 7 && progress <= 10 {
+                            Text("UV exposure is high.")
+                                .bold()
+                                .foregroundColor(Color.init(.orange))
+                        } else {
+                            Text("UV exposure too high.")
+                                .bold()
+                                .foregroundColor(Color.init(.red))
+                        }
+                    }
+                }
+            }
         }
-        .padding()
+        
+        Spacer()
     }
 }
 
 #Preview {
-    UVIndexMeter(uvIndex: 11.0)
+    UVContentView()
 }

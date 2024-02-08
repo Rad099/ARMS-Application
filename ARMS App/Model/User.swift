@@ -22,6 +22,7 @@ class User {
     var name: String
     var resporatoryDisease: Bool
     var email: String
+    //@Published var progressValue: Int = 0
     
     static let shared = User()
 

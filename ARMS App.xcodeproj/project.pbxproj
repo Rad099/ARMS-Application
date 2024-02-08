@@ -9,12 +9,12 @@
 /* Begin PBXBuildFile section */
 		510AA4292B64E07A00D3A78B /* UVSubviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510AA4282B64E07A00D3A78B /* UVSubviewController.swift */; };
 		510AA42B2B64E96C00D3A78B /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510AA42A2B64E96C00D3A78B /* PageViewController.swift */; };
+		51154C122B749E5E003BB12A /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51154C112B749E5E003BB12A /* PersistenceController.swift */; };
 		5133D49A2B4F24DE0024419F /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5133D4992B4F24DE0024419F /* GradientView.swift */; };
 		5134E6122B4A57A900AD9F01 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5134E6112B4A57A900AD9F01 /* User.swift */; };
 		5134E6142B4A5B7700AD9F01 /* Pollutant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5134E6132B4A5B7700AD9F01 /* Pollutant.swift */; };
 		5134E6162B4B947A00AD9F01 /* BLEManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5134E6152B4B947A00AD9F01 /* BLEManager.swift */; };
 		5134E6182B4D331D00AD9F01 /* TabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5134E6172B4D331D00AD9F01 /* TabViewController.swift */; };
-		51518B582B50B55A0001BE11 /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 51518B572B50B55A0001BE11 /* SQLite */; };
 		516232C82B41657700186E99 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516232C72B41657700186E99 /* AppDelegate.swift */; };
 		516232CA2B41657700186E99 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516232C92B41657700186E99 /* SceneDelegate.swift */; };
 		516232CC2B41657700186E99 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516232CB2B41657700186E99 /* HomeViewController.swift */; };
@@ -61,6 +61,7 @@
 /* Begin PBXFileReference section */
 		510AA4282B64E07A00D3A78B /* UVSubviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UVSubviewController.swift; sourceTree = "<group>"; };
 		510AA42A2B64E96C00D3A78B /* PageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
+		51154C112B749E5E003BB12A /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
 		5133D4992B4F24DE0024419F /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		5134E6112B4A57A900AD9F01 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		5134E6132B4A5B7700AD9F01 /* Pollutant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pollutant.swift; sourceTree = "<group>"; };
@@ -102,7 +103,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				51518B582B50B55A0001BE11 /* SQLite in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -216,6 +216,7 @@
 				516865852B5102640017316B /* Thresholds.swift */,
 				5134E6132B4A5B7700AD9F01 /* Pollutant.swift */,
 				51A4B9F42B468E6600CCF637 /* ParseAQI.swift */,
+				51154C112B749E5E003BB12A /* PersistenceController.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -246,7 +247,6 @@
 			);
 			name = "ARMS App";
 			packageProductDependencies = (
-				51518B572B50B55A0001BE11 /* SQLite */,
 			);
 			productName = "ARMS App";
 			productReference = 516232C42B41657700186E99 /* ARMS App.app */;
@@ -389,6 +389,7 @@
 				5133D49A2B4F24DE0024419F /* GradientView.swift in Sources */,
 				51A4B9F12B46859700CCF637 /* SettingsViewController.swift in Sources */,
 				516865862B5102640017316B /* Thresholds.swift in Sources */,
+				51154C122B749E5E003BB12A /* PersistenceController.swift in Sources */,
 				516865882B53B4BB0017316B /* NewUserViewController.swift in Sources */,
 				51A4B9F52B468E6600CCF637 /* ParseAQI.swift in Sources */,
 			);
@@ -762,14 +763,6 @@
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		51518B572B50B55A0001BE11 /* SQLite */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 51518B562B50B55A0001BE11 /* XCRemoteSwiftPackageReference "SQLite.swift" */;
-			productName = SQLite;
-		};
-/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		518D8AE62B60E34A0052E354 /* PollutantData.xcdatamodeld */ = {

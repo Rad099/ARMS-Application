@@ -52,7 +52,7 @@
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iIy-FG-qL8">
                                         <rect key="frame" x="0.0" y="0.0" width="404" height="495"/>
-                                        <color key="backgroundColor" systemColor="systemFillColor"/>
+                                        <color key="backgroundColor" red="0.029550853771968082" green="0.028932748190480001" blue="0.095806632379088708" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                     </view>
                                 </subviews>
                                 <constraints>
@@ -88,7 +88,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" red="0.1424506113" green="0.1424506113" blue="0.1424506113" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <color key="backgroundColor" red="0.02955085377" green="0.02893274819" blue="0.095806632380000006" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
                                     <constraint firstItem="hxC-IC-S1b" firstAttribute="centerX" secondItem="wSt-6c-t28" secondAttribute="centerX" id="Ocf-ZL-4vl"/>
                                     <constraint firstItem="wSt-6c-t28" firstAttribute="centerX" secondItem="ASb-pg-c8W" secondAttribute="centerX" id="XCm-5y-nsc"/>
@@ -99,7 +99,7 @@
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="cCt-mG-g8N"/>
-                        <color key="backgroundColor" systemColor="systemFillColor"/>
+                        <color key="backgroundColor" red="0.047897120207125846" green="0.048300148368942315" blue="0.048551925505050497" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
                             <constraint firstItem="caa-Ee-4cg" firstAttribute="top" secondItem="ASb-pg-c8W" secondAttribute="bottom" constant="20" id="3P4-Si-HsQ"/>
                             <constraint firstItem="cCt-mG-g8N" firstAttribute="bottom" secondItem="caa-Ee-4cg" secondAttribute="bottom" constant="130" id="69S-jP-E6j"/>
@@ -597,9 +597,6 @@
         <image name="house.fill" catalog="system" width="128" height="104"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemFillColor">
-            <color red="0.47058823529999999" green="0.47058823529999999" blue="0.50196078430000002" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="underPageBackgroundColor">
             <color red="0.70980392160000005" green="0.71764705880000002" blue="0.74117647060000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

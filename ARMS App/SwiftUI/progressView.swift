@@ -8,9 +8,10 @@
 import SwiftUI
 
 class ProgressData: ObservableObject {
-    @Published var progressValue: Float = 75.0
+    //static let shared = ProgressData()
+    @Published var progressValue: Float = 0
     @Published var degrees: Double = -110
-    @Published var pollutantData: Array<Int> = [50, 100, 0, 200, 0, 300]
+   
 
 
     func setProgressValue(to newValue: Float) {
@@ -19,17 +20,21 @@ class ProgressData: ObservableObject {
             self.degrees = Double(newValue) * 220.0 - 110.0
         }
     }
-    
-    func setPollutantData(to array: Array<Int>) {
-        withAnimation {
-            self.pollutantData = array
-        }
-    }
 }
+ 
+
 
 struct ContentView: View {
-    @ObservedObject var progressData: ProgressData
-    @State private var showingSheet = false
+    
+    @ObservedObject var progressData = ProgressData()
+    @State var showingSheet = false
+    @ObservedObject var pm1 = PollutantManager.shared.getPollutant(named: .pm1)!
+    @ObservedObject var pm2_5 = PollutantManager.shared.getPollutant(named: .pm2_5)!
+    @ObservedObject var pm10 = PollutantManager.shared.getPollutant(named: .pm10)!
+    @ObservedObject var voc =  PollutantManager.shared.getPollutant(named: .voc)!
+    @ObservedObject var co =  PollutantManager.shared.getPollutant(named: .co)!
+    @ObservedObject var co2 = PollutantManager.shared.getPollutant(named: .co2)!
+   
 
     var body: some View {
         //NavigationStack {
@@ -42,16 +47,16 @@ struct ContentView: View {
                     .padding(.top, 25)
                 
                 ZStack {
-                    ProgressBar(progress: self.$progressData.progressValue)
+                    ProgressBar(progress: progressData.progressValue)
                         .frame(width: 270.0, height: 260.0)
                     
                     HStack(spacing: 17) {
-                        pollutantView(title: "PM1", value: $progressData.pollutantData[0])
-                        pollutantView(title: "PM2.5", value: $progressData.pollutantData[1])
-                        pollutantView(title: "PM10", value: $progressData.pollutantData[2])
-                        pollutantView(title: "VOC Index", value: $progressData.pollutantData[3])
-                        pollutantView(title: "CO", value: $progressData.pollutantData[4])
-                        pollutantView(title: "CO2", value: $progressData.pollutantData[5])
+                        pollutantView(title: "PM1", value: pm1.concentration)
+                        pollutantView(title: "PM2.5", value: pm2_5.concentration)
+                        pollutantView(title: "PM10", value: pm10.concentration)
+                        pollutantView(title: "VOC Index", value: voc.concentration)
+                        pollutantView(title: "CO", value: co.concentration)
+                        pollutantView(title: "CO2", value: co2.concentration)
                     }
                     .offset(CGSize(width: 3, height: 260))
                 }
@@ -61,14 +66,11 @@ struct ContentView: View {
                 }.offset(CGSize(width: 0, height: -25))
                     .foregroundColor(.white).bold()
     
-            //.navigationDestination(isPresented: $isShowingExtendedContentView) {
-            //   FullAQIView()
-           // }
         }
             .background(Color.clear)
             .sheet(isPresented: $showingSheet) {
-                        // Content of the sheet goes here
-                        FullAQIView(progressData: progressData)
+            
+            FullAQIView(progressData: progressData)
             }
     }
 }
@@ -76,22 +78,22 @@ struct ContentView: View {
     
     
     
-    func pollutantView(title: String, value: Binding<Int>) -> some View {
+    func pollutantView(title: String, value: Int) -> some View {
             VStack(spacing: 5) {
                 Text(title)
                     .font(Font.system(size: 15))
                     .foregroundColor(Color.init(.white))
-                Text("\(value.wrappedValue)")
+                Text("\(value)")
                     .bold()
                     .font(Font.system(size: 25))
                     .foregroundColor(Color.init(.white))
                 Circle()
                     .frame(width: 5, height: 5)
-                    .foregroundColor(getColorForValue(value.wrappedValue))
+                    .foregroundColor(getColorForValue(value))
                     
                 Spacer()
             }
-        }
+    }
 
 private func getColorForValue(_ value: Int) -> Color {
     switch value {
@@ -110,7 +112,7 @@ private func getColorForValue(_ value: Int) -> Color {
 
     
     struct ProgressBar: View {
-        @Binding var progress: Float
+        /*@Binding */ var progress: Float
         
         private var normalizedProgress: CGFloat {
                // Map the progress value (0-100) to a range of 0.3 to 0.9

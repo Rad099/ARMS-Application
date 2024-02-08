@@ -7,12 +7,13 @@
 
 import Foundation
 
-enum PollutantType {
-    case pm1
-    case pm2_5
-    case pm10
-    case voc
-    case co
+enum PollutantType: String, CaseIterable {
+    case pm1 = "PM1"
+    case pm2_5 = "PM2.5"
+    case pm10 = "PM10"
+    case voc = "VOC"
+    case co = "CO"
+    case co2 = "CO2"
 }
 
 struct Range: Codable {
@@ -31,6 +32,8 @@ struct pollutantThresholds: Codable {
     var pm10: AQIRange
     var voc: AQIRange
     var co: AQIRange
+    var co2: AQIRange
+    
 }
 
 func serializeThresholds(_ thresholds: pollutantThresholds) -> Data? {
@@ -45,33 +48,40 @@ func deserializeThresholds(_ data: Data) -> pollutantThresholds? {
 
 func decreaseThreshold(thresh: inout pollutantThresholds, AQItype: PollutantType) {
     switch AQItype {
-        case .pm1:
+    case .pm1:
         if !thresh.pm1.modified {
             thresh.pm1.range = limitMod(ranges: thresh.pm1.range)
             thresh.pm1.modified = true
-            }
-        case .pm2_5:
+        }
+    case .pm2_5:
         if !thresh.pm2_5.modified {
             thresh.pm2_5.range = limitMod(ranges: thresh.pm2_5.range)
             thresh.pm2_5.modified = true
-            }
-            
-        case .pm10:
+        }
+        
+    case .pm10:
         if !thresh.pm10.modified {
             thresh.pm10.range = limitMod(ranges: thresh.pm10.range)
             thresh.pm10.modified = true
         }
-        case .voc:
+    case .voc:
         if !thresh.voc.modified {
             thresh.voc.range = limitMod(ranges: thresh.voc.range)
             thresh.voc.modified = true
         }
-        case .co:
+    case .co:
         if !thresh.co.modified {
             thresh.co.range = limitMod(ranges: thresh.co.range)
             thresh.co.modified = true
         }
+        
+    case .co2:
+        if !thresh.co2.modified {
+            thresh.co2.range = limitMod(ranges: thresh.co2.range)
+            thresh.co2.modified = true
+        }
     }
+    
 }
 
 func limitMod(ranges: Array<Range>) -> (Array<Range>) {
@@ -90,4 +100,4 @@ let defaultRange = [Range(lowerLimit: 0, upperLimit: 50), Range(lowerLimit: 51, 
 let defaultAmbientAQI = AQIRange(range: defaultRange, modified: false)
 
 
-let defaultAmbientThresholds = pollutantThresholds(pm1: defaultAmbientAQI, pm2_5: defaultAmbientAQI, pm10: defaultAmbientAQI, voc: defaultAmbientAQI, co: defaultAmbientAQI)
+    let defaultAmbientThresholds = pollutantThresholds(pm1: defaultAmbientAQI, pm2_5: defaultAmbientAQI, pm10: defaultAmbientAQI, voc: defaultAmbientAQI, co: defaultAmbientAQI, co2: defaultAmbientAQI)

@@ -9,7 +9,9 @@ import SwiftUI
 
 // new view when pressed
 struct FullAQIView: View {
-    @ObservedObject var progressData: ProgressData
+    @ObservedObject var progressData = ProgressData()
+   // @State var progressValue: Float
+    //var degrees: Double
 
         // Define the maximum Y-coordinate start point for the gesture to be considered as initiated from the top edge
    // let topEdgeThreshold: CGFloat = 100
@@ -28,16 +30,16 @@ struct FullAQIView: View {
                     Text("Air Quality Report").font(Font.system(size: 25))
                         .bold()
                     ZStack {
-                        ProgressBar(progress: self.$progressData.progressValue)
+                        ProgressBar(progress: progressData.progressValue)
                             .frame(width: 270.0, height: 260.0)
                         
                         HStack(spacing: 17) {
-                            pollutantView(title: "PM1", value: $progressData.pollutantData[0])
-                            pollutantView(title: "PM2.5", value: $progressData.pollutantData[1])
-                            pollutantView(title: "PM10", value: $progressData.pollutantData[2])
-                            pollutantView(title: "VOC Index", value: $progressData.pollutantData[3])
-                            pollutantView(title: "CO", value: $progressData.pollutantData[4])
-                            pollutantView(title: "CO2", value: $progressData.pollutantData[5])
+                            pollutantView(title: "PM1", value: pm1.concentration)
+                            pollutantView(title: "PM2.5", value: pm2_5.concentration)
+                            pollutantView(title: "PM10", value: pm10.concentration)
+                            pollutantView(title: "VOC Index", value: voc.concentration)
+                            pollutantView(title: "CO", value: co.concentration)
+                            pollutantView(title: "CO2", value: co2.concentration)
                         }
                         .offset(CGSize(width: 3, height: 200))
                     } .padding(.bottom, 30).padding(.top, 40)
@@ -107,17 +109,19 @@ struct FullAQIView: View {
                     
                 } .padding()
             }.frame(maxWidth: .infinity, maxHeight: .infinity)
-                //.background(Color.blue.opacity(0.5))
+                .background(Color.blue.opacity(0.01))
              
 
             
            
         } .frame(maxWidth: .infinity, maxHeight: .infinity)
-            //.background(Color.blue.opacity(0.5))
+            .background(Color.blue.opacity(0.01))
         
     }
 }
 
-#Preview {
-   FullAQIView(progressData: ProgressData())
+struct FullAQIView_Previews: PreviewProvider {
+    static var previews: some View {
+        FullAQIView(progressData: ProgressData())
+    }
 }

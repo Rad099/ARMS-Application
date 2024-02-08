@@ -14,12 +14,8 @@ class TabViewController: UITabBarController {
     var cloudManager = ICloudManager()
     var pendingAlertMessage: String?
     var currentUser = User()
-    let pm1 = Pollutant(name: "pm1")
-    let pm2_5 = Pollutant(name: "pm2.5")
-    let pm10 = Pollutant(name: "pm10")
-    let voc = Pollutant(name: "voc")
-    let co = Pollutant(name: "co")
-    let uv = UV(name: "uv")
+
+
     
 
     func showAlert(message: String, shouldCloseApp: Bool = false) {
@@ -103,14 +99,7 @@ class TabViewController: UITabBarController {
             }
         }
 
-        bleManager = BLEManager()
-        bleManager.uv = uv
-        bleManager.pm1 = pm1
-        bleManager.pm2_5 = pm2_5
-        bleManager.pm10 = pm10
-        bleManager.voc = voc
-        bleManager.co = co
-        
+     
         updateChildViewControllers()
     }
     
@@ -119,23 +108,26 @@ class TabViewController: UITabBarController {
             for viewController in viewControllers {
                 if let homeTab = viewController as? HomeViewController  {
                     homeTab.user = self.currentUser
-                    homeTab.pm1 = self.pm1
-                    homeTab.pm2_5 = self.pm2_5
-                    homeTab.pm10 = self.pm10
-                    homeTab.co = self.co
-                    homeTab.uv = self.uv
+                   // homeTab.pm1 = self.pm1
+                   // homeTab.pm2_5 = self.pm2_5
+                   // homeTab.pm10 = self.pm10
+                   // homeTab.co = self.co
+                   // homeTab.uv = self.uv
                 } else if let settingsTab = viewController as? SettingsViewController {
                     settingsTab.User = self.currentUser
-                    settingsTab.pm1 = self.pm1
+                  /*  settingsTab.pm1 = self.pm1
                     settingsTab.pm2_5 = self.pm2_5
                     settingsTab.pm10 = self.pm10
                     settingsTab.co = self.co
+                   */
                 } else if let exposureTab = viewController as? ExposureViewController {
                     exposureTab.User = self.currentUser
+                    /*
                     exposureTab.pm1 = self.pm1
                     exposureTab.pm2_5 = self.pm2_5
                     exposureTab.pm10 = self.pm10
                     exposureTab.co = self.co
+                     */
                 }
             }
         }

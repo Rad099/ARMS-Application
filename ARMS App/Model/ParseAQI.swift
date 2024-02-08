@@ -11,18 +11,12 @@ import Foundation
 import CoreBluetooth
 
 var uv: UV?
-var pm1: Pollutant?
-var pm2_5: Pollutant?
-var pm10: Pollutant?
-var voc: Pollutant?
-var co: Pollutant?
 var user: User?
-var averages: Array<Double> = []
+var progressData = ProgressData()
 
 
 
 func parseCharacteristic(characteristic: CBCharacteristic) {
-    // Update your class values
     var value1: UInt16 = 0
     var value2: UInt16 = 0
     var value3: UInt16 = 0
@@ -37,50 +31,34 @@ func parseCharacteristic(characteristic: CBCharacteristic) {
         return
     }
 
-    let values: [UInt16] = characteristicData.withUnsafeBytes { bufferPointer -> [UInt16] in
-           let count = bufferPointer.count / MemoryLayout<UInt16>.size
-           return bufferPointer.bindMemory(to: UInt16.self).prefix(count).compactMap { $0 }
-       }
+    // Manually reconstruct each UInt16 from two bytes
+    value1 = (UInt16(characteristicData[0]) << 8) | UInt16(characteristicData[1])
+    value2 = (UInt16(characteristicData[2]) << 8) | UInt16(characteristicData[3])
+    value3 = (UInt16(characteristicData[4]) << 8) | UInt16(characteristicData[5])
+    value4 = (UInt16(characteristicData[6]) << 8) | UInt16(characteristicData[7])
+    value5 = (UInt16(characteristicData[8]) << 8) | UInt16(characteristicData[9])
+    value6 = (UInt16(characteristicData[10]) << 8) | UInt16(characteristicData[11])
 
-    guard values.count == 6 else {
-        print("Data parsing error")
-        return
-    }
-    
-    // Update your class values
-    value1 = values[0]
-    value2 = values[1]
-    value3 = values[2]
-    value4 = values[3]
-    value5 = values[4]
-    value6 = values[5]
-
+    print("Successfully parsed!")
+    print("\(value1) - \(value2) - \(value3) - \(value4) - \(value5) - \(value6)")
 
     // Here you can call any functions to further process these values or update UI
     updateValues(v1: value1, v2: value2, v3: value3, v4: value4, v5: value5, v6: value6)
 }
 
+
 func updateValues(v1: UInt16, v2: UInt16, v3: UInt16, v4: UInt16, v5: UInt16, v6: UInt16) {
-    pm1?.setIndex(forConcentration: Double(v1), forIndex: "Indoor")
-    pm2_5?.setIndex(forConcentration: Double(v2), forIndex: "Indoor")
-    pm10?.setIndex(forConcentration: Double(v3), forIndex: "Indoor")
-    voc?.setIndex(forConcentration: Double(v4), forIndex: "Indoor")
-    co?.setIndex(forConcentration: Double(v5), forIndex: "Indoor")
-    uv?.setIndoorIndex(index: Double(v6))
+    print("updating values")
+    pm1.setConcentration(for: Int(v1))
+    pm2_5.setConcentration(for: Int(v2))
+    pm10.setConcentration(for: Int(v3))
+    voc.setConcentration(for: Int(v4))
+    co.setConcentration(for: Int(v5))
+    co2.setConcentration(for: Int(v6))
+    progressData.setProgressValue(to: Float(v3))
+    //uv!.setIndoorIndex(index: Double(v6))
 }
 
 
-func averageHourConcentration() -> Double {
-    var hourAvg = 0
-    // check if size is 12
-    if averages.count == 12 {
-        let sum = averages.reduce(0, +)
-        hourAvg = Int(sum/12)
-        averages.removeAll()
-        return Double(hourAvg)
-    }
-    
-    return -1
-    
-}
+
 

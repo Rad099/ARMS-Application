@@ -9,13 +9,6 @@ import Foundation
 import CoreBluetooth
 
 class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
-    var uv: UV?
-    var pm1: Pollutant?
-    var pm2_5: Pollutant?
-    var pm10: Pollutant?
-    var voc: Pollutant?
-    var co: Pollutant?
-    //weak var delegate: BLEManagerDelegate?
     var centralManager: CBCentralManager!
     var photon: CBPeripheral!
     var AQIChar: CBCharacteristic!
@@ -23,14 +16,14 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     
     override init() {
         super.init()
-        centralManager = CBCentralManager(delegate: self, queue: nil)
+        centralManager = CBCentralManager(delegate: self, queue: nil, options: [CBCentralManagerOptionRestoreIdentifierKey: "myCentralManagerIdentifier"])
     }
     
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         switch central.state {
         case .poweredOn:
             print("Bluetooth is powered on")
-            centralManager.scanForPeripherals(withServices: [CBUUIDs.AQIService], options: nil)
+            centralManager.scanForPeripherals(withServices: [CBUUIDs.AQIService], options: [CBCentralManagerScanOptionAllowDuplicatesKey: NSNumber(value: false)])
             
         case .poweredOff:
             print("Bluetooth is powered off")
@@ -38,6 +31,17 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
             print("Unknown state")
         }
     }
+    
+    func centralManager(_ central: CBCentralManager, willRestoreState dict: [String : Any]) {
+            // Handle state restoration
+            if let restoredPeripherals = dict[CBCentralManagerRestoredStatePeripheralsKey] as? [CBPeripheral] {
+                // You may want to reassign your peripheral and delegate here
+                if let restoredPhoton = restoredPeripherals.first {
+                    photon = restoredPhoton
+                    photon.delegate = self
+                }
+            }
+        }
     
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         print("Function: \(#function), Line: \(#line)")
@@ -82,23 +86,7 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
                return
            }
 
-        if let data = characteristic.value {
-            // Assuming the float is in the first 4 bytes of the 8-byte buffer
-            let value = data.withUnsafeBytes { $0.load(as: Int.self) }
-            print("Received concentration: \(value)")
-            let uvData: Double = Double(value)
-            //delegate?.didShareClass()
-            
-            uv!.setIndoorIndex(index: uvData)
-            averages.append(uvData)
-            let average = averageHourConcentration()
-            if average != -1 {
-                uv!.setHourIndex(index: average)
-                print("recieved hour")
-
-            }
-                
-        }
+        parseCharacteristic(characteristic: characteristic)
 
     }
     

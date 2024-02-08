@@ -8,6 +8,7 @@
 import UIKit
 import CloudKit
 import UserNotifications
+
 class NewUserViewController: UIViewController, UITextFieldDelegate {
     var tempUser = User()
     let cloudManager = ICloudManager()
