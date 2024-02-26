@@ -25,7 +25,6 @@
 	<array>
 		<string>bluetooth-central</string>
 		<string>processing</string>
-		<string>remote-notification</string>
 	</array>
 </dict>
 </plist>

@@ -4,6 +4,7 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="Image references" minToolsVersion="12.0"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -52,10 +53,12 @@
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iIy-FG-qL8">
                                         <rect key="frame" x="0.0" y="0.0" width="404" height="495"/>
-                                        <color key="backgroundColor" red="0.029550853771968082" green="0.028932748190480001" blue="0.095806632379088708" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <color key="backgroundColor" name="SubviewSet"/>
                                     </view>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="iIy-FG-qL8" secondAttribute="trailing" id="128-WY-VEQ"/>
+                                    <constraint firstItem="iIy-FG-qL8" firstAttribute="leading" secondItem="caa-Ee-4cg" secondAttribute="leading" id="DUM-CL-D5F"/>
                                     <constraint firstItem="iIy-FG-qL8" firstAttribute="leading" secondItem="caa-Ee-4cg" secondAttribute="leading" id="Hi8-ng-Axa"/>
                                     <constraint firstAttribute="trailing" secondItem="iIy-FG-qL8" secondAttribute="trailing" id="Mh1-Ac-vXY"/>
                                     <constraint firstAttribute="bottom" secondItem="iIy-FG-qL8" secondAttribute="bottom" id="YHO-YZ-Lv2"/>
@@ -75,7 +78,7 @@
                                             <constraint firstAttribute="height" constant="37" id="hn0-dD-4zb"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="28"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="textColor" name="LabelSet"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Band not connected" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hxC-IC-S1b">
@@ -84,11 +87,11 @@
                                             <constraint firstAttribute="width" constant="311" id="8Xz-VC-8pU"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="textColor" name="LabelSet"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" red="0.02955085377" green="0.02893274819" blue="0.095806632380000006" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <color key="backgroundColor" name="SubviewSet"/>
                                 <constraints>
                                     <constraint firstItem="hxC-IC-S1b" firstAttribute="centerX" secondItem="wSt-6c-t28" secondAttribute="centerX" id="Ocf-ZL-4vl"/>
                                     <constraint firstItem="wSt-6c-t28" firstAttribute="centerX" secondItem="ASb-pg-c8W" secondAttribute="centerX" id="XCm-5y-nsc"/>
@@ -99,12 +102,13 @@
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="cCt-mG-g8N"/>
-                        <color key="backgroundColor" red="0.047897120207125846" green="0.048300148368942315" blue="0.048551925505050497" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <color key="backgroundColor" name="HomeTabSet"/>
                         <constraints>
                             <constraint firstItem="caa-Ee-4cg" firstAttribute="top" secondItem="ASb-pg-c8W" secondAttribute="bottom" constant="20" id="3P4-Si-HsQ"/>
                             <constraint firstItem="cCt-mG-g8N" firstAttribute="bottom" secondItem="caa-Ee-4cg" secondAttribute="bottom" constant="130" id="69S-jP-E6j"/>
                             <constraint firstItem="cCt-mG-g8N" firstAttribute="trailing" secondItem="caa-Ee-4cg" secondAttribute="trailing" constant="5" id="IsY-iP-4Ya"/>
                             <constraint firstItem="caa-Ee-4cg" firstAttribute="leading" secondItem="cCt-mG-g8N" secondAttribute="leading" constant="5" id="Jh8-r8-5H8"/>
+                            <constraint firstItem="caa-Ee-4cg" firstAttribute="leading" secondItem="cCt-mG-g8N" secondAttribute="leading" constant="8" id="Ks8-wx-Iuf"/>
                             <constraint firstItem="caa-Ee-4cg" firstAttribute="leading" secondItem="cCt-mG-g8N" secondAttribute="leading" constant="5" id="LNa-Qn-Oam"/>
                             <constraint firstAttribute="bottom" secondItem="ASb-pg-c8W" secondAttribute="bottom" constant="728" id="P0M-SS-NMA"/>
                             <constraint firstItem="ASb-pg-c8W" firstAttribute="leading" secondItem="caa-Ee-4cg" secondAttribute="leading" id="Ykt-PH-A42"/>
@@ -112,6 +116,7 @@
                             <constraint firstItem="caa-Ee-4cg" firstAttribute="leading" secondItem="cCt-mG-g8N" secondAttribute="leading" constant="5" id="obo-Oa-Lux"/>
                             <constraint firstItem="cCt-mG-g8N" firstAttribute="trailing" secondItem="caa-Ee-4cg" secondAttribute="trailing" constant="5" id="sAa-GI-HRe"/>
                             <constraint firstItem="cCt-mG-g8N" firstAttribute="trailing" secondItem="caa-Ee-4cg" secondAttribute="trailing" constant="5" id="swf-bw-ua9"/>
+                            <constraint firstItem="cCt-mG-g8N" firstAttribute="trailing" secondItem="caa-Ee-4cg" secondAttribute="trailing" constant="8" id="ua8-MI-HrU"/>
                             <constraint firstItem="ASb-pg-c8W" firstAttribute="trailing" secondItem="caa-Ee-4cg" secondAttribute="trailing" id="xGS-lQ-rmf"/>
                         </constraints>
                     </view>
@@ -595,6 +600,15 @@
         <image name="cloud.fill" catalog="system" width="128" height="87"/>
         <image name="gearshape.fill" catalog="system" width="128" height="123"/>
         <image name="house.fill" catalog="system" width="128" height="104"/>
+        <namedColor name="HomeTabSet">
+            <color red="0.82213545535006938" green="0.83027541035353536" blue="0.83027541035353536" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
+        <namedColor name="LabelSet">
+            <color red="0.99999994039535522" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="SubviewSet">
+            <color red="0.99999994039535522" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

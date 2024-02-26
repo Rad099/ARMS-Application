@@ -49,6 +49,7 @@ class TabViewController: UITabBarController {
                     pendingAlertMessage = nil
         }
         
+        /*
         cloudManager.checkICloudStatus { [weak self] isSignedIn, errorMessage in
             guard let self = self else { return }
             DispatchQueue.main.async { [self] in
@@ -62,6 +63,9 @@ class TabViewController: UITabBarController {
                 }
             }
         }
+         
+         */
+        
         
     }
     
@@ -80,6 +84,8 @@ class TabViewController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        
         cloudManager.fetchUserRecord { record, error in
             DispatchQueue.main.async {
                 if let record = record, let user = User.fromCKRecord(record) {
@@ -99,7 +105,7 @@ class TabViewController: UITabBarController {
             }
         }
 
-     
+        bleManager = BLEManager()
         updateChildViewControllers()
     }
     
@@ -108,26 +114,11 @@ class TabViewController: UITabBarController {
             for viewController in viewControllers {
                 if let homeTab = viewController as? HomeViewController  {
                     homeTab.user = self.currentUser
-                   // homeTab.pm1 = self.pm1
-                   // homeTab.pm2_5 = self.pm2_5
-                   // homeTab.pm10 = self.pm10
-                   // homeTab.co = self.co
-                   // homeTab.uv = self.uv
                 } else if let settingsTab = viewController as? SettingsViewController {
                     settingsTab.User = self.currentUser
-                  /*  settingsTab.pm1 = self.pm1
-                    settingsTab.pm2_5 = self.pm2_5
-                    settingsTab.pm10 = self.pm10
-                    settingsTab.co = self.co
-                   */
+                  
                 } else if let exposureTab = viewController as? ExposureViewController {
                     exposureTab.User = self.currentUser
-                    /*
-                    exposureTab.pm1 = self.pm1
-                    exposureTab.pm2_5 = self.pm2_5
-                    exposureTab.pm10 = self.pm10
-                    exposureTab.co = self.co
-                     */
                 }
             }
         }

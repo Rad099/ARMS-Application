@@ -28,7 +28,7 @@ class User {
 
     
     // threshold instances
-    var AmbientThresholds = defaultAmbientThresholds
+    //var AmbientThresholds = defaultAmbientThresholds
     var ageType = "Not Set"
     //var IndoorThresholds = thresholds()
     
@@ -41,9 +41,9 @@ class User {
         self.resporatoryDisease = resp
         self.email = email
         self.ageType = setAgeRange(age: age)
-        self.AmbientThresholds = setHourThresholds()
+        //self.AmbientThresholds = setHourThresholds()
     }
-    
+  /*
     func compareIndexToThreshold(AQIType: PollutantType, thresh: pollutantThresholds, index: UInt16) {
         let notificationIndexes: [Int] = [
                findRangeIndexForValue(index, in: self.AmbientThresholds.pm1) ?? 0,
@@ -57,7 +57,7 @@ class User {
                scheduleNotification(withMessage: messageForRangeIndex(notifyIndex))
            }
        }
-        
+        */
         
     func findRangeIndexForValue(_ value: UInt16, in aqiType: AQIRange) -> Int? {
         for (index, range) in aqiType.range.enumerated() {
@@ -70,8 +70,8 @@ class User {
     }
     
     
-    
-    // SECTION: set thresholds algorithm
+        /*
+        // SECTION: set thresholds algorithm
     private func setHourThresholds() -> pollutantThresholds {
         var thresholds = defaultAmbientThresholds
         if self.heartDisease {
@@ -100,6 +100,8 @@ class User {
         return thresholds
         
     }
+         
+         */
     
     //private func setIndoorThresholds() {
         
@@ -143,7 +145,7 @@ class User {
         self.resporatoryDisease = record["lungDisease"] as? Bool ?? false
         self.email = record["email"] as? String ?? ""
         //saveAgeRangeToCloud(range: self.ageType)
-        storeThresholds(thresholds: self.AmbientThresholds)
+        //storeThresholds(thresholds: self.AmbientThresholds)
     }
     
     
@@ -265,7 +267,6 @@ extension User {
        }
     
 }
-
 
 
 

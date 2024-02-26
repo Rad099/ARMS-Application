@@ -6,27 +6,49 @@
 //
 
 import SwiftUI
+import CoreData
 
 class ProgressData: ObservableObject {
     //static let shared = ProgressData()
     @Published var progressValue: Float = 0
     @Published var degrees: Double = -110
+    @Published var showCustomNotification: Bool = false // Add this line
+    @Published var notificationMessage: String = "" // And this lin
    
 
 
     func setProgressValue(to newValue: Float) {
+            withAnimation {
+                self.progressValue = newValue
+                self.degrees = Double(newValue) * 220.0 - 110.0
+                
+                // Decide when to show the notification, e.g., progressValue exceeds 0.8 (80%)
+                if self.progressValue < 0.8 {
+                    self.notificationMessage = "Air quality is poor!"
+                    self.showCustomNotification = true
+                    // Optionally, add logic to hide the notification after some time
+                } else {
+                    self.showCustomNotification = false
+                }
+            }
+        }
+    
+    func updateProgress(fromPAQRValue value: Int) {
         withAnimation {
-            self.progressValue = newValue
-            self.degrees = Double(newValue) * 220.0 - 110.0
+            let newValue = Float(value) / 100.0 // Assuming PAQR.value ranges from 0 to 100
+            setProgressValue(to: newValue)
         }
     }
 }
+
+let context = PersistenceController.shared.container.viewContext
  
 
 
 struct ContentView: View {
     
     @ObservedObject var progressData = ProgressData()
+    @ObservedObject var paqr: PAQR
     @State var showingSheet = false
     @ObservedObject var pm1 = PollutantManager.shared.getPollutant(named: .pm1)!
     @ObservedObject var pm2_5 = PollutantManager.shared.getPollutant(named: .pm2_5)!
@@ -34,90 +56,145 @@ struct ContentView: View {
     @ObservedObject var voc =  PollutantManager.shared.getPollutant(named: .voc)!
     @ObservedObject var co =  PollutantManager.shared.getPollutant(named: .co)!
     @ObservedObject var co2 = PollutantManager.shared.getPollutant(named: .co2)!
+    //var context: NSManagedObjectContext
+    
+    //init(progressData: ProgressData, paqr: PAQR) {
+           // self.progressData = progressData
+           // self.paqr = paqr
+            // Setup observer for PAQR value changes
+        
+   // }
    
-
     var body: some View {
-        //NavigationStack {
+        ZStack {
             VStack {
                 Text("Personalized Air Quality Range")
                     .font(Font.system(size: 18))
                     .bold()
-                    .foregroundColor(.white)
-                    .padding(.bottom, 20)
+                    //.foregroundColor(.white)
                     .padding(.top, 25)
+                Text(timeSinceUpdateMessage())
+                    .padding(.bottom, 8)
+                    .padding(.top, 5)
+                    .font(Font.system(size: 11))
+                   // .foregroundColor(.white)
                 
                 ZStack {
-                    ProgressBar(progress: progressData.progressValue)
+                    ProgressBar(progress: Float(paqr.value))
                         .frame(width: 270.0, height: 260.0)
                     
                     HStack(spacing: 17) {
-                        pollutantView(title: "PM1", value: pm1.concentration)
-                        pollutantView(title: "PM2.5", value: pm2_5.concentration)
-                        pollutantView(title: "PM10", value: pm10.concentration)
-                        pollutantView(title: "VOC Index", value: voc.concentration)
-                        pollutantView(title: "CO", value: co.concentration)
-                        pollutantView(title: "CO2", value: co2.concentration)
+                        pollutantView(title: "PM1", value: pm1.concentration, type: .pm1)
+                        pollutantView(title: "PM2.5", value: pm2_5.concentration, type: .pm2_5)
+                        pollutantView(title: "PM10", value: pm10.concentration, type: .pm10)
+                        pollutantView(title: "VOC Index", value: voc.concentration, type: .voc)
+                        pollutantView(title: "CO", value: co.concentration, type: .co)
+                        pollutantView(title: "CO2", value: co2.concentration, type: .co2)
                     }
                     .offset(CGSize(width: 3, height: 260))
                 }
                 
-                Button("Show Details") {
-                        showingSheet = true
+                Button("Show AQ Report") {
+                    showingSheet = true
                 }.offset(CGSize(width: 0, height: -25))
-                    .foregroundColor(.white).bold()
-    
-        }
+                    .bold().padding(.top, 10)
+                
+            }
             .background(Color.clear)
+            
+            if progressData.showCustomNotification {
+                NotificationView(message: progressData.notificationMessage)
+                    .animation(.easeInOut, value: progressData.showCustomNotification)
+                    .padding(.top, 20) // Adjust padding as needed
+            }
+        }
+
+        
             .sheet(isPresented: $showingSheet) {
             
             FullAQIView(progressData: progressData)
-            }
+        }
+        
+        
+        
     }
 }
     
+
+func timeSinceUpdateMessage() -> String {
+    guard let latestRecord = PollutantManager.shared.getconcMRD() else {
+            return "No data available"
+        }
     
+        print("Latest record we got: \(latestRecord)")
+        
+        return relativeTimeString(for: latestRecord)
+       // return manualRelativeTimeString(for: latestRecord)
+    }
+
+func relativeTimeString(for date: Date?) -> String {
+    guard let date = date else { return "No timestamp available" }
+
+    // Calculate the time difference between now and the input date
+    let timeInterval = Date().timeIntervalSince(date)
     
-    
-    func pollutantView(title: String, value: Int) -> some View {
+    // Check if the update occurred within 10 seconds ago
+    if timeInterval <= 10 {
+        return "Updated just now"
+    }
+
+    let formatter = RelativeDateTimeFormatter()
+    formatter.unitsStyle = .full
+    let relativeDate = formatter.localizedString(for: date, relativeTo: Date())
+    let text = "Updated \(relativeDate)"
+
+    return text
+}
+
+
+func pollutantView(title: String, value: Int, type: PollutantType) -> some View {
             VStack(spacing: 5) {
                 Text(title)
                     .font(Font.system(size: 15))
-                    .foregroundColor(Color.init(.white))
+                    //.foregroundColor(Color.init(.white))
                 Text("\(value)")
                     .bold()
                     .font(Font.system(size: 25))
-                    .foregroundColor(Color.init(.white))
+                    //.foregroundColor(Color.init(.white))
                 Circle()
                     .frame(width: 5, height: 5)
-                    .foregroundColor(getColorForValue(value))
+                    .foregroundColor(getColorForValue(value, type))
                     
                 Spacer()
             }
     }
 
-private func getColorForValue(_ value: Int) -> Color {
-    switch value {
-    case ..<0:
-        return Color.init(hex: "32E1A0") // Consider handling negative values if needed
-    case 0..<50:
-        return Color.green
-    case 50..<80:
-        return Color.yellow
-    default:
-        return Color.red
+private func getColorForValue(_ value: Int, _ type: PollutantType) -> Color {
+    guard let ranges = pollutantRanges[type] else { return Color.gray }
+    
+    let colors = [Color.green, Color.teal, Color.yellow, Color.orange, Color.red]
+    for (index, range) in ranges.enumerated() {
+        if value >= Int(range.bpLow) && value <= Int(range.bpHigh) {
+            let colorIndex = min(index, colors.count - 1)
+            return colors[colorIndex]
+        }
     }
+    
+    return Color.gray
 }
     
     
 
     
     struct ProgressBar: View {
-        /*@Binding */ var progress: Float
+         var progress: Float
         
         private var normalizedProgress: CGFloat {
                // Map the progress value (0-100) to a range of 0.3 to 0.9
-               let scaledProgress = (progress / 100) * (0.9 - 0.3) + 0.3
-               return CGFloat(scaledProgress)
+            let scaledProgress = (progress / 100) * (0.9 - 0.3) + 0.3
+          //  let invertedProgress = 100 - progress // Invert the progress value
+           // let scaledProgress = (Float(invertedProgress) / 100) * (0.9 - 0.3) + 0.3
+            return CGFloat(scaledProgress)
         }
         
         private var angle: Angle {
@@ -127,6 +204,7 @@ private func getColorForValue(_ value: Int) -> Color {
             
             let angleSpan = endAngle - startAngle
             let angleForProgress = startAngle + (Double(progress) / 100.0) * angleSpan
+           // let angleForProgress = endAngle - (Double(progress) / 100.0) * angleSpan
             return .degrees(angleForProgress)
         }
         
@@ -138,11 +216,11 @@ private func getColorForValue(_ value: Int) -> Color {
                     .trim(from: 0.3, to: 0.9)
                     .stroke(style: StrokeStyle(lineWidth: 30.0, lineCap: .round, lineJoin: .round))
                     .fill(AngularGradient(gradient: Gradient(stops: [
-                        .init(color: Color.init(hex: "32E1A0"), location: 0.39000002),
-                        .init(color: Color.init(hex: "EEED56"), location: 0.48000002),
+                        .init(color: Color.init(hex: "ED4D4D"), location: 0.39000002),
+                        .init(color: Color.init(hex: "E59148"), location: 0.48000002),
                         .init(color: Color.init(hex: "EFBF39"), location: 0.5999999),
-                        .init(color: Color.init(hex: "E59148"), location: 0.7199998),
-                        .init(color: Color.init(hex: "ED4D4D"), location: 0.8099997)]), center: .center))
+                        .init(color: Color.init(hex: "EEED56"), location: 0.7199998),
+                        .init(color: Color.init(hex: "32E1A0"), location: 0.8099997)]), center: .center))
                     .rotationEffect(.degrees(54.5))
                 
 
@@ -159,14 +237,14 @@ private func getColorForValue(_ value: Int) -> Color {
                     Text("\(Int(progress))")
                         .font(Font.system(size: 60))
                         .bold()
-                       .foregroundColor(Color.init(.white))
+                       //.foregroundColor(Color.init(.white))
                        .offset(CGSize(width: 0, height: -20))
                        
-                    if progress >= 0 && progress <= 20 {
+                    if progress >= 80 && progress <= 100 {
                         Text("Air is good.")
                             .bold()
                             .foregroundColor(Color.init(hex: "32E1A0"))
-                    } else if progress <= 40 && progress > 20 {
+                    } else if progress <= 80 && progress > 60 {
                         Text("Air is mildy polluted.")
                             .bold()
                             .foregroundColor(Color.init(.mint))
@@ -175,7 +253,7 @@ private func getColorForValue(_ value: Int) -> Color {
                             .bold()
                             .foregroundColor(Color.init(.yellow))
                         
-                    } else if progress > 60 && progress <= 80 {
+                    } else if progress > 20 && progress <= 40 {
                         Text("Air is very unhealthy.")
                             .bold()
                             .foregroundColor(Color.init(.orange))
@@ -194,7 +272,7 @@ private func getColorForValue(_ value: Int) -> Color {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(progressData: ProgressData())
+        ContentView(progressData: ProgressData(), paqr: paqr)
     }
 }
 

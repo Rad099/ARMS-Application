@@ -60,16 +60,17 @@ class ICloudManager: ObservableObject {
                          
                          
                          """)
-            }
-            
-            switch accountStatus {
-            case .available:
-                completion(true, nil)
-                //checkICloudKitPermission(completion: completion)
-            case .restricted, .couldNotDetermine, .noAccount:
-                completion(false, "ICloud access is restricted or could not be determined")
-            default:
-                completion(false, "Unknown error occured while trying to sign in to ICloud")
+            } else if accountStatus == .available {
+                NotificationCenter.default.post(name: NSNotification.Name("UserDidSignInToiCloud"), object: nil)
+                
+            } else {
+                
+                switch accountStatus {
+                case .restricted, .couldNotDetermine, .noAccount:
+                    completion(false, "ICloud access is restricted or could not be determined")
+                default:
+                    completion(false, "Unknown error occured while trying to sign in to ICloud")
+                }
             }
         }
         

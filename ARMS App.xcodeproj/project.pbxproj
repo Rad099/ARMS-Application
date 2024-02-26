@@ -25,7 +25,6 @@
 		516232E92B41657800186E99 /* ARMS_AppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516232E82B41657800186E99 /* ARMS_AppUITests.swift */; };
 		516232EB2B41657800186E99 /* ARMS_AppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516232EA2B41657800186E99 /* ARMS_AppUITestsLaunchTests.swift */; };
 		516232F82B420DB500186E99 /* CBUUIDs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516232F72B420DB500186E99 /* CBUUIDs.swift */; };
-		516232FA2B42832500186E99 /* CircularProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516232F92B42832500186E99 /* CircularProgressBarView.swift */; };
 		516865842B50DC5D0017316B /* ICloudManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516865832B50DC5D0017316B /* ICloudManager.swift */; };
 		516865862B5102640017316B /* Thresholds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516865852B5102640017316B /* Thresholds.swift */; };
 		516865882B53B4BB0017316B /* NewUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516865872B53B4BB0017316B /* NewUserViewController.swift */; };
@@ -33,6 +32,10 @@
 		518039582B5D12DB00F536E7 /* AQINotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518039572B5D12DB00F536E7 /* AQINotificationViewController.swift */; };
 		518D8AE52B60DBAE0052E354 /* AQISubviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518D8AE42B60DBAE0052E354 /* AQISubviewController.swift */; };
 		518D8AE82B60E34A0052E354 /* PollutantData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 518D8AE62B60E34A0052E354 /* PollutantData.xcdatamodeld */; };
+		5198265F2B78BE2A00C76558 /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5198265E2B78BE2A00C76558 /* NotificationView.swift */; };
+		519826612B7A703D00C76558 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519826602B7A703D00C76558 /* SignInViewController.swift */; };
+		519D89202B76062400A8D275 /* PAQR.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519D891F2B76062400A8D275 /* PAQR.swift */; };
+		519D89222B76148B00A8D275 /* BreakpointDataCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519D89212B76148B00A8D275 /* BreakpointDataCollection.swift */; };
 		51A313E22B6996CB00B71041 /* progressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A313E12B6996CB00B71041 /* progressView.swift */; };
 		51A4B9F12B46859700CCF637 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A4B9F02B46859700CCF637 /* SettingsViewController.swift */; };
 		51A4B9F32B468AF700CCF637 /* ExposureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A4B9F22B468AF700CCF637 /* ExposureViewController.swift */; };
@@ -81,7 +84,6 @@
 		516232E82B41657800186E99 /* ARMS_AppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARMS_AppUITests.swift; sourceTree = "<group>"; };
 		516232EA2B41657800186E99 /* ARMS_AppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARMS_AppUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		516232F72B420DB500186E99 /* CBUUIDs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBUUIDs.swift; sourceTree = "<group>"; };
-		516232F92B42832500186E99 /* CircularProgressBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressBarView.swift; sourceTree = "<group>"; };
 		516865822B50BB150017316B /* ARMS App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "ARMS App.entitlements"; sourceTree = "<group>"; };
 		516865832B50DC5D0017316B /* ICloudManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICloudManager.swift; sourceTree = "<group>"; };
 		516865852B5102640017316B /* Thresholds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Thresholds.swift; sourceTree = "<group>"; };
@@ -90,6 +92,10 @@
 		518039572B5D12DB00F536E7 /* AQINotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AQINotificationViewController.swift; sourceTree = "<group>"; };
 		518D8AE42B60DBAE0052E354 /* AQISubviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AQISubviewController.swift; sourceTree = "<group>"; };
 		518D8AE72B60E34A0052E354 /* PollutantData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PollutantData.xcdatamodel; sourceTree = "<group>"; };
+		5198265E2B78BE2A00C76558 /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
+		519826602B7A703D00C76558 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
+		519D891F2B76062400A8D275 /* PAQR.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PAQR.swift; sourceTree = "<group>"; };
+		519D89212B76148B00A8D275 /* BreakpointDataCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakpointDataCollection.swift; sourceTree = "<group>"; };
 		51A313E12B6996CB00B71041 /* progressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = progressView.swift; sourceTree = "<group>"; };
 		51A4B9F02B46859700CCF637 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		51A4B9F22B468AF700CCF637 /* ExposureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposureViewController.swift; sourceTree = "<group>"; };
@@ -183,6 +189,7 @@
 				51A313E12B6996CB00B71041 /* progressView.swift */,
 				51C57AE52B6D8EEF00B114AF /* FullAQIView.swift */,
 				51C57AE32B6A0C0C00B114AF /* UVMeter.swift */,
+				5198265E2B78BE2A00C76558 /* NotificationView.swift */,
 			);
 			path = SwiftUI;
 			sourceTree = "<group>";
@@ -198,6 +205,7 @@
 				51A4B9F02B46859700CCF637 /* SettingsViewController.swift */,
 				518D8AE42B60DBAE0052E354 /* AQISubviewController.swift */,
 				510AA4282B64E07A00D3A78B /* UVSubviewController.swift */,
+				519826602B7A703D00C76558 /* SignInViewController.swift */,
 				510AA42A2B64E96C00D3A78B /* PageViewController.swift */,
 			);
 			path = Controllers;
@@ -207,7 +215,6 @@
 			isa = PBXGroup;
 			children = (
 				516232F72B420DB500186E99 /* CBUUIDs.swift */,
-				516232F92B42832500186E99 /* CircularProgressBarView.swift */,
 				516865832B50DC5D0017316B /* ICloudManager.swift */,
 				5133D4992B4F24DE0024419F /* GradientView.swift */,
 				516865892B53C5A80017316B /* AQINotify.swift */,
@@ -215,6 +222,8 @@
 				5134E6112B4A57A900AD9F01 /* User.swift */,
 				516865852B5102640017316B /* Thresholds.swift */,
 				5134E6132B4A5B7700AD9F01 /* Pollutant.swift */,
+				519D891F2B76062400A8D275 /* PAQR.swift */,
+				519D89212B76148B00A8D275 /* BreakpointDataCollection.swift */,
 				51A4B9F42B468E6600CCF637 /* ParseAQI.swift */,
 				51154C112B749E5E003BB12A /* PersistenceController.swift */,
 			);
@@ -321,7 +330,6 @@
 			);
 			mainGroup = 516232BB2B41657700186E99;
 			packageReferences = (
-				51518B562B50B55A0001BE11 /* XCRemoteSwiftPackageReference "SQLite.swift" */,
 			);
 			productRefGroup = 516232C52B41657700186E99 /* Products */;
 			projectDirPath = "";
@@ -368,6 +376,7 @@
 			files = (
 				51C57AE42B6A0C0C00B114AF /* UVMeter.swift in Sources */,
 				510AA4292B64E07A00D3A78B /* UVSubviewController.swift in Sources */,
+				519D89222B76148B00A8D275 /* BreakpointDataCollection.swift in Sources */,
 				51C57AE62B6D8EEF00B114AF /* FullAQIView.swift in Sources */,
 				5134E6182B4D331D00AD9F01 /* TabViewController.swift in Sources */,
 				518D8AE52B60DBAE0052E354 /* AQISubviewController.swift in Sources */,
@@ -375,6 +384,7 @@
 				518D8AE82B60E34A0052E354 /* PollutantData.xcdatamodeld in Sources */,
 				51A313E22B6996CB00B71041 /* progressView.swift in Sources */,
 				516232C82B41657700186E99 /* AppDelegate.swift in Sources */,
+				519826612B7A703D00C76558 /* SignInViewController.swift in Sources */,
 				518039582B5D12DB00F536E7 /* AQINotificationViewController.swift in Sources */,
 				5168658A2B53C5A80017316B /* AQINotify.swift in Sources */,
 				516865842B50DC5D0017316B /* ICloudManager.swift in Sources */,
@@ -385,13 +395,14 @@
 				510AA42B2B64E96C00D3A78B /* PageViewController.swift in Sources */,
 				5134E6122B4A57A900AD9F01 /* User.swift in Sources */,
 				51A4B9F32B468AF700CCF637 /* ExposureViewController.swift in Sources */,
-				516232FA2B42832500186E99 /* CircularProgressBarView.swift in Sources */,
 				5133D49A2B4F24DE0024419F /* GradientView.swift in Sources */,
 				51A4B9F12B46859700CCF637 /* SettingsViewController.swift in Sources */,
 				516865862B5102640017316B /* Thresholds.swift in Sources */,
+				5198265F2B78BE2A00C76558 /* NotificationView.swift in Sources */,
 				51154C122B749E5E003BB12A /* PersistenceController.swift in Sources */,
 				516865882B53B4BB0017316B /* NewUserViewController.swift in Sources */,
 				51A4B9F52B468E6600CCF637 /* ParseAQI.swift in Sources */,
+				519D89202B76062400A8D275 /* PAQR.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -577,13 +588,15 @@
 				DEVELOPMENT_TEAM = RYD4695XLC;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "ARMS App/Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Allow this app to use BLE?";
 				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "Allow to connect to peripherals?";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -612,13 +625,15 @@
 				DEVELOPMENT_TEAM = RYD4695XLC;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "ARMS App/Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Allow this app to use BLE?";
 				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "Allow to connect to peripherals?";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -752,17 +767,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		51518B562B50B55A0001BE11 /* XCRemoteSwiftPackageReference "SQLite.swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/stephencelis/SQLite.swift.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.14.1;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCVersionGroup section */
 		518D8AE62B60E34A0052E354 /* PollutantData.xcdatamodeld */ = {

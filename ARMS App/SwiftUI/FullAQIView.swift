@@ -10,6 +10,7 @@ import SwiftUI
 // new view when pressed
 struct FullAQIView: View {
     @ObservedObject var progressData = ProgressData()
+    @Environment(\.colorScheme) var scheme
    // @State var progressValue: Float
     //var degrees: Double
 
@@ -28,73 +29,29 @@ struct FullAQIView: View {
             ScrollView {
                 VStack(spacing: 40) {
                     Text("Air Quality Report").font(Font.system(size: 25))
-                        .bold()
+                        .bold().foregroundColor(.white)
                     ZStack {
-                        ProgressBar(progress: progressData.progressValue)
+                        ProgressBar(progress: Float(paqr.value))
                             .frame(width: 270.0, height: 260.0)
                         
                         HStack(spacing: 17) {
-                            pollutantView(title: "PM1", value: pm1.concentration)
-                            pollutantView(title: "PM2.5", value: pm2_5.concentration)
-                            pollutantView(title: "PM10", value: pm10.concentration)
-                            pollutantView(title: "VOC Index", value: voc.concentration)
-                            pollutantView(title: "CO", value: co.concentration)
-                            pollutantView(title: "CO2", value: co2.concentration)
+                            pollutantView(title: "PM1", value: pm1.concentration, type: .pm1)
+                            pollutantView(title: "PM2.5", value: pm2_5.concentration, type: .pm2_5)
+                            pollutantView(title: "PM10", value: pm10.concentration, type: .pm10)
+                            pollutantView(title: "VOC Index", value: voc.concentration, type: .voc)
+                            pollutantView(title: "CO", value: co.concentration, type: .co)
+                            pollutantView(title: "CO2", value: co2.concentration, type: .co2)
                         }
                         .offset(CGSize(width: 3, height: 200))
                     } .padding(.bottom, 30).padding(.top, 40)
-                    Text("Particle Pollution").padding()
-                        .font(Font.system(size: 30))
-                    HStack {
-                        VStack(spacing: 20) {
-                            Text("")
-                            Text("EPA AQI(1-hour)").padding(.trailing, 50)
-                            Text("Concentrations(5-min)")
-                            
-                        } .padding(.trailing, 204)
+                    VStack {
+                        pollutionStats()
+                        aqiStats(type: .voc)
+                        aqiStats(type: .co)
+                        aqiStats(type: .co2)
                         
-                        Text("5")
                     }
-                    
-                    Text("VOCs").padding()
-                        .font(Font.system(size: 30))
-                    HStack {
-                        VStack(spacing: 20) {
-                            Text("")
-                            Text("EPA AQI(1-hour)").padding(.trailing, 50)
-                            Text("Concentrations(5-min)")
-                            
-                        } .padding(.trailing, 204)
-                        
-                        Text("5")
-                    }
-                    
-                    Text("CO").padding()
-                        .font(Font.system(size: 30))
-                    
-                    HStack {
-                        VStack(spacing: 20) {
-                            Text("")
-                            Text("EPA AQI(1-hour)").padding(.trailing, 50)
-                            Text("Concentrations(5-min)")
-                            
-                        } .padding(.trailing, 204)
-                        
-                        Text("5")
-                    }
-                    
-                    Text("CO2").padding()
-                        .font(Font.system(size: 30))
-                    HStack {
-                        VStack(spacing: 20) {
-                            Text("")
-                            Text("EPA AQI(1-hour)").padding(.trailing, 50)
-                            Text("Concentrations(5-min)")
-                            
-                        } .padding(.trailing, 204)
-                        
-                        Text("5")
-                    }
+                
                     
                     
                     
@@ -109,14 +66,66 @@ struct FullAQIView: View {
                     
                 } .padding()
             }.frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color.blue.opacity(0.01))
-             
+               
+        
 
             
            
-        } .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color.blue.opacity(0.01))
-        
+        }
+
+    }
+}
+
+struct paqrStats: View {
+    var body: some View {
+        VStack {
+            Text("PAQR Report")
+        }
+    }
+}
+
+struct pollutionStats: View {
+    var aqi = 0
+    var concentration = 0
+    
+    var body: some View {
+        Text("Particle Pollution").padding()
+            .font(Font.system(size: 30)).foregroundColor(.white)
+        HStack {
+            VStack(spacing: 20) {
+                Text("")
+                Text("EPA AQI(1-hour)").padding(.trailing, 50).foregroundColor(.white)
+                Text("Concentrations(5-min)").foregroundColor(.white)
+                
+            } .padding(.trailing, 150)
+            
+            Text("5").foregroundColor(.white)
+        }
+    }
+}
+
+struct aqiStats: View {
+    var type: PollutantType
+
+    var body: some View {
+        let pollutant = PollutantManager.shared.getPollutant(named: type)
+        Text(String(type.rawValue)).padding()
+            .font(Font.system(size: 30)).foregroundColor(.white)
+        HStack {
+            VStack(spacing: 20) {
+                Text("")
+                Text("EPA AQI(1-hour)").padding(.trailing, 50).foregroundColor(.white)
+                Text("Concentrations(5-min)").foregroundColor(.white)
+                
+            } .padding(.trailing, 150)
+            
+            VStack(spacing: 20) {
+                Text("\(pollutant!.currentHourIndex)").foregroundColor(.white)
+                Text("\(pollutant!.concentration)").foregroundColor(.white)
+                
+            }
+            
+        }
     }
 }
 

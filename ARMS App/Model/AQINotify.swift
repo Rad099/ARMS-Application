@@ -25,10 +25,10 @@ func messageForRangeIndex(_ index: Int) -> String {
     }
 }
 
-func scheduleNotification(withMessage message: String) {
+func scheduleNotification() {
     let content = UNMutableNotificationContent()
-    content.title = "Important Alert"
-    content.body = message
+    content.title = "Notification Test"
+    content.body = "The Values were updated."
     content.sound = UNNotificationSound.default
 
     // Trigger the notification in 5 seconds

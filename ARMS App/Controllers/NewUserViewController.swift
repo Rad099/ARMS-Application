@@ -91,6 +91,9 @@ class NewUserViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func submitAction(_ sender: UIButton) {
         let newUser = User(name: tempUser.name, age: tempUser.age, heart: tempUser.heartDisease, asthma: tempUser.asthma, lung: tempUser.lungDisease, resp: tempUser.lungDisease, email: tempUser.email)
+        
+        
+        
         saveUserToiCloud(user: newUser)
     
         if let handler = completionHandler {
@@ -117,3 +120,4 @@ class NewUserViewController: UIViewController, UITextFieldDelegate {
         }
     }
 }
+

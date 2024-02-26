@@ -7,16 +7,19 @@
 
 import Foundation
 import CoreBluetooth
+import BackgroundTasks
+import UIKit
 
 class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     var centralManager: CBCentralManager!
     var photon: CBPeripheral!
     var AQIChar: CBCharacteristic!
+    var backgroundTask: UIBackgroundTaskIdentifier = .invalid
     
     
     override init() {
         super.init()
-        centralManager = CBCentralManager(delegate: self, queue: nil, options: [CBCentralManagerOptionRestoreIdentifierKey: "myCentralManagerIdentifier"])
+        centralManager = CBCentralManager(delegate: self, queue: nil, options: [CBCentralManagerOptionRestoreIdentifierKey: "myCentralManagerIdentifier"] )
     }
     
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
@@ -85,9 +88,29 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
                print("Error: \(error!.localizedDescription)")
                return
            }
-
-        parseCharacteristic(characteristic: characteristic)
+        //if characteristic == AQIChar {
+            print("BLE Recieved")
+            handleBluetoothDataInBackground(characteristic: characteristic)
+            //parseCharacteristic(characteristic: characteristic)
+        //}
+        
 
     }
     
+    func handleBluetoothDataInBackground(characteristic: CBCharacteristic) {
+        backgroundTask = UIApplication.shared.beginBackgroundTask(withName: "UpdatePollutants") {
+            // End the task if time expires.
+            UIApplication.shared.endBackgroundTask(self.backgroundTask)
+            self.backgroundTask = .invalid
+        }
+        
+        DispatchQueue.global(qos: .background).async {
+            parseCharacteristic(characteristic: characteristic)
+            // Assume parseCharacteristic updates pollutant data directly or via a delegate
+            
+            // End the background task once processing is complete
+            UIApplication.shared.endBackgroundTask(self.backgroundTask)
+            self.backgroundTask = .invalid
+        }
+    }
 }

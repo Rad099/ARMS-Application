@@ -13,12 +13,39 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
 
 
+
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+        let cloudManager = ICloudManager()
+        cloudManager.checkICloudStatus { [weak self] isSignedIn, errorMessage in
+                DispatchQueue.main.async {
+                    if !isSignedIn {
+                        guard let windowScene = scene as? UIWindowScene else { return }
+                        
+                        let signInVC = SignInViewController()
+                        signInVC.modalPresentationStyle = .fullScreen
+                        
+                        // Create a new UIWindow using the windowScene constructor which takes in a window scene.
+                        let window = UIWindow(windowScene: windowScene)
+                        window.rootViewController = UIViewController() // Set to your app's initial view controller if needed
+                        window.makeKeyAndVisible()
+                        window.rootViewController?.present(signInVC, animated: true, completion: nil)
+                        
+                        // Update the window property of the SceneDelegate to keep a reference to the new window
+                        self?.window = window
+                    } else {
+                        print("Signed in to iCloud")
+                    }
+                }
+            }
      
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let _ = (scene as? UIWindowScene) else { return }
+        
+        
+        
+        
     }
     
 
@@ -49,35 +76,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
     }
-    
-
-
-    /*
-    func showMainViewController() {
-        // Load and present the main app interface
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-            let window = UIWindow(windowScene: windowScene)
-            let mainController = TabViewController() // Main app interface
-            window.rootViewController = mainController
-            self.window = window
-            window.makeKeyAndVisible()
-        }
-    }
-    
-    func showNewUserViewController() {
-        // Present a view controller that collects user data
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-            let window = UIWindow(windowScene: windowScene)
-            let newUserController = NewUserViewController() // ViewController to collect new user data
-            window.rootViewController = newUserController
-            self.window = window
-            window.makeKeyAndVisible()
-        }
-    }
-*/
-   
-
-
 
 }
 

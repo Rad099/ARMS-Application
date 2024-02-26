@@ -94,10 +94,3 @@ func limitMod(ranges: Array<Range>) -> (Array<Range>) {
     }
 
 
-// defaults
-let defaultRange = [Range(lowerLimit: 0, upperLimit: 50), Range(lowerLimit: 51, upperLimit: 100), Range(lowerLimit: 101, upperLimit: 200), Range(lowerLimit: 201, upperLimit: 300), Range(lowerLimit: 301, upperLimit: 400), Range(lowerLimit: 401, upperLimit: 500)]
-
-let defaultAmbientAQI = AQIRange(range: defaultRange, modified: false)
-
-
-    let defaultAmbientThresholds = pollutantThresholds(pm1: defaultAmbientAQI, pm2_5: defaultAmbientAQI, pm10: defaultAmbientAQI, voc: defaultAmbientAQI, co: defaultAmbientAQI, co2: defaultAmbientAQI)

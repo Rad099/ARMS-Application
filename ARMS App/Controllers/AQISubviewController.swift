@@ -11,11 +11,11 @@ import SwiftUI
 
 class AQISubviewController: UIHostingController<ContentView> {
     
-      // var progressData = ProgressData()
+       var progressData = ProgressData()
        
 
         required init?(coder: NSCoder) {
-            super.init(coder: coder, rootView: ContentView(progressData: progressData))
+            super.init(coder: coder, rootView: ContentView(progressData: progressData, paqr: paqr))
             self.view.backgroundColor = .clear
             self.view.isOpaque = false
         }
