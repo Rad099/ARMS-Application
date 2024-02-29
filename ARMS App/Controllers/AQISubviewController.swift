@@ -24,13 +24,6 @@ class AQISubviewController: UIHostingController<ContentView> {
     
     //progressBarImageView.frame = CGRect(x: 0, y: 0, width: 200, height: 100) // Adjust frame as needed
    
-    func updateProgress(to newValue: Float) {
-            // Call this function to update the progress
-            progressData.progressValue = newValue
-    }
-    
-
-
     
     
     override func viewDidLoad() {

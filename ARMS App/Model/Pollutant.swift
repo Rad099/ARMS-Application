@@ -19,7 +19,7 @@ protocol PollutantDelegate: AnyObject {
 
 // pollutant class to populate pollutant values
 
-class Pollutant: ObservableObject {
+class Pollutant:  ObservableObject {
     weak var delegate: PollutantDelegate?
     var context: NSManagedObjectContext
     
@@ -142,12 +142,18 @@ class Pollutant: ObservableObject {
 }
 
 // special case: uv
-class UV: Pollutant {
+class UV: ObservableObject {
     var hourIndex: Double = 0
     var currentValue: Double = 0
+    var context: NSManagedObjectContext
+
+    
+    init(context: NSManagedObjectContext) {
+        self.context = context
+    }
+    
     func setHourIndex(index: Double) {
         self.hourIndex = index
-        delegate?.didUpdateUVHour(self.hourIndex)
     }
     
     func setValue(index: Double) {
@@ -319,6 +325,26 @@ var voc =  PollutantManager.shared.getPollutant(named: .voc)!
 var co =  PollutantManager.shared.getPollutant(named: .co)!
 var co2 = PollutantManager.shared.getPollutant(named: .co2)!
 
+
+class UVManagaer: ObservableObject {
+    let context = PersistenceController.shared.container.viewContext
+    static let shared = UVManagaer()
+    
+    @Published private var uv: UV
+    
+    private init() {
+        uv = UV(context: self.context)
+    }
+    
+    func getUVValue() -> Double {
+        return self.uv.currentValue
+    }
+    
+    func getHourIndex() -> Double {
+        return self.uv.hourIndex
+    }
+    
+}
 
 
 

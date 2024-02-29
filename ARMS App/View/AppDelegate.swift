@@ -12,12 +12,15 @@ import CloudKit
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
+
     var persistenceController = PersistenceController.shared
-
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+      
+        _ = PersistenceController.shared
+        
         let pollutants = PollutantManager.shared
         pollutants.fetchAllPollutantData()
+          
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
             if granted {
                 print("Notification permission granted.")
@@ -30,6 +33,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         return true
     }
+    
+    
 
     // MARK: UISceneSession Lifecycle
 

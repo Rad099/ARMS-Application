@@ -118,7 +118,7 @@ class TabViewController: UITabBarController {
                     settingsTab.User = self.currentUser
                   
                 } else if let exposureTab = viewController as? ExposureViewController {
-                    exposureTab.User = self.currentUser
+                   // exposureTab.User = self.currentUser
                 }
             }
         }

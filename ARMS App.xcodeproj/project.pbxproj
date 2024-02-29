@@ -32,6 +32,7 @@
 		518039582B5D12DB00F536E7 /* AQINotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518039572B5D12DB00F536E7 /* AQINotificationViewController.swift */; };
 		518D8AE52B60DBAE0052E354 /* AQISubviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518D8AE42B60DBAE0052E354 /* AQISubviewController.swift */; };
 		518D8AE82B60E34A0052E354 /* PollutantData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 518D8AE62B60E34A0052E354 /* PollutantData.xcdatamodeld */; };
+		519107652B8D57F700689CE0 /* ExposureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519107642B8D57F700689CE0 /* ExposureView.swift */; };
 		5198265F2B78BE2A00C76558 /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5198265E2B78BE2A00C76558 /* NotificationView.swift */; };
 		519826612B7A703D00C76558 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519826602B7A703D00C76558 /* SignInViewController.swift */; };
 		519D89202B76062400A8D275 /* PAQR.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519D891F2B76062400A8D275 /* PAQR.swift */; };
@@ -40,6 +41,8 @@
 		51A4B9F12B46859700CCF637 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A4B9F02B46859700CCF637 /* SettingsViewController.swift */; };
 		51A4B9F32B468AF700CCF637 /* ExposureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A4B9F22B468AF700CCF637 /* ExposureViewController.swift */; };
 		51A4B9F52B468E6600CCF637 /* ParseAQI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A4B9F42B468E6600CCF637 /* ParseAQI.swift */; };
+		51C3F2F12B8FABD9000A143F /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C3F2F02B8FABD8000A143F /* GraphView.swift */; };
+		51C3F2F42B8FAE71000A143F /* SwiftUICharts in Frameworks */ = {isa = PBXBuildFile; productRef = 51C3F2F32B8FAE71000A143F /* SwiftUICharts */; };
 		51C57AE42B6A0C0C00B114AF /* UVMeter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C57AE32B6A0C0C00B114AF /* UVMeter.swift */; };
 		51C57AE62B6D8EEF00B114AF /* FullAQIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C57AE52B6D8EEF00B114AF /* FullAQIView.swift */; };
 /* End PBXBuildFile section */
@@ -92,6 +95,7 @@
 		518039572B5D12DB00F536E7 /* AQINotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AQINotificationViewController.swift; sourceTree = "<group>"; };
 		518D8AE42B60DBAE0052E354 /* AQISubviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AQISubviewController.swift; sourceTree = "<group>"; };
 		518D8AE72B60E34A0052E354 /* PollutantData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PollutantData.xcdatamodel; sourceTree = "<group>"; };
+		519107642B8D57F700689CE0 /* ExposureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposureView.swift; sourceTree = "<group>"; };
 		5198265E2B78BE2A00C76558 /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		519826602B7A703D00C76558 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		519D891F2B76062400A8D275 /* PAQR.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PAQR.swift; sourceTree = "<group>"; };
@@ -100,6 +104,7 @@
 		51A4B9F02B46859700CCF637 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		51A4B9F22B468AF700CCF637 /* ExposureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposureViewController.swift; sourceTree = "<group>"; };
 		51A4B9F42B468E6600CCF637 /* ParseAQI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseAQI.swift; sourceTree = "<group>"; };
+		51C3F2F02B8FABD8000A143F /* GraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphView.swift; sourceTree = "<group>"; };
 		51C57AE32B6A0C0C00B114AF /* UVMeter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UVMeter.swift; sourceTree = "<group>"; };
 		51C57AE52B6D8EEF00B114AF /* FullAQIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullAQIView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -109,6 +114,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				51C3F2F42B8FAE71000A143F /* SwiftUICharts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -189,6 +195,8 @@
 				51A313E12B6996CB00B71041 /* progressView.swift */,
 				51C57AE52B6D8EEF00B114AF /* FullAQIView.swift */,
 				51C57AE32B6A0C0C00B114AF /* UVMeter.swift */,
+				519107642B8D57F700689CE0 /* ExposureView.swift */,
+				51C3F2F02B8FABD8000A143F /* GraphView.swift */,
 				5198265E2B78BE2A00C76558 /* NotificationView.swift */,
 			);
 			path = SwiftUI;
@@ -256,6 +264,7 @@
 			);
 			name = "ARMS App";
 			packageProductDependencies = (
+				51C3F2F32B8FAE71000A143F /* SwiftUICharts */,
 			);
 			productName = "ARMS App";
 			productReference = 516232C42B41657700186E99 /* ARMS App.app */;
@@ -330,6 +339,7 @@
 			);
 			mainGroup = 516232BB2B41657700186E99;
 			packageReferences = (
+				51C3F2F22B8FAE71000A143F /* XCRemoteSwiftPackageReference "chartview" */,
 			);
 			productRefGroup = 516232C52B41657700186E99 /* Products */;
 			projectDirPath = "";
@@ -380,6 +390,7 @@
 				51C57AE62B6D8EEF00B114AF /* FullAQIView.swift in Sources */,
 				5134E6182B4D331D00AD9F01 /* TabViewController.swift in Sources */,
 				518D8AE52B60DBAE0052E354 /* AQISubviewController.swift in Sources */,
+				51C3F2F12B8FABD9000A143F /* GraphView.swift in Sources */,
 				516232CC2B41657700186E99 /* HomeViewController.swift in Sources */,
 				518D8AE82B60E34A0052E354 /* PollutantData.xcdatamodeld in Sources */,
 				51A313E22B6996CB00B71041 /* progressView.swift in Sources */,
@@ -387,6 +398,7 @@
 				519826612B7A703D00C76558 /* SignInViewController.swift in Sources */,
 				518039582B5D12DB00F536E7 /* AQINotificationViewController.swift in Sources */,
 				5168658A2B53C5A80017316B /* AQINotify.swift in Sources */,
+				519107652B8D57F700689CE0 /* ExposureView.swift in Sources */,
 				516865842B50DC5D0017316B /* ICloudManager.swift in Sources */,
 				516232CA2B41657700186E99 /* SceneDelegate.swift in Sources */,
 				516232F82B420DB500186E99 /* CBUUIDs.swift in Sources */,
@@ -767,6 +779,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		51C3F2F22B8FAE71000A143F /* XCRemoteSwiftPackageReference "chartview" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apppear/chartview.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.5.5;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		51C3F2F32B8FAE71000A143F /* SwiftUICharts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 51C3F2F22B8FAE71000A143F /* XCRemoteSwiftPackageReference "chartview" */;
+			productName = SwiftUICharts;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		518D8AE62B60E34A0052E354 /* PollutantData.xcdatamodeld */ = {
