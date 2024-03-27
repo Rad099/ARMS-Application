@@ -12,13 +12,23 @@ import CloudKit
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
-
+    func customLog(_ message: String) {
+            #if DEBUG
+            print("MyAppDebug: \(message)")
+            #endif
+    }
+    
     var persistenceController = PersistenceController.shared
+   
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
       
         _ = PersistenceController.shared
         
+        
         let pollutants = PollutantManager.shared
+        let uv = UVManager.shared
+        uv.fetchUVData()
         pollutants.fetchAllPollutantData()
           
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
@@ -28,12 +38,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 print("Notification permission error: \(error.localizedDescription)")
             }
         }
-        
-       // UNUserNotificationCenter.current().delegate = self
-        // Override point for customization after application launch.
+      
         return true
     }
     
+  
     
 
     // MARK: UISceneSession Lifecycle

@@ -9,19 +9,16 @@
 import Foundation
 import CoreData
 
-protocol PollutantDelegate: AnyObject {
-    func didUpdateHourIndex(_ index: Int, _ name: PollutantType)
-    func didUpdateIndoorIndex(_ index: Int, _ name: PollutantType)
-    func didUpdateUVIndoor(_ index: Double)
-    func didUpdateUVHour(_ index: Double)
-    func didUpdateConcentration(_ concentration: Int)
-}
 
 // pollutant class to populate pollutant values
+protocol updateHomeNotify: AnyObject {
+    func didUpdateNotify(typez: PollutantType, message: String)
+}
 
 class Pollutant:  ObservableObject {
-    weak var delegate: PollutantDelegate?
+   
     var context: NSManagedObjectContext
+
     
     
     // properties
@@ -29,6 +26,7 @@ class Pollutant:  ObservableObject {
     var hourbreakpoints: [AQIBreakpoints]?
     var customBreakpoints: [Breakpoints]?
     var weight: Double = 0
+    var lastNotifyTime: Date? = nil
    
  
     
@@ -36,6 +34,7 @@ class Pollutant:  ObservableObject {
    @Published var currentHourIndex: Int = 0
    @Published var currentIndoorIndex: Int = 0
    @Published var concentration: Int = 0
+   var isHigh = false
 
 
     
@@ -67,7 +66,7 @@ class Pollutant:  ObservableObject {
         } else {
             self.currentHourIndex = hourAvg
         }
-        delegate?.didUpdateHourIndex(Int(self.currentHourIndex), self.type)
+
         self.average.removeAll()
     }
     
@@ -105,12 +104,13 @@ class Pollutant:  ObservableObject {
     }
     
     func setConcentration(for concentration: Int) {
-    
-       self.concentration = concentration
-                
-    
-        //setIndex(forConcentration: concentration, forIndex: "hour")
-        //delegate?.didUpdateConcentration(self.concentration)
+        DispatchQueue.main.async {
+            self.concentration = concentration
+            //setIndex(forConcentration: concentration, forIndex: "hour")
+            //delegate?.didUpdateConcentration(self.concentration)
+        }
+
+        
     }
     
     // get methods
@@ -131,11 +131,19 @@ class Pollutant:  ObservableObject {
         
     }
     
+    
+
+
+    
     func getData() -> (Int, Double, Double, Double, Double) {
-        let currBreakpoint = findBreakpoints(forConcentration: self.concentration)
-        //let currScore = currBreakpoint?.score ?? -1
-        return (self.concentration, currBreakpoint!.bpLow, currBreakpoint!.bpHigh, currBreakpoint!.lowScore, currBreakpoint!.score)
+        let defaultBreakpoint = Breakpoints(bpLow: 0, bpHigh: 0, lowScore: 0.0, score: 0.0) // Provide suitable default values
+        var currBreakpoint = findBreakpoints(forConcentration: self.concentration) ?? defaultBreakpoint
+        if (currBreakpoint.bpLow.isNaN || currBreakpoint.bpLow.isInfinite) {
+            currBreakpoint = defaultBreakpoint
+        }
+        return (self.concentration, currBreakpoint.bpLow, currBreakpoint.bpHigh, currBreakpoint.lowScore, currBreakpoint.score)
     }
+
     
 
    
@@ -143,8 +151,9 @@ class Pollutant:  ObservableObject {
 
 // special case: uv
 class UV: ObservableObject {
-    var hourIndex: Double = 0
-    var currentValue: Double = 0
+    @Published var hourIndex: Double = 0
+    @Published var currentValue: Double = 0
+    var type = PollutantType.uv
     var context: NSManagedObjectContext
 
     
@@ -153,11 +162,16 @@ class UV: ObservableObject {
     }
     
     func setHourIndex(index: Double) {
-        self.hourIndex = index
+        DispatchQueue.main.async {
+            self.hourIndex = index
+        }
+        
     }
     
     func setValue(index: Double) {
-        self.currentValue = index
+        DispatchQueue.main.async {
+            self.currentValue = index
+        }
     }
     
     
@@ -168,9 +182,14 @@ class UV: ObservableObject {
 // Core Data UV extension
 extension UV {
     func saveUV(for value: Double, context: NSManagedObjectContext) {
+        guard value >= 0 else {
+            print("Invalid uv value. Skipping save operation.")
+            return
+        }
         let newRecord = UVRecord(context: context)
         newRecord.value = self.currentValue
         newRecord.timestamp = Date()
+        newRecord.type = self.type.rawValue
         do {
             try context.save()
         } catch {
@@ -197,6 +216,12 @@ extension UV {
 extension Pollutant {
     // Assume this function replaces your existing setConcentration method
     func saveConcentration(for concentration: Int, context: NSManagedObjectContext) {
+        // Validate the concentration value before proceeding.
+        guard concentration >= 0 else {
+            print("Invalid concentration value. Skipping save operation.")
+            return
+        }
+
         let newRecord = ConcentrationRecord(context: context)
         newRecord.type = self.type.rawValue // Assuming PollutantType conforms to RawRepresentable
         newRecord.concentration = Int32(concentration)
@@ -207,8 +232,14 @@ extension Pollutant {
             print("Failed to save pollutant record: \(error)")
         }
     }
-    
+
     func saveHourIndex(for index: Int, context: NSManagedObjectContext) {
+        // Validate the index value before proceeding.
+        guard index >= 0 else {
+            print("Invalid hour index value. Skipping save operation.")
+            return
+        }
+
         let newRecord = HourIndexRecord(context: context)
         newRecord.type = self.type.rawValue
         newRecord.hourIndex = Int32(index)
@@ -218,12 +249,15 @@ extension Pollutant {
         } catch {
             print("Failed to save pollutant record: \(error)")
         }
-        
     }
+
     
     func fetchMostRecentConcentrationRecord(ofType type: PollutantType, context: NSManagedObjectContext) -> ConcentrationRecord? {
         let fetchRequest: NSFetchRequest<ConcentrationRecord> = ConcentrationRecord.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "type == %@", type.rawValue)
+        // Combine predicates to both match the pollutant type and exclude the invalid concentration value
+        let typePredicate = NSPredicate(format: "type == %@", type.rawValue)
+        let validConcentrationPredicate = NSPredicate(format: "concentration != %d", 65535)
+        fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [typePredicate, validConcentrationPredicate])
         fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \ConcentrationRecord.timestamp, ascending: false)]
         fetchRequest.fetchLimit = 1
 
@@ -234,6 +268,7 @@ extension Pollutant {
             return nil
         }
     }
+
     
     func fetchMostRecentHourIndexRecord(ofType type: PollutantType, context: NSManagedObjectContext) -> HourIndexRecord? {
         let fetchRequest: NSFetchRequest<HourIndexRecord> = HourIndexRecord.fetchRequest()
@@ -255,9 +290,11 @@ extension Pollutant {
 // Singleton Class Manager
 class PollutantManager: ObservableObject {
     let context = PersistenceController.shared.container.viewContext
+    weak var delegate: updateHomeNotify?
     static let shared = PollutantManager()
     @Published var concentrationMRD: Date? = nil
     var hourMRD: Date? = nil
+    var lastNotifyTime: Date? = nil
     
     @Published private var pollutants: [PollutantType: Pollutant]
     
@@ -273,6 +310,43 @@ class PollutantManager: ObservableObject {
         pollutants[.co2]!.customBreakpoints = defaultCO2Range
         
     }
+    
+    func checkHighest() {
+        var highPollutant: Pollutant?
+        var highestValue = 0
+        
+        for (type, pollutant) in self.pollutants {
+            let max = pollutant.concentration
+            if max > highestValue {
+                highestValue = max
+                highPollutant = pollutant
+            }
+        }
+        
+        guard let highPollutant = highPollutant else { return }
+        let (con, min, max, minscore, maxscore) = highPollutant.getData()
+        
+        
+        
+        if canScheduleNotificationFor(pollutant: highPollutant) && maxscore >= 0.2 {
+            scheduleNotification(maxscore, highPollutant.type)
+            highPollutant.lastNotifyTime = Date()
+        }
+        
+        
+        
+        
+        
+    }
+    
+    // Function to check if enough time has passed since the last notification for this pollutant
+        private func canScheduleNotificationFor(pollutant: Pollutant) -> Bool {
+            guard let lastNotificationTime = pollutant.lastNotifyTime else { return true }
+            let currentTime = Date()
+            let timePassed = Calendar.current.dateComponents([.minute], from: lastNotificationTime, to: currentTime).minute ?? 0
+     
+            return timePassed >= 1 // minute
+        }
     
     func getconcMRD() -> Date? {
         return self.concentrationMRD
@@ -305,6 +379,9 @@ class PollutantManager: ObservableObject {
                     // Handle the fetched concentration record
                     //print("Most recent concentration for \(type.rawValue): \(recentConcentrationRecord.concentration)")
                     concentrationMRD = recentConcentrationRecord.timestamp ?? nil
+                    if (recentConcentrationRecord.concentration == 65535 ) {
+                        pollutant.concentration = 0
+                    }
                     pollutant.concentration = Int(recentConcentrationRecord.concentration)
                 }
 
@@ -317,23 +394,26 @@ class PollutantManager: ObservableObject {
         }
 }
 
-// Globally Defined
-var pm1 = PollutantManager.shared.getPollutant(named: .pm1)!
-var pm2_5 = PollutantManager.shared.getPollutant(named: .pm2_5)!
-var pm10 = PollutantManager.shared.getPollutant(named: .pm10)!
-var voc =  PollutantManager.shared.getPollutant(named: .voc)!
-var co =  PollutantManager.shared.getPollutant(named: .co)!
-var co2 = PollutantManager.shared.getPollutant(named: .co2)!
 
 
-class UVManagaer: ObservableObject {
+class UVManager: ObservableObject {
     let context = PersistenceController.shared.container.viewContext
-    static let shared = UVManagaer()
+    static let shared = UVManager()
     
     @Published private var uv: UV
     
     private init() {
         uv = UV(context: self.context)
+    }
+    
+    func uvObj() -> UV {
+        return self.uv
+    }
+    
+    func fetchUVData() {
+        if let recentUVRecord = uv.fetchMostRecentUVRecord(ofType: .uv, context: context) {
+            self.uv.currentValue = recentUVRecord.value
+        }
     }
     
     func getUVValue() -> Double {
@@ -344,7 +424,23 @@ class UVManagaer: ObservableObject {
         return self.uv.hourIndex
     }
     
+    func saveIndex() {
+        self.uv.saveUV(for: uv.currentValue, context: self.context)
+    }
+    
 }
+
+
+// Globally Defined
+var pm1 = PollutantManager.shared.getPollutant(named: .pm1)!
+var pm2_5 = PollutantManager.shared.getPollutant(named: .pm2_5)!
+var pm10 = PollutantManager.shared.getPollutant(named: .pm10)!
+var voc =  PollutantManager.shared.getPollutant(named: .voc)!
+var co =  PollutantManager.shared.getPollutant(named: .co)!
+var co2 = PollutantManager.shared.getPollutant(named: .co2)!
+var uv = UVManager.shared.uvObj()
+
+
 
 
 

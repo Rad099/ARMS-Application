@@ -43,6 +43,7 @@
 		51A4B9F52B468E6600CCF637 /* ParseAQI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A4B9F42B468E6600CCF637 /* ParseAQI.swift */; };
 		51C3F2F12B8FABD9000A143F /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C3F2F02B8FABD8000A143F /* GraphView.swift */; };
 		51C3F2F42B8FAE71000A143F /* SwiftUICharts in Frameworks */ = {isa = PBXBuildFile; productRef = 51C3F2F32B8FAE71000A143F /* SwiftUICharts */; };
+		51C3F2F82B906D51000A143F /* GraphViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C3F2F72B906D51000A143F /* GraphViewModel.swift */; };
 		51C57AE42B6A0C0C00B114AF /* UVMeter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C57AE32B6A0C0C00B114AF /* UVMeter.swift */; };
 		51C57AE62B6D8EEF00B114AF /* FullAQIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C57AE52B6D8EEF00B114AF /* FullAQIView.swift */; };
 /* End PBXBuildFile section */
@@ -105,6 +106,7 @@
 		51A4B9F22B468AF700CCF637 /* ExposureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposureViewController.swift; sourceTree = "<group>"; };
 		51A4B9F42B468E6600CCF637 /* ParseAQI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseAQI.swift; sourceTree = "<group>"; };
 		51C3F2F02B8FABD8000A143F /* GraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphView.swift; sourceTree = "<group>"; };
+		51C3F2F72B906D51000A143F /* GraphViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphViewModel.swift; sourceTree = "<group>"; };
 		51C57AE32B6A0C0C00B114AF /* UVMeter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UVMeter.swift; sourceTree = "<group>"; };
 		51C57AE52B6D8EEF00B114AF /* FullAQIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullAQIView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -205,9 +207,9 @@
 		51A4B9ED2B450EDA00CCF637 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				516232CB2B41657700186E99 /* HomeViewController.swift */,
 				5134E6172B4D331D00AD9F01 /* TabViewController.swift */,
 				518039572B5D12DB00F536E7 /* AQINotificationViewController.swift */,
-				516232CB2B41657700186E99 /* HomeViewController.swift */,
 				516865872B53B4BB0017316B /* NewUserViewController.swift */,
 				51A4B9F22B468AF700CCF637 /* ExposureViewController.swift */,
 				51A4B9F02B46859700CCF637 /* SettingsViewController.swift */,
@@ -224,6 +226,7 @@
 			children = (
 				516232F72B420DB500186E99 /* CBUUIDs.swift */,
 				516865832B50DC5D0017316B /* ICloudManager.swift */,
+				51C3F2F72B906D51000A143F /* GraphViewModel.swift */,
 				5133D4992B4F24DE0024419F /* GradientView.swift */,
 				516865892B53C5A80017316B /* AQINotify.swift */,
 				5134E6152B4B947A00AD9F01 /* BLEManager.swift */,
@@ -397,6 +400,7 @@
 				516232C82B41657700186E99 /* AppDelegate.swift in Sources */,
 				519826612B7A703D00C76558 /* SignInViewController.swift in Sources */,
 				518039582B5D12DB00F536E7 /* AQINotificationViewController.swift in Sources */,
+				51C3F2F82B906D51000A143F /* GraphViewModel.swift in Sources */,
 				5168658A2B53C5A80017316B /* AQINotify.swift in Sources */,
 				519107652B8D57F700689CE0 /* ExposureView.swift in Sources */,
 				516865842B50DC5D0017316B /* ICloudManager.swift in Sources */,
@@ -601,7 +605,6 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "ARMS App/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
-				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Allow this app to use BLE?";
 				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "Allow to connect to peripherals?";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -638,7 +641,6 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "ARMS App/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
-				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Allow this app to use BLE?";
 				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "Allow to connect to peripherals?";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;

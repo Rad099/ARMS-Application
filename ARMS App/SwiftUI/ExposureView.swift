@@ -36,7 +36,7 @@ struct ExposureView: View {
             self.managedObjectContext = managedObjectContext
         }
     
-    let items = [Item(title: "PAQR", color: Color.red), Item(title: "Particle Exposure", color: Color.blue), Item(title: "VOC Exposure", color: Color.green), Item(title: "CO Exposure", color: Color.gray), Item(title: "CO2 Exposure", color: Color.yellow )]
+    let items = [Item(title: "PAQR", color: Color.red), Item(title: "Particle Exposure", color: Color.blue), Item(title: "VOC Exposure", color: Color.green), Item(title: "CO Exposure", color: Color.gray), Item(title: "CO2 Exposure", color: Color.yellow ), Item(title: "UV Exposure", color: Color.orange)]
     
         @State private var showDetailView = false
         @State private var selectedTab = "Daily" // For the tabs in the detail view
@@ -74,30 +74,32 @@ struct ExposureView: View {
 
 struct DetailView: View {
     @Binding var selectedTab: String
-    var managedObjectContext: NSManagedObjectContext // Add this lin
+    var managedObjectContext: NSManagedObjectContext
     var type: PollutantType
+
     var body: some View {
         TabView(selection: $selectedTab) {
-                GraphView(pollutantType: type, managedObjectContext: managedObjectContext, timeFrame: selectedTab)
+            GraphView(pollutantType: type, managedObjectContext: managedObjectContext, timeFrame: selectedTab)
                 .tabItem {
                     Label("Daily", systemImage: "calendar")
                 }
-                .tag("Daily")
+                .tag(TimeFrame.daily.rawValue)
             
-                GraphView(pollutantType: type, managedObjectContext: managedObjectContext, timeFrame: selectedTab)
+            GraphView(pollutantType: type, managedObjectContext: managedObjectContext, timeFrame: selectedTab)
                 .tabItem {
                     Label("Weekly", systemImage: "calendar")
                 }
-                .tag("Weekly")
+                .tag(TimeFrame.weekly.rawValue)
             
-               GraphView(pollutantType: type, managedObjectContext: managedObjectContext, timeFrame: selectedTab)
+            GraphView(pollutantType: type, managedObjectContext: managedObjectContext, timeFrame: selectedTab)
                 .tabItem {
                     Label("Monthly", systemImage: "calendar")
                 }
-                .tag("Monthly")
+                .tag(TimeFrame.monthly.rawValue)
         }
     }
 }
+
 
 #Preview {
     ExposureView(managedObjectContext: PersistenceController.shared.container.viewContext)

@@ -148,31 +148,7 @@ class User {
         //storeThresholds(thresholds: self.AmbientThresholds)
     }
     
-    
-    // SECTION: get methods
-    /*
-    func getPM() -> (pm1: Int, pm2_5: Int, pm10: Int) {
-        print("pm1: \(self.userThresholds.pm1Thresh) pm2.5: \(self.userThresholds.pm2_5Thresh) pm10: \(self.userThresholds.pm10Thresh)")
-        return (self.userThresholds.pm1Thresh, self.userThresholds.pm2_5Thresh, self.userThresholds.pm10Thresh)
-    }
-    
-    func getvoc() -> Int {
-        print("voc threshold: \(self.userThresholds.vocThresh)")
-        return self.userThresholds.vocThresh
-    }
-    
-    func getCo() -> Int {
-        print("co threshold: \(self.userThresholds.coThresh)")
-        return self.userThresholds.coThresh
-    }
-    
-    func getUv() -> Int {
-        print("uv threshold: \(self.userThresholds.uvThresh)")
-        return self.userThresholds.uvThresh
-    }
-     
-     */
-    
+
     func getAge() -> Int {
         return self.age
     }

@@ -11,12 +11,7 @@ import SwiftUI
 struct FullAQIView: View {
     @ObservedObject var progressData = ProgressData()
     @Environment(\.colorScheme) var scheme
-   // @State var progressValue: Float
-    //var degrees: Double
-
-        // Define the maximum Y-coordinate start point for the gesture to be considered as initiated from the top edge
-   // let topEdgeThreshold: CGFloat = 100
-
+   
 
     var body: some View {
         VStack {
@@ -24,12 +19,12 @@ struct FullAQIView: View {
                             .frame(width: 40, height: 5)
                             .cornerRadius(2.5)
                             .opacity(0.1)
-                            .padding().foregroundColor(.black)
+                            .padding()
                         
             ScrollView {
                 VStack(spacing: 40) {
                     Text("Air Quality Report").font(Font.system(size: 25))
-                        .bold().foregroundColor(.white)
+                        .bold()
                     ZStack {
                         ProgressBar(progress: Float(paqr.value))
                             .frame(width: 270.0, height: 260.0)
@@ -76,13 +71,6 @@ struct FullAQIView: View {
     }
 }
 
-struct paqrStats: View {
-    var body: some View {
-        VStack {
-            Text("PAQR Report")
-        }
-    }
-}
 
 struct pollutionStats: View {
     var aqi = 0
@@ -90,16 +78,16 @@ struct pollutionStats: View {
     
     var body: some View {
         Text("Particle Pollution").padding()
-            .font(Font.system(size: 30)).foregroundColor(.white)
+            .font(Font.system(size: 30))
         HStack {
             VStack(spacing: 20) {
                 Text("")
-                Text("EPA AQI(1-hour)").padding(.trailing, 50).foregroundColor(.white)
-                Text("Concentrations(5-min)").foregroundColor(.white)
+                Text("EPA AQI(1-hour)").padding(.trailing, 50)
+                Text("Concentrations(5-min)")
                 
             } .padding(.trailing, 150)
             
-            Text("5").foregroundColor(.white)
+            Text("5")
         }
     }
 }
@@ -110,18 +98,18 @@ struct aqiStats: View {
     var body: some View {
         let pollutant = PollutantManager.shared.getPollutant(named: type)
         Text(String(type.rawValue)).padding()
-            .font(Font.system(size: 30)).foregroundColor(.white)
+            .font(Font.system(size: 30))
         HStack {
             VStack(spacing: 20) {
                 Text("")
                 Text("EPA AQI(1-hour)").padding(.trailing, 50).foregroundColor(.white)
-                Text("Concentrations(5-min)").foregroundColor(.white)
+                Text("Concentrations(5-min)")
                 
             } .padding(.trailing, 150)
             
             VStack(spacing: 20) {
-                Text("\(pollutant!.currentHourIndex)").foregroundColor(.white)
-                Text("\(pollutant!.concentration)").foregroundColor(.white)
+                Text("\(pollutant!.currentHourIndex)")
+                Text("\(pollutant!.concentration)")
                 
             }
             

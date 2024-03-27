@@ -18,12 +18,6 @@ class UVSubviewController: UIHostingController<UVContentView> {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-    
-    
-
     }
-    
-    
-    
 }
 

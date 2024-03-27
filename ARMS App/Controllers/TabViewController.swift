@@ -114,11 +114,10 @@ class TabViewController: UITabBarController {
             for viewController in viewControllers {
                 if let homeTab = viewController as? HomeViewController  {
                     homeTab.user = self.currentUser
+                    homeTab.bleManager = self.bleManager
                 } else if let settingsTab = viewController as? SettingsViewController {
                     settingsTab.User = self.currentUser
                   
-                } else if let exposureTab = viewController as? ExposureViewController {
-                   // exposureTab.User = self.currentUser
                 }
             }
         }

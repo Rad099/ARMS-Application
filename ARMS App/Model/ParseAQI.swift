@@ -9,12 +9,18 @@
 
 import Foundation
 import CoreBluetooth
+import UIKit
 
 
+
+protocol batteryUpdateDelegate: AnyObject {
+    func didUpdateBattery(percentage: String)
+}
 
 
 // ensures serial execution for updating concentration values
 let serialQueue = DispatchQueue(label: "com.yourapp.PollutantSerialQueue")
+let uvQueue = DispatchQueue(label: "com.yourapp.UVQueue")
 
 func parseCharacteristic(characteristic: CBCharacteristic) {
     var values: [UInt16] = []
@@ -23,9 +29,6 @@ func parseCharacteristic(characteristic: CBCharacteristic) {
     for i in stride(from: 0, to: 12, by: 2) {
         values.append((UInt16(characteristicData[i]) << 8) | UInt16(characteristicData[i + 1]))
     }
-    
-    //print("Successfully parsed!")
-    //print(values)
     
     updateValues(v1: values[0], v2: values[1], v3: values[2], v4: values[3], v5: values[4], v6: values[5])
 }
@@ -43,10 +46,32 @@ func updateValues(v1: UInt16, v2: UInt16, v3: UInt16, v4: UInt16, v5: UInt16, v6
         //uv!.setIndoorIndex(index: Double(v6))
         
         PollutantManager.shared.saveAll()
+        paqr.saveValue(for: Int(paqr.value), context: PersistenceController.shared.container.viewContext)
+        PollutantManager.shared.checkHighest()
         
     }
     
-    scheduleNotification()
+    
+    
+    //scheduleNotification()
+}
+
+func parseUV(characteristic: CBCharacteristic) {
+    guard let data = characteristic.value else { return }
+    let uvValue = data.first ?? 0
+    uvQueue.async {
+        uv.setValue(index: Double(uvValue))
+        UVManager.shared.saveIndex()
+    }
+   
+    
+}
+
+func parseBatteryLevel(fromCharacteristic characteristic: CBCharacteristic) -> Int {
+    guard let data = characteristic.value else { return -1 }
+    let batteryLevel = data.first ?? 0
+    return Int(batteryLevel)
+    
 }
 
 

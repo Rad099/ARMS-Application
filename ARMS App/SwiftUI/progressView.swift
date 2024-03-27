@@ -12,24 +12,12 @@ class ProgressData: ObservableObject {
     //static let shared = ProgressData()
     @Published var progressValue: Float = 0
     @Published var degrees: Double = -110
-    @Published var showCustomNotification: Bool = false // Add this line
-    @Published var notificationMessage: String = "" // And this lin
-   
-
 
     func setProgressValue(to newValue: Float) {
             withAnimation {
                 self.progressValue = newValue
                 self.degrees = Double(newValue) * 220.0 - 110.0
-                
-                // Decide when to show the notification, e.g., progressValue exceeds 0.8 (80%)
-                if self.progressValue < 0.8 {
-                    self.notificationMessage = "Air quality is poor!"
-                    self.showCustomNotification = true
-                    // Optionally, add logic to hide the notification after some time
-                } else {
-                    self.showCustomNotification = false
-                }
+  
             }
         }
     
@@ -56,14 +44,7 @@ struct ContentView: View {
     @ObservedObject var voc =  PollutantManager.shared.getPollutant(named: .voc)!
     @ObservedObject var co =  PollutantManager.shared.getPollutant(named: .co)!
     @ObservedObject var co2 = PollutantManager.shared.getPollutant(named: .co2)!
-    //var context: NSManagedObjectContext
     
-    //init(progressData: ProgressData, paqr: PAQR) {
-           // self.progressData = progressData
-           // self.paqr = paqr
-            // Setup observer for PAQR value changes
-        
-   // }
    
     var body: some View {
         ZStack {
@@ -102,11 +83,7 @@ struct ContentView: View {
             }
             .background(Color.clear)
             
-            if progressData.showCustomNotification {
-                NotificationView(message: progressData.notificationMessage)
-                    .animation(.easeInOut, value: progressData.showCustomNotification)
-                    .padding(.top, 20) // Adjust padding as needed
-            }
+
         }
 
         
@@ -126,7 +103,7 @@ func timeSinceUpdateMessage() -> String {
             return "No data available"
         }
     
-        print("Latest record we got: \(latestRecord)")
+        //print("Latest record we got: \(latestRecord)")
         
         return relativeTimeString(for: latestRecord)
        // return manualRelativeTimeString(for: latestRecord)
@@ -240,7 +217,7 @@ private func getColorForValue(_ value: Int, _ type: PollutantType) -> Color {
                        //.foregroundColor(Color.init(.white))
                        .offset(CGSize(width: 0, height: -20))
                        
-                    if progress >= 80 && progress <= 100 {
+                    if progress > 80 && progress <= 100 {
                         Text("Air is good.")
                             .bold()
                             .foregroundColor(Color.init(hex: "32E1A0"))

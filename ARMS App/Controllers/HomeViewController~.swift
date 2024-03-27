@@ -143,7 +143,7 @@ func updateUserInterface() {
         let size = min(statusCircle.bounds.width, statusCircle.bounds.height)
         statusCircle.layer.cornerRadius = size / 2
         statusCircle.clipsToBounds = true
-        statusCircle.layer.borderWidth = 0.5
+        statusCircle.layer.borderWidth = 1.0
         statusCircle.layer.borderColor = UIColor.clear.cgColor
 
         if isConnected {

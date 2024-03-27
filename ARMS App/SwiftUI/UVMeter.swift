@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct UVIndexMeter: View {
-    var uvIndex: CGFloat // Assuming uvIndex is between 0 and 11
+    var uvIndex: CGFloat
 
     private struct UVIndexZone {
         var range: ClosedRange<CGFloat>
@@ -23,22 +23,36 @@ struct UVIndexMeter: View {
     ]
 
     var body: some View {
-        
-            ZStack {
-                RoundedRectangle(cornerRadius: 20) // Soft edges
-                    .fill(
-                        LinearGradient(
-                            gradient: Gradient(colors: [Color.init(hex: "ED4D4D"), Color.init(hex: "E59148"), Color.init(hex: "EFBF39"),  Color.init(hex: "EEED56"), Color.init(hex: "32E1A0")]), // Multiple colors
-                            startPoint: .top, // Start of the gradient
-                            endPoint: .bottom // End of the gradient
-                        )
+        ZStack {
+            RoundedRectangle(cornerRadius: 20) // Soft edges
+                .fill(
+                    LinearGradient(
+                        gradient: Gradient(colors: [Color.init(hex: "ED4D4D"), Color.init(hex: "E59148"), Color.init(hex: "EFBF39"), Color.init(hex: "EEED56"), Color.init(hex: "32E1A0")]), // Multiple colors
+                        startPoint: .top, // Start of the gradient
+                        endPoint: .bottom // End of the gradient
                     )
-                    .frame(width: 30, height: 300) // Specific dimensions
-        }
-                
-                
+                )
+                .frame(width: 30, height: 300)
+                .overlay(
+                    Circle()
+                        .fill(Color.white)
+                        .frame(width: 20, height: 20)
+                        .offset(y: calculateCircleOffset(from: uvIndex, for: 300))
+            )
         }
     }
+
+    
+private func calculateCircleOffset(from uvIndex: CGFloat, for meterHeight: CGFloat) -> CGFloat {
+      
+        let maxUVIndex: CGFloat = 11
+       
+        let ratio = uvIndex / maxUVIndex
+  
+        let offset = (1 - ratio) * (meterHeight - 20) - (meterHeight / 2 - 10)
+        return offset
+    }
+}
 
 struct cutLines: View {
     var body: some View {
@@ -52,36 +66,34 @@ struct cutLines: View {
 }
 
 struct UVContentView: View {
-    @State private var uvIndex: CGFloat = 0
-    var progress: Int = 9
+    @ObservedObject var uv = UVManager.shared.uvObj()
+  
 
     var body: some View {
+        let progress = uv.currentValue
         VStack {
             Text("Personalized UV Meter")
                     .font(Font.system(size: 18))
                     .bold()
-                    .foregroundColor(.white)
                     .padding(.top, 25)
                     .padding(.bottom, 20)
             
             ZStack {
                 HStack(spacing: 100) {
-                        UVIndexMeter(uvIndex: uvIndex).padding(.trailing).overlay(VStack {
-                            cutLines().offset(CGSize(width: 0, height: 50))
-                            cutLines().offset(CGSize(width: 0, height: 10))
+                        UVIndexMeter(uvIndex: progress).padding(.trailing).overlay(VStack {
+                            cutLines().offset(CGSize(width: 0, height: 35))
+                            cutLines().offset(CGSize(width: 0, height: 5))
  
-                            cutLines().offset(CGSize(width: 0, height: -20))
-                            cutLines().offset(CGSize(width: 0, height: -60))
+                            cutLines().offset(CGSize(width: 0, height: -50))
+                            cutLines().offset(CGSize(width: 0, height: -80))
                         }
                 )
                     VStack(spacing: 30) {
                         Text("UV Index:").font(Font.system(size: 30))
                             .bold()
-                            .foregroundColor(.white)
-                        Text("\(Int(progress))")
+                        Text("\(Int(uv.currentValue))")
                             .font(Font.system(size: 60))
                             .bold()
-                           .foregroundColor(Color.init(.white))
                            .offset(CGSize(width: 0, height: -20))
                            
                         if progress >= 0 && progress <= 2 {
@@ -91,7 +103,7 @@ struct UVContentView: View {
                         } else if progress <= 5 && progress > 2 {
                             Text("Mild exposure.")
                                 .bold()
-                                .foregroundColor(Color.init(.mint))
+                                .foregroundColor(Color.init(hex: "EEED56"))
                         } else if progress > 5 && progress <= 7 {
                             Text("unsafe UV exposure.")
                                 .bold()
@@ -102,7 +114,7 @@ struct UVContentView: View {
                                 .bold()
                                 .foregroundColor(Color.init(.orange))
                         } else {
-                            Text("UV exposure too high.")
+                            Text("UV exposure extremely high.")
                                 .bold()
                                 .foregroundColor(Color.init(.red))
                         }

@@ -12,7 +12,6 @@ class AQINotificationViewController: UIViewController {
     
     override func viewDidLoad() {
             super.viewDidLoad()
-            
             // Perform initial view setup
             setupViews()
         }

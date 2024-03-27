@@ -9,6 +9,8 @@
 			<string></string>
 		</dict>
 	</array>
+	<key>NSBluetoothServices</key>
+	<array/>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
