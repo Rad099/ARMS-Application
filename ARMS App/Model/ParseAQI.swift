@@ -43,17 +43,11 @@ func updateValues(v1: UInt16, v2: UInt16, v3: UInt16, v4: UInt16, v5: UInt16, v6
         co2.setConcentration(for: Int(v5))
         co.setConcentration(for: Int(v6))
         paqr.setValue()
-        //uv!.setIndoorIndex(index: Double(v6))
-        
         PollutantManager.shared.saveAll()
-        paqr.saveValue(for: Int(paqr.value), context: PersistenceController.shared.container.viewContext)
         PollutantManager.shared.checkHighest()
+        scheduleUpdateNotification()
         
     }
-    
-    
-    
-    //scheduleNotification()
 }
 
 func parseUV(characteristic: CBCharacteristic) {

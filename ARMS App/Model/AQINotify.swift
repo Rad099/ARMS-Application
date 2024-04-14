@@ -42,10 +42,10 @@ func titleForPAQR(_ score: Int) -> String {
 
 func titleForConentration(_ score: Double, _ type: PollutantType) -> String {
     switch score {
-    case 0.2:
-            return "\(type.rawValue) is mild "
-    case 0.4:
-            return " \(type.rawValue) is high "
+    //case 0.2:
+          //  return "\(type.rawValue) is mild "
+   // case 0.4:
+          //  return " \(type.rawValue) is high "
     case 0.6:
             return "\(type.rawValue) is very high "
     case 1.0:
@@ -57,10 +57,40 @@ func titleForConentration(_ score: Double, _ type: PollutantType) -> String {
 
 func messageForConcentration(_ score: Double, _ type: PollutantType) -> String {
     switch score {
+    //case 0.2:
+       // return "avoid heavy exertion or leave the area"
+   // case 0.4:
+       //     return "It is recommended to leave the area"
+    case 0.6:
+            return "CAUTION: concentartions are very high. You may start to feel symptoms"
+    case 1.0:
+            return "WARNING: concentrations are extremely high. You will feel symptoms. Move immediatley"
+    default:
+            return "Unknown Level"
+    }
+}
+
+func personalizedTitle(_ score: Double, _ type: PollutantType) -> String {
+    switch score {
+    case 0.2:
+        return "sensitive pollutant: \(type.rawValue) mild"
+    case 0.4:
+           return "sensitive pollutant: \(type.rawValue) is high"
+    case 0.6:
+            return "sensitive pollutant: \(type.rawValue) is very high"
+    case 1.0:
+            return "sensitive pollutant: \(type.rawValue) hazardous"
+    default:
+            return "Unknown Level"
+    }
+}
+
+func personalizedMessage(_ score: Double, _ type: PollutantType) -> String {
+    switch score {
     case 0.2:
         return "avoid heavy exertion or leave the area"
     case 0.4:
-            return "It is recommended to leave the area"
+           return "It is recommended to leave the area"
     case 0.6:
             return "CAUTION: concentartions are very high. You may start to feel symptoms"
     case 1.0:
@@ -76,6 +106,30 @@ func scheduleNotification(_ score: Double, _ type: PollutantType) {
     let content = UNMutableNotificationContent()
     content.title = titleForConentration(score, type)
     content.body = messageForConcentration(score, type)
+    content.sound = UNNotificationSound.default
+
+    // Trigger the notification in 5 seconds
+    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+
+    // Unique identifier for each notification
+    let identifier = UUID().uuidString
+
+    // Create the request
+    let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+
+    // Add the request to the notification center
+    UNUserNotificationCenter.current().add(request) { error in
+        if let error = error {
+            print("Error scheduling notification: \(error)")
+        }
+    }
+}
+
+func scheduleUpdateNotification() {
+    print("We got to notifications")
+    let content = UNMutableNotificationContent()
+    content.title = "Average Collection Update"
+    content.body = "Check latest values"
     content.sound = UNNotificationSound.default
 
     // Trigger the notification in 5 seconds

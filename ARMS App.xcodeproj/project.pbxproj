@@ -46,6 +46,8 @@
 		51C3F2F82B906D51000A143F /* GraphViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C3F2F72B906D51000A143F /* GraphViewModel.swift */; };
 		51C57AE42B6A0C0C00B114AF /* UVMeter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C57AE32B6A0C0C00B114AF /* UVMeter.swift */; };
 		51C57AE62B6D8EEF00B114AF /* FullAQIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C57AE52B6D8EEF00B114AF /* FullAQIView.swift */; };
+		51D2E61D2BB3F8D200DB5437 /* HealthStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D2E61C2BB3F8D200DB5437 /* HealthStatus.swift */; };
+		51D2E61F2BB829A400DB5437 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D2E61E2BB829A400DB5437 /* OnboardingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -109,6 +111,8 @@
 		51C3F2F72B906D51000A143F /* GraphViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphViewModel.swift; sourceTree = "<group>"; };
 		51C57AE32B6A0C0C00B114AF /* UVMeter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UVMeter.swift; sourceTree = "<group>"; };
 		51C57AE52B6D8EEF00B114AF /* FullAQIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullAQIView.swift; sourceTree = "<group>"; };
+		51D2E61C2BB3F8D200DB5437 /* HealthStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthStatus.swift; sourceTree = "<group>"; };
+		51D2E61E2BB829A400DB5437 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -195,6 +199,7 @@
 			isa = PBXGroup;
 			children = (
 				51A313E12B6996CB00B71041 /* progressView.swift */,
+				51D2E61E2BB829A400DB5437 /* OnboardingView.swift */,
 				51C57AE52B6D8EEF00B114AF /* FullAQIView.swift */,
 				51C57AE32B6A0C0C00B114AF /* UVMeter.swift */,
 				519107642B8D57F700689CE0 /* ExposureView.swift */,
@@ -234,6 +239,7 @@
 				516865852B5102640017316B /* Thresholds.swift */,
 				5134E6132B4A5B7700AD9F01 /* Pollutant.swift */,
 				519D891F2B76062400A8D275 /* PAQR.swift */,
+				51D2E61C2BB3F8D200DB5437 /* HealthStatus.swift */,
 				519D89212B76148B00A8D275 /* BreakpointDataCollection.swift */,
 				51A4B9F42B468E6600CCF637 /* ParseAQI.swift */,
 				51154C112B749E5E003BB12A /* PersistenceController.swift */,
@@ -409,12 +415,14 @@
 				5134E6162B4B947A00AD9F01 /* BLEManager.swift in Sources */,
 				5134E6142B4A5B7700AD9F01 /* Pollutant.swift in Sources */,
 				510AA42B2B64E96C00D3A78B /* PageViewController.swift in Sources */,
+				51D2E61F2BB829A400DB5437 /* OnboardingView.swift in Sources */,
 				5134E6122B4A57A900AD9F01 /* User.swift in Sources */,
 				51A4B9F32B468AF700CCF637 /* ExposureViewController.swift in Sources */,
 				5133D49A2B4F24DE0024419F /* GradientView.swift in Sources */,
 				51A4B9F12B46859700CCF637 /* SettingsViewController.swift in Sources */,
 				516865862B5102640017316B /* Thresholds.swift in Sources */,
 				5198265F2B78BE2A00C76558 /* NotificationView.swift in Sources */,
+				51D2E61D2BB3F8D200DB5437 /* HealthStatus.swift in Sources */,
 				51154C122B749E5E003BB12A /* PersistenceController.swift in Sources */,
 				516865882B53B4BB0017316B /* NewUserViewController.swift in Sources */,
 				51A4B9F52B468E6600CCF637 /* ParseAQI.swift in Sources */,

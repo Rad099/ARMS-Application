@@ -116,6 +116,7 @@ class NewUserViewController: UIViewController, UITextFieldDelegate {
             }
             if let record = record {
                 print("User saved successfully with record ID: \(record.recordID)")
+                paqr.applyWeights()
             }
         }
     }

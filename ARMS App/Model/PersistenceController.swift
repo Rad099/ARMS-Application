@@ -17,7 +17,6 @@ class PersistenceController {
         container = NSPersistentCloudKitContainer(name: "PollutantData")
         container.loadPersistentStores { (storeDescription, error) in
             if let error = error as NSError? {
-                // Handle the error
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         }

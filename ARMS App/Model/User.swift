@@ -14,6 +14,7 @@ import UserNotifications
 // user class
 class User {
     // user properties
+    
     var recordID: CKRecord.ID?
     var age: Int
     var heartDisease: Bool
@@ -22,14 +23,16 @@ class User {
     var name: String
     var resporatoryDisease: Bool
     var email: String
+    
     //@Published var progressValue: Int = 0
     
     static let shared = User()
-
+    
     
     // threshold instances
     //var AmbientThresholds = defaultAmbientThresholds
     var ageType = "Not Set"
+    var userConditions: [String] = []
     //var IndoorThresholds = thresholds()
     
     init(name: String = "", age: Int = 0, heart: Bool = false, asthma: Bool = false, lung: Bool = false, resp: Bool = false, email: String = "") {
@@ -40,24 +43,42 @@ class User {
         self.name = name
         self.resporatoryDisease = resp
         self.email = email
-        self.ageType = setAgeRange(age: age)
-        //self.AmbientThresholds = setHourThresholds()
+        self.ageType = User.setAgeRange(age: age)
+        self.userConditions = setConditions()
+        
+        
+        
     }
-  /*
-    func compareIndexToThreshold(AQIType: PollutantType, thresh: pollutantThresholds, index: UInt16) {
-        let notificationIndexes: [Int] = [
-               findRangeIndexForValue(index, in: self.AmbientThresholds.pm1) ?? 0,
-               findRangeIndexForValue(index, in: self.AmbientThresholds.pm2_5) ?? 0,
-               findRangeIndexForValue(index, in: self.AmbientThresholds.pm10) ?? 0,
-               findRangeIndexForValue(index, in: self.AmbientThresholds.voc) ?? 0,
-               findRangeIndexForValue(index, in: self.AmbientThresholds.co) ?? 0
-           ]
+    
+    
+    func updateUser(user: User) {
+        self.age = user.age
+        self.heartDisease = user.heartDisease
+        self.asthma = user.asthma
+        self.lungDisease = user.lungDisease
+        self.name = user.name
+        self.resporatoryDisease = user.resporatoryDisease
+        self.email = user.email
+        self.ageType = User.setAgeRange(age: age)
+        self.userConditions = setConditions()
+        
+    }
+    
 
-           for notifyIndex in notificationIndexes where notifyIndex >= 2 {
-               scheduleNotification(withMessage: messageForRangeIndex(notifyIndex))
-           }
-       }
-        */
+    func setConditions() -> [String] {
+        var conditions: [String] = []
+        
+        if heartDisease {
+            print("this is true")
+            conditions.append("heart disease")
+        }
+        if asthma { conditions.append("asthma") }
+        if resporatoryDisease { conditions.append("respiratory disease") }
+        if ageType != "Not Set" { conditions.append(ageType) }
+        
+        return conditions
+}
+  
         
     func findRangeIndexForValue(_ value: UInt16, in aqiType: AQIRange) -> Int? {
         for (index, range) in aqiType.range.enumerated() {
@@ -118,7 +139,7 @@ class User {
     }
     
  
-    private func setAgeRange(age: Int) -> String {
+    static private func setAgeRange(age: Int) -> String {
         var type: String
         if age < 18 && age > 0 {
             type = "young"
@@ -127,7 +148,7 @@ class User {
         } else if age > 55 {
             type = "elderly"
         } else {
-            type = "not set"
+            type = "Not Set"
         }
         
         return type
@@ -203,12 +224,7 @@ extension User {
            record["LungDisease"] = lungDisease
            record["RespiratoryDisease"] = resporatoryDisease
            record["Email"] = email
-           //record["AgeType"] = ageType
-
-           //if let thresholdsData = serializeThresholds(AmbientThresholds) {
-             //  record["AmbientPollutantThresholds"] = thresholdsData as CKRecordValue
-           //}
-            
+        
 
            return record
        }

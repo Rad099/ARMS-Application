@@ -35,6 +35,7 @@ class Pollutant:  ObservableObject {
    @Published var currentIndoorIndex: Int = 0
    @Published var concentration: Int = 0
    var isHigh = false
+   var isSensitive = false
 
 
     
@@ -214,24 +215,33 @@ extension UV {
 
 // Core Data Section
 extension Pollutant {
-    // Assume this function replaces your existing setConcentration method
-    func saveConcentration(for concentration: Int, context: NSManagedObjectContext) {
-        // Validate the concentration value before proceeding.
-        guard concentration >= 0 else {
-            print("Invalid concentration value. Skipping save operation.")
+    
+    func saveConcentration(for concentration: Int?, context: NSManagedObjectContext) {
+        guard let concentration = concentration, concentration >= 0 else {
+            print("Invalid or nil concentration value. Skipping save operation.")
             return
         }
 
         let newRecord = ConcentrationRecord(context: context)
-        newRecord.type = self.type.rawValue // Assuming PollutantType conforms to RawRepresentable
+        newRecord.type = self.type.rawValue
         newRecord.concentration = Int32(concentration)
         newRecord.timestamp = Date()
-        do {
-            try context.save()
-        } catch {
-            print("Failed to save pollutant record: \(error)")
+
+        // Avoid nesting performAndWait blocks
+        saveContext(context)
+    }
+
+    private func saveContext(_ context: NSManagedObjectContext) {
+        context.perform {
+            do {
+                try context.save()
+                print("Concentration record saved successfully.")
+            } catch let saveError as NSError {
+                print("Failed to save pollutant record: \(saveError), \(saveError.userInfo)")
+            }
         }
     }
+
 
     func saveHourIndex(for index: Int, context: NSManagedObjectContext) {
         // Validate the index value before proceeding.
@@ -248,8 +258,28 @@ extension Pollutant {
             try context.save()
         } catch {
             print("Failed to save pollutant record: \(error)")
+            self.handleError(error, context: context)
         }
     }
+    
+    private func handleError(_ error: Error, context: NSManagedObjectContext) {
+            print("Handling error: \(error)")
+            if let nsError = error as NSError? {
+                // Analyze error codes and decide on next steps
+                switch nsError.code {
+                case NSManagedObjectValidationError, NSValidationMultipleErrorsError, NSValidationMissingMandatoryPropertyError:
+                    print("Validation error: \(error)")
+                case Int(NSCocoaErrorDomain) where nsError.code == NSManagedObjectConstraintValidationError:
+                    print("Constraint violation: \(error)")
+                default:
+                    print("Unresolved error \(nsError), \(nsError.userInfo)")
+                    if context.hasChanges {
+                        context.rollback()  // Roll back changes in the context
+                        print("Changes rolled back due to error.")
+                    }
+                }
+            }
+        }
 
     
     func fetchMostRecentConcentrationRecord(ofType type: PollutantType, context: NSManagedObjectContext) -> ConcentrationRecord? {
@@ -311,10 +341,17 @@ class PollutantManager: ObservableObject {
         
     }
     
+    func monitorPollutants() {
+        
+        /*
+         NotificationCenter.default.post(name: .highPollutant, object: nil, userInfo: ["highPollutant": selectedType!])
+         */
+    }
+    
     func checkHighest() {
         var highPollutant: Pollutant?
         var highestValue = 0
-        
+      
         for (type, pollutant) in self.pollutants {
             let max = pollutant.concentration
             if max > highestValue {
@@ -323,20 +360,15 @@ class PollutantManager: ObservableObject {
             }
         }
         
+    
+    
         guard let highPollutant = highPollutant else { return }
         let (con, min, max, minscore, maxscore) = highPollutant.getData()
-        
-        
-        
-        if canScheduleNotificationFor(pollutant: highPollutant) && maxscore >= 0.2 {
+
+        if canScheduleNotificationFor(pollutant: highPollutant) && maxscore >= 0.6 {
             scheduleNotification(maxscore, highPollutant.type)
             highPollutant.lastNotifyTime = Date()
         }
-        
-        
-        
-        
-        
     }
     
     // Function to check if enough time has passed since the last notification for this pollutant
@@ -394,6 +426,12 @@ class PollutantManager: ObservableObject {
         }
 }
 
+extension Notification.Name {
+    static let isHigh = Notification.Name("isHigh")
+    static let highPollutant = Notification.Name("highPollutant")
+    
+
+}
 
 
 class UVManager: ObservableObject {

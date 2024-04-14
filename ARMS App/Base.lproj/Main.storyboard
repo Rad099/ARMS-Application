@@ -88,7 +88,7 @@
                                                 <color key="progressTintColor" systemColor="systemGreenColor"/>
                                             </progressView>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iGd-yb-Vjc" userLabel="statusCircle">
-                                                <rect key="frame" x="188" y="69" width="15" height="15"/>
+                                                <rect key="frame" x="187.5" y="69" width="15" height="15"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="15" id="4on-Ej-RQ0"/>
@@ -126,59 +126,16 @@
                                     <constraint firstItem="ASb-pg-c8W" firstAttribute="centerY" secondItem="cjr-di-kvi" secondAttribute="centerY" id="mga-dK-SXu"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SGA-Mb-RLP" userLabel="notifyShadow">
-                                <rect key="frame" x="12" y="190" width="382" height="59"/>
-                                <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zWH-BT-jXT" userLabel="NotifyView">
-                                        <rect key="frame" x="0.0" y="0.0" width="382" height="59"/>
-                                        <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Particle Pollution is high" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N3s-3L-95I">
-                                                <rect key="frame" x="8" y="8" width="366" height="21"/>
-                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
-                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Refer to the AQ Report" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d6J-gG-yxg">
-                                                <rect key="frame" x="8" y="34" width="366" height="17"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                        </subviews>
-                                        <color key="backgroundColor" systemColor="systemBlueColor"/>
-                                        <constraints>
-                                            <constraint firstItem="N3s-3L-95I" firstAttribute="centerY" secondItem="zWH-BT-jXT" secondAttribute="centerY" constant="-11" id="4it-b8-uKc"/>
-                                            <constraint firstItem="N3s-3L-95I" firstAttribute="leading" secondItem="zWH-BT-jXT" secondAttribute="leading" constant="8" id="Qhe-Pw-32i"/>
-                                            <constraint firstItem="N3s-3L-95I" firstAttribute="trailing" secondItem="zWH-BT-jXT" secondAttribute="trailingMargin" id="tyk-Ey-Ex3"/>
-                                        </constraints>
-                                    </view>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstItem="zWH-BT-jXT" firstAttribute="leading" secondItem="SGA-Mb-RLP" secondAttribute="leadingMargin" constant="-8" id="5DH-Sr-xzr"/>
-                                    <constraint firstItem="zWH-BT-jXT" firstAttribute="bottom" secondItem="SGA-Mb-RLP" secondAttribute="bottomMargin" constant="8" id="Gpo-rD-WSg"/>
-                                    <constraint firstItem="zWH-BT-jXT" firstAttribute="leading" secondItem="SGA-Mb-RLP" secondAttribute="leadingMargin" constant="-8" id="I6N-uH-xiD"/>
-                                    <constraint firstItem="zWH-BT-jXT" firstAttribute="top" secondItem="SGA-Mb-RLP" secondAttribute="topMargin" constant="-8" id="KmQ-2z-xaz"/>
-                                    <constraint firstItem="zWH-BT-jXT" firstAttribute="top" secondItem="SGA-Mb-RLP" secondAttribute="topMargin" constant="-8" id="OkS-FL-vgH"/>
-                                    <constraint firstAttribute="bottomMargin" secondItem="zWH-BT-jXT" secondAttribute="bottom" constant="-8" id="Pgp-wN-feq"/>
-                                    <constraint firstItem="zWH-BT-jXT" firstAttribute="trailing" secondItem="SGA-Mb-RLP" secondAttribute="trailingMargin" constant="8" id="UOV-xb-wv4"/>
-                                    <constraint firstAttribute="trailingMargin" secondItem="zWH-BT-jXT" secondAttribute="trailing" constant="-8" id="mR8-RP-bkv"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="cCt-mG-g8N"/>
                         <color key="backgroundColor" name="HomeTabSet"/>
                         <constraints>
-                            <constraint firstItem="SGA-Mb-RLP" firstAttribute="leading" secondItem="cjr-di-kvi" secondAttribute="leading" id="5Cn-gg-IvO"/>
                             <constraint firstItem="cCt-mG-g8N" firstAttribute="bottom" secondItem="caa-Ee-4cg" secondAttribute="bottom" constant="48" id="69S-jP-E6j"/>
-                            <constraint firstItem="SGA-Mb-RLP" firstAttribute="top" secondItem="cjr-di-kvi" secondAttribute="bottom" constant="25" id="95Y-ob-drW"/>
                             <constraint firstItem="cCt-mG-g8N" firstAttribute="trailing" secondItem="caa-Ee-4cg" secondAttribute="trailing" constant="12" id="IsY-iP-4Ya"/>
                             <constraint firstItem="caa-Ee-4cg" firstAttribute="leading" secondItem="cCt-mG-g8N" secondAttribute="leading" constant="12" id="Jh8-r8-5H8"/>
                             <constraint firstItem="caa-Ee-4cg" firstAttribute="leading" secondItem="cCt-mG-g8N" secondAttribute="leading" constant="12" id="Ks8-wx-Iuf"/>
                             <constraint firstItem="caa-Ee-4cg" firstAttribute="leading" secondItem="cCt-mG-g8N" secondAttribute="leading" constant="12" id="LNa-Qn-Oam"/>
                             <constraint firstItem="cjr-di-kvi" firstAttribute="trailing" secondItem="caa-Ee-4cg" secondAttribute="trailing" id="OGS-41-g9l"/>
-                            <constraint firstItem="caa-Ee-4cg" firstAttribute="top" secondItem="SGA-Mb-RLP" secondAttribute="bottom" constant="21" id="TBJ-iN-Mnt"/>
-                            <constraint firstItem="SGA-Mb-RLP" firstAttribute="trailing" secondItem="2Eo-aZ-Xyn" secondAttribute="trailingMargin" id="a1Y-lM-Gpz"/>
                             <constraint firstItem="cjr-di-kvi" firstAttribute="leading" secondItem="caa-Ee-4cg" secondAttribute="leading" id="dFH-48-Y27"/>
                             <constraint firstItem="caa-Ee-4cg" firstAttribute="top" secondItem="cjr-di-kvi" secondAttribute="bottom" constant="105" id="dqe-WX-bKP"/>
                             <constraint firstItem="caa-Ee-4cg" firstAttribute="leading" secondItem="cCt-mG-g8N" secondAttribute="leading" constant="12" id="obo-Oa-Lux"/>
@@ -194,11 +151,7 @@
                         <outlet property="batteryLabel" destination="hxC-IC-S1b" id="pid-Sn-I6o"/>
                         <outlet property="batteryProgress" destination="GEv-US-vV2" id="Z2q-r3-aMt"/>
                         <outlet property="connectionLabal" destination="Ms3-3r-rGg" id="rhG-6p-Vb5"/>
-                        <outlet property="notifyBody" destination="d6J-gG-yxg" id="Jua-mD-epb"/>
-                        <outlet property="notifyLabel" destination="zWH-BT-jXT" id="Ens-f4-fNw"/>
-                        <outlet property="notifyTitle" destination="N3s-3L-95I" id="Gw3-Vt-DYm"/>
                         <outlet property="pageContainerView" destination="iIy-FG-qL8" id="rbj-2R-Egu"/>
-                        <outlet property="shadowNotify" destination="SGA-Mb-RLP" id="KhV-ap-dfK"/>
                         <outlet property="shadowView" destination="caa-Ee-4cg" id="pbK-5L-IEU"/>
                         <outlet property="statusCircle" destination="iGd-yb-Vjc" id="835-pb-4rz"/>
                         <outlet property="topShadowView" destination="cjr-di-kvi" id="rwb-LJ-Y0D"/>
@@ -551,9 +504,6 @@
         </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGreenColor">
             <color red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

@@ -12,33 +12,106 @@ import CoreData
 var progressData = ProgressData()
 var user: User?
 
+
+var paqrReady = false
+
 struct PollutantWeights {
-    var pm1Weight: Int = 10
-    var pm25Weight: Int = 10
-    var pm10Weight: Int = 10
-    var vocWeight: Int = 30
-    var coWeight: Int = 20
-    var co2Weight: Int = 20
-    
-    // Function to apply adjustments
-    mutating func applyAdjustments(_ adjustments: [String: Int]) {
-        pm1Weight += adjustments["pm1", default: 0]
-        pm25Weight += adjustments["pm2.5", default: 0]
-        pm10Weight += adjustments["pm10", default: 0]
-        vocWeight += adjustments["voc", default: 0]
-        coWeight += adjustments["co", default: 0]
-        co2Weight += adjustments["co2", default: 0]
+    var weights: [PollutantType: Int]
+    var sensitive: Set<PollutantType> = []
+    var pollutants = PollutantManager.shared.getArray()
+
+    init() {
+        weights = [.pm1: 10, .pm2_5: 10, .pm10: 10, .voc: 30, .co: 20, .co2: 20]
     }
+
+    mutating func applyAdjustments(for conditions: [String], with adjustments: [String: [String: Int]]) {
+        for condition in conditions {
+            guard let conditionAdjustments = adjustments[condition] else { continue }
+            
+            for (key, adjustment) in conditionAdjustments {
+                if let pollutant = PollutantType(rawValue: key) {
+                    weights[pollutant, default: 0] += adjustment
+                    sensitive.insert(pollutant)  // Mark as sensitive (prioritized)
+                    
+                    
+                }
+            }
+        }
+        
+        for pollutant in pollutants {
+            pollutant.isSensitive = sensitive.contains(pollutant.type)
+        }
+        
+       
+        redistributeWeights()
+    }
+
+    private mutating func redistributeWeights() {
+        let totalCurrentWeight = weights.values.reduce(0, +)
+        var adjustmentNeeded = totalCurrentWeight - 100
+
+        if adjustmentNeeded == 0 { return }
+
+        var attempts = 0
+        while adjustmentNeeded != 0 && attempts < 100 {  // Safeguard with attempts to avoid infinite loops
+            var totalDecrementThisRound = 0
+
+            for (pollutant, weight) in weights {
+                if !sensitive.contains(pollutant) {
+                    let decrement = min(weight - 1, adjustmentNeeded)  // Ensure we do not take more than needed or make weights negative
+                    weights[pollutant] = weight - decrement
+                    totalDecrementThisRound += decrement
+                    adjustmentNeeded -= decrement
+                    if adjustmentNeeded == 0 {
+                        break
+                    }
+                }
+            }
+
+            attempts += 1  // Increment attempts to ensure we do not loop infinitely
+        }
+
+        // Final pass to clean up any residual due to rounding issues
+        if adjustmentNeeded != 0 {
+            finalizeWeights(adjustmentNeeded)
+        }
+    }
+
+    private mutating func finalizeWeights(_ initialAdjustmentNeeded: Int) {
+        var adjustmentNeeded = initialAdjustmentNeeded  // Make it a mutable variable
+        for (pollutant, weight) in weights.sorted(by: { $0.value > $1.value }) {
+            if !sensitive.contains(pollutant) {
+                let adjustment = min(abs(adjustmentNeeded), weight - 1) * (adjustmentNeeded > 0 ? -1 : 1)
+                weights[pollutant]! += adjustment
+                adjustmentNeeded += adjustment
+                if adjustmentNeeded == 0 { break }
+            }
+        }
+    }
+    
+    func updatePollutants(_ pollutants: [Pollutant]) {
+        for pollutant in pollutants {
+            pollutant.setWeight(withWeight: Double(weights[pollutant.type, default: 0]))
+        }
+    }
+
 }
 
+     
 // Health condition adjustments
 let adjustments: [String: [String: Int]] = [
-    "heart disease": ["co": 20],
-    "asthma": ["pm2.5": 15, "pm10": 15],
-    "respiratory disease": ["pm10": 20, "voc": 10],
-    "children": ["pm2.5": 10, "voc": 5],
-    "elderly": ["co": 10, "co2": 10]
+    "heart disease": ["CO": 20, "PM2.5": 10, "PM1": 10],
+    "asthma": ["PM2.5": 15, "PM10": 15],
+    "respiratory disease": ["PM10": 10, "PM2.5": 10, "PM1": 10 , "VOC": 10],
+    "young": ["PM2.5": 15, "PM1": 15, "VOC": 5],
+    "elderly": ["CO": 10, "CO2": 10]
 ]
+
+
+
+
+
+
 
 
 class PAQR: ObservableObject {
@@ -52,9 +125,19 @@ class PAQR: ObservableObject {
 
     init(pollutants: [Pollutant]) {
         self.pollutants = pollutants
-        //self.user = user
-
+        //defaultWeights()
         self.setValue() // Initialize value
+    }
+    
+    
+    
+    func applyWeights() {
+        var weights = PollutantWeights()
+        weights.applyAdjustments(for: User.shared.userConditions, with: adjustments)
+        print("Conditions: \(User.shared.userConditions)")
+        weights.updatePollutants(pollutants)
+        print(weights)
+        self.setValue()
     }
     
     func defaultWeights() {
@@ -66,20 +149,12 @@ class PAQR: ObservableObject {
         self.pollutants[5].setWeight(withWeight: 20.0)
     }
     
-    func calculateWeights(forConditions conditions: [String]) -> PollutantWeights {
-        var finalWeights = PollutantWeights()
-        for condition in conditions {
-            if let conditionAdjustments = adjustments[condition] {
-                finalWeights.applyAdjustments(conditionAdjustments)
-            }
-        }
-        return finalWeights
-    }
+    
 
     
     func setValue() {
         var mod = 100.0
-        defaultWeights()
+       // self.applyWeights()
         for pollutant in pollutants {
             let (con, min, max, minscore, maxscore) = pollutant.getData()
             var score = calculateScore(value: con, minValue: Int(min), maxValue: Int(max), minScore: minscore, maxScore: maxscore)
@@ -88,12 +163,9 @@ class PAQR: ObservableObject {
             }
     
             mod -= (score*pollutant.weight)
-           // print("we are getting: \(score*pollutant.weight)")
-            //print("score: \(score) with weight: \(pollutant.weight) for type \(pollutant.type)")
+            print("score: \(score) with weight: \(pollutant.weight) for type \(pollutant.type)")
         }
         print("mod recieved: \(mod)")
-        
-        // TODO: add the paqr notification here
         
         DispatchQueue.main.async { [weak self] in
             self?.value = mod
@@ -112,24 +184,36 @@ class PAQR: ObservableObject {
         
         return score
     }
-    
-    func saveValue(for value: Int, context: NSManagedObjectContext) {
-        
-        let newRecord = PaqrRecord(context: context)
-        newRecord.value = Int32(value)
-        newRecord.timestamp = Date()
-        
-        do {
-            try context.save()
-        } catch {
-            print("Failed to store paqr value: \(error)")
-            
+    /*
+    func saveValue(for value: Int?, context: NSManagedObjectContext) {
+        guard let v = value, v >= 0 else {
+            print("Invalid or nil PAQR value. Skipping save operation.")
+            return
         }
         
+        let newRecord = PaqrRecord(context: context)
+        newRecord.value = Int32(v)
+        newRecord.timestamp = Date()
+        
+        saveContext(context)
+        
+    }
+    
+     */
+    private func saveContext(_ context: NSManagedObjectContext) {
+        context.perform {
+            do {
+                try context.save()
+                print("paqr record saved successfully.")
+            } catch let saveError as NSError {
+                print("Failed to save paqr: \(saveError), \(saveError.userInfo)")
+            }
+        }
     }
  }
 
 var paqr = PAQR(pollutants: PollutantManager.shared.getArray())
+
 
 
  

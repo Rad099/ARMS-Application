@@ -47,7 +47,57 @@ class ICloudManager: ObservableObject {
 
         self.db.add(queryOperation)
     }
+    
+    func updateUserRecord(user: User, completion: @escaping (Bool, Error?) -> Void) {
+            let predicate = NSPredicate(format: "Email == %@", user.email)
+            let query = CKQuery(recordType: "User", predicate: predicate)
+            let queryOperation = CKQueryOperation(query: query)
 
+            queryOperation.recordMatchedBlock = { recordID, result in
+                switch result {
+                case .success(let record):
+                    DispatchQueue.main.async {
+                        // Proceed to update the fetched record with new information
+                        self.update(record: record, with: user, completion: completion)
+                    }
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        completion(false, error)
+                    }
+                }
+            }
+
+            queryOperation.queryResultBlock = { result in
+                if case .failure(let error) = result {
+                    DispatchQueue.main.async {
+                        completion(false, error)
+                    }
+                }
+            }
+
+            db.add(queryOperation)
+        }
+
+        private func update(record: CKRecord, with user: User, completion: @escaping (Bool, Error?) -> Void) {
+            // Update the CKRecord with new information from the user
+            record["Name"] = user.name
+            record["Age"] = user.age
+            record["HeartDisease"] = user.heartDisease
+            record["Asthma"] = user.asthma
+            record["LungDisease"] = user.lungDisease
+            record["RespiratoryDisease"] = user.resporatoryDisease
+
+            db.save(record) { _, error in
+                DispatchQueue.main.async {
+                    if let error = error {
+                        completion(false, error)
+                    } else {
+                        completion(true, nil)
+                    }
+                }
+            }
+        }
+ 
 
     func checkICloudStatus(completion: @escaping (Bool, String?) -> Void) {
         CKContainer(identifier: "iCloud.ARMS-App").accountStatus { accountStatus, error in

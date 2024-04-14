@@ -1,17 +1,9 @@
-//
-//  SettingsViewController.swift
-//  ARMS App
-//
-//  Created by Radwan Alrefai on 1/4/24.
-//
-
 import UIKit
 
 class SettingsViewController: UIViewController, UITextFieldDelegate {
-    var User: User!
+    var user: User!
+    var iCloudManager = ICloudManager()
     
-    // initialize shared classes
-
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var nameText: UITextField!
     @IBOutlet weak var ageText: UITextField!
@@ -21,76 +13,71 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var updateButton: UIButton!
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupDelegates()
+        loadUserData()
+    }
+    
+    private func setupDelegates() {
         nameText.delegate = self
         ageText.delegate = self
         heartText.delegate = self
         lungText.delegate = self
         asthmaText.delegate = self
-        
-        print("settings loaded")
-        nameLabel.text = ("Name: \(User.name)")
-        nameText.text = ("\(User.name)")
-        ageText.text = ("\(User.age)")
-        heartText.text = ("\(User.heartDisease)")
-        lungText.text = ("\(User.lungDisease)")
-        asthmaText.text = ("\(User.asthma)")
+    }
     
+    private func loadUserData() {
+        print("Settings loaded")
+        nameLabel.text = "Name: \(user.name)"
+        nameText.text = user.name
+        ageText.text = "\(user.age)"
+        heartText.text = user.heartDisease ? "true" : "false"
+        lungText.text = user.lungDisease ? "true" : "false"
+        asthmaText.text = user.asthma ? "true" : "false"
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         updateButton.setTitle("Update User", for: .normal)
     }
     
     @IBAction func confirmUpdateTapped(_ sender: UIButton) {
-        if updateUser() == 1 {
-            updateButton.setTitle("User Updated!", for: .normal)
-        } else {
-            updateButton.setTitle("Error Updating!", for: .normal)
-        }
-
+        updateUser()
     }
     
-    private func updateUser() -> Int {
-        let newName = nameText.text ?? ""
-        let newAge = ageText.text ?? ""
-        let newHeartStatus = heartText.text ?? ""
-        let newLungStatus = lungText.text ?? ""
-        let newAsthmaStatus = asthmaText.text ?? ""
-        var verfiy = 1
-    
-        
-        if newName == "" {
-           verfiy = 0
-        } else if newAge == "" {
-           verfiy = 0
-        } else if (newHeartStatus != "true" || newHeartStatus != "false") {
-            verfiy = 0
-        } else if (newLungStatus != "true" || newLungStatus != "false") {
-            verfiy = 0
-        } else if (newAsthmaStatus != "true" || newAsthmaStatus != "false") {
-            verfiy = 0
+    private func updateUser() {
+        guard let newName = nameText.text, !newName.isEmpty,
+              let ageTextValue = ageText.text, let newAge = Int(ageTextValue),
+              let newHeartStatus = heartText.text?.lowercased(),
+              let newLungStatus = lungText.text?.lowercased(),
+              let newAsthmaStatus = asthmaText.text?.lowercased() else {
+            updateButton.setTitle("Error Updating! Check your inputs", for: .normal)
+            return
         }
         
-        if (verfiy == 1) {
-           // User.setUpdates(name: newName, age: Int(newAge)!, heart: Bool(newHeartStatus)!, lung: Bool(newLungStatus)!, asthma: Bool(newAsthmaStatus)!)
-            return 0
-        }
+        user.name = newName
+        user.age = newAge
+        user.heartDisease = newHeartStatus == "true"
+        user.lungDisease = newLungStatus == "true"
+        user.asthma = newAsthmaStatus == "true"
         
-        return 1
+        iCloudManager.updateUserRecord(user: user) { [weak self] success, error in
+            DispatchQueue.main.async {
+                if success {
+                    self?.updateButton.setTitle("User Updated!", for: .normal)
+                    paqr.applyWeights()
+                } else {
+                    self?.updateButton.setTitle("Error Updating!", for: .normal)
+                    print("Error: \(String(describing: error))")
+                }
+            }
+        }
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
-        
         return true
     }
-    
-    
-    
 }

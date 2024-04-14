@@ -15,7 +15,8 @@ class HomeViewController: UIViewController {
     var bleManager: BLEManager!
     
     var pageViewController: PageViewController!
-    var disconnectTimer: Timer?
+    var highPollutant: Bool = false
+    
    
     // initialize shared classes
     var user: User? {
@@ -37,10 +38,6 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var shadowView: UIView!
     @IBOutlet weak var topShadowView: UIView!
     
-    @IBOutlet weak var notifyLabel: UIView!
-    @IBOutlet weak var shadowNotify: UIView!
-    @IBOutlet weak var notifyTitle: UILabel!
-    @IBOutlet weak var notifyBody: UILabel!
     
     @IBOutlet weak var statusCircle: UIView!
     
@@ -56,11 +53,11 @@ class HomeViewController: UIViewController {
         configureStatusIndicator(isConnected: false)
         batteryProgress.progressTintColor = UIColor.green
         updateUserInterface()
+        
         NotificationCenter.default.addObserver(self, selector: #selector(toggleConnected(_:)), name: .bleManagerConnectionChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(updateBattery(_:)), name: .bleManagerBatteryUpdate, object: nil)
-        
+       
 
-        
         pageViewController = PageViewController()
         addChild(pageViewController)
         
@@ -96,6 +93,9 @@ class HomeViewController: UIViewController {
         isConnected ? configureStatusIndicator(isConnected: true) : configureStatusIndicator(isConnected: false)
     }
 }
+    
+    
+
 
 /**
  Function that updates the battery level based on the information received in a notification.
@@ -122,14 +122,14 @@ func updateUserInterface() {
     let cornerRadius: CGFloat = 20
     welcomeLabel.text = "Hi, \(user.name)!"
     
-    [pageContainerView, topView, notifyLabel].forEach { view in
+    [pageContainerView, topView].forEach { view in
         view.layer.cornerRadius = cornerRadius
         view.clipsToBounds = true
     }
     
     let shadowProperties: (color: CGColor, offset: CGSize, opacity: Float, radius: CGFloat) = (UIColor.black.cgColor, CGSize(width: 0, height: 7), 0.7, 5)
     
-    [shadowView, topShadowView, shadowNotify].forEach { view in
+    [shadowView, topShadowView].forEach { view in
         view.layer.shadowColor = shadowProperties.color
         view.layer.shadowOffset = shadowProperties.offset
         view.layer.shadowOpacity = shadowProperties.opacity
@@ -138,24 +138,28 @@ func updateUserInterface() {
     }
 }
     
-    func configureStatusIndicator(isConnected: Bool) {
-        // Ensure the view is a circle by setting the cornerRadius to half of the smaller dimension (width/height)
-        let size = min(statusCircle.bounds.width, statusCircle.bounds.height)
-        statusCircle.layer.cornerRadius = size / 2
-        statusCircle.clipsToBounds = true
-        statusCircle.layer.borderWidth = 0.5
-        statusCircle.layer.borderColor = UIColor.clear.cgColor
 
-        if isConnected {
-            statusCircle.backgroundColor = UIColor.green
-            addPulsingEffect(to: statusCircle)
-        } else {
-            statusCircle.layer.removeAllAnimations()
-            statusCircle.backgroundColor = UIColor.red
-        }
-    }
+func configureStatusIndicator(isConnected: Bool) {
+    let size = min(statusCircle.bounds.width, statusCircle.bounds.height)
+    statusCircle.layer.cornerRadius = size / 2
+    statusCircle.clipsToBounds = true
+    statusCircle.layer.borderWidth = 0.5
+    statusCircle.layer.borderColor = UIColor.clear.cgColor
     
-    func addPulsingEffect(to view: UIView) {
+    if isConnected {
+        statusCircle.backgroundColor = UIColor.green
+        addPulsingEffect(to: statusCircle)
+    } else {
+        resetStatusIndicator()
+    }
+}
+
+func resetStatusIndicator() {
+    statusCircle.layer.removeAllAnimations()
+    statusCircle.backgroundColor = UIColor.red
+}
+    
+func addPulsingEffect(to view: UIView) {
         let pulseAnimation = CABasicAnimation(keyPath: "transform.scale")
         pulseAnimation.duration = 1.0
         pulseAnimation.fromValue = 0.5
@@ -169,6 +173,7 @@ func updateUserInterface() {
     
         
 }
+
      
      
 

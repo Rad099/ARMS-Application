@@ -92,6 +92,10 @@ class TabViewController: UITabBarController {
                     // Record exists and User object is created
                     print("User fetched: \(user.name)")
                     self.currentUser = user
+                    User.shared.updateUser(user: user)
+                    print("User heart: \(User.shared.heartDisease)")
+                    paqr.applyWeights()
+                   
                 } else {
                     // Either record is nil or there was an error fetching the record
                     if let error = error {
@@ -116,7 +120,7 @@ class TabViewController: UITabBarController {
                     homeTab.user = self.currentUser
                     homeTab.bleManager = self.bleManager
                 } else if let settingsTab = viewController as? SettingsViewController {
-                    settingsTab.User = self.currentUser
+                    settingsTab.user = self.currentUser
                   
                 }
             }
