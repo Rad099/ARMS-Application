@@ -37,23 +37,5 @@ struct pollutantThresholds: Codable {
     
 }
 
-func serializeThresholds(_ thresholds: pollutantThresholds) -> Data? {
-    try? JSONEncoder().encode(thresholds)
-}
-
-func deserializeThresholds(_ data: Data) -> pollutantThresholds? {
-    try? JSONDecoder().decode(pollutantThresholds.self, from: data)
-}
-
-
-
-func limitMod(ranges: Array<Range>) -> (Array<Range>) {
-    var modifiedRanges = ranges
-        for i in 0..<modifiedRanges.count {
-            modifiedRanges[i].lowerLimit -= 20
-            modifiedRanges[i].upperLimit -= 20
-        }
-        return modifiedRanges
-    }
 
 

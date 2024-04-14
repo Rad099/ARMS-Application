@@ -24,6 +24,7 @@ class ProgressData: ObservableObject {
     func updateProgress(fromPAQRValue value: Int) {
         withAnimation {
             let newValue = Float(value) / 100.0 // Assuming PAQR.value ranges from 0 to 100
+    
             setProgressValue(to: newValue)
         }
     }
@@ -68,14 +69,14 @@ struct ContentView: View {
                         pollutantView(title: "PM1", value: pm1.concentration, type: .pm1)
                         pollutantView(title: "PM2.5", value: pm2_5.concentration, type: .pm2_5)
                         pollutantView(title: "PM10", value: pm10.concentration, type: .pm10)
-                        pollutantView(title: "VOC Index", value: voc.concentration, type: .voc)
+                        pollutantView(title: "VOC", value: voc.concentration, type: .voc)
                         pollutantView(title: "CO", value: co.concentration, type: .co)
                         pollutantView(title: "CO2", value: co2.concentration, type: .co2)
                     }
                     .offset(CGSize(width: 3, height: 260))
                 }
                 
-                Button("Show AQ Report") {
+                Button("View AQ Report") {
                     showingSheet = true
                 }.offset(CGSize(width: 0, height: -25))
                     .bold().padding(.top, 10)
@@ -222,22 +223,22 @@ private func getColorForValue(_ value: Int, _ type: PollutantType) -> Color {
                             .bold()
                             .foregroundColor(Color.init(hex: "32E1A0"))
                     } else if progress <= 80 && progress > 60 {
-                        Text("Air is mildy polluted.")
+                        Text("Sensitive pollutant may be high. Check report.")
                             .bold()
-                            .foregroundColor(Color.init(.mint))
+                            .foregroundColor(Color.init(.mint)).frame(maxWidth: 200).multilineTextAlignment(.center)
                     } else if progress > 40 && progress <= 60 {
-                        Text("Air is polluted.")
+                        Text("Multiple pollutants may be high. Check report")
                             .bold()
-                            .foregroundColor(Color.init(.yellow))
-                        
+                            .foregroundColor(Color.init(.yellow)).frame(maxWidth: 200).multilineTextAlignment(.center)
+
                     } else if progress > 20 && progress <= 40 {
-                        Text("Air is very unhealthy.")
+                        Text("Air is very unhealthy. Check report for details")
                             .bold()
-                            .foregroundColor(Color.init(.orange))
+                            .foregroundColor(Color.init(.orange)).frame(maxWidth: 200).multilineTextAlignment(.center)
                     } else {
-                        Text("Air is hazardous.")
+                        Text("Air is hazardous.Leave area immediately!")
                             .bold()
-                            .foregroundColor(Color.init(.red))
+                            .foregroundColor(Color.init(.red)).frame(maxWidth: 200).multilineTextAlignment(.center)
                     }
                     
                 }

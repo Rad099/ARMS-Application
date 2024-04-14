@@ -9,17 +9,44 @@ import Foundation
 import UserNotifications
 
 
+func messageForUV(_ index: Int) -> String {
+    switch index {
+    case 3:
+        return "UV index is above the normal range. It is recommended to apply protection or seek shade."
+    case 6:
+        return "UV index is 6 or above. Apply protection or seek shade."
+    case 8:
+        return "UV index is 8 or above. You will get skin burn if protection not applied!"
+    case 11:
+        return "UV index is at maximum value. You will feel skin burn in less than 10 minutes. Apply protection or seek shade immediately!"
+    default:
+        return "Unknown Level"
+    }
+}
+
+func titleForUV(_ score: Int) -> String {
+    switch score {
+    case 3:
+        return "UV Levels are mild."
+    case 6:
+        return "UV Levels are high."
+    case 8:
+        return "CAUTION: UV Levels are very high!"
+    case 11:
+        return "WARNING: UV Levels extremely high!"
+    default:
+        return "Unknown Level"
+    }
+}
 
 func messageForPAQR(_ index: Int) -> String {
     switch index {
     case 2:
-        return "PAQR score . Avoid heavy exertion or extended periods of time in the area"
-    case 3:
-        return "index level are high. It is advisable to leave the area "
+        return "Pollutant concentrations you are sensitive to may be high. Check your AQI Report for details."
     case 4:
-        return "CAUTION: index level is very high. You may start to feel symptoms"
+        return "Multiple pollutant concentrations may be high. Please check the AQI Report and leave the area"
     case 5:
-        return "WARNING: index level is extremely high. You will feel symptoms. Move immediatley"
+        return "Leave the Area Immediately!"
     default:
         return "Unknown Level"
     }
@@ -29,12 +56,10 @@ func titleForPAQR(_ score: Int) -> String {
     switch score {
     case 2:
         return "PAQR score below 80"
-    case 3:
-        return "index level are high. It is advisable to leave the area "
     case 4:
-        return "CAUTION: index level is very high. You may start to feel symptoms"
+        return "CAUTION: PAQR score below 60"
     case 5:
-        return "WARNING: index level is extremely high. You will feel symptoms. Move immediatley"
+        return "WARNING: PAQR scoe"
     default:
         return "Unknown Level"
     }
@@ -126,10 +151,9 @@ func scheduleNotification(_ score: Double, _ type: PollutantType) {
 }
 
 func scheduleUpdateNotification() {
-    print("We got to notifications")
     let content = UNMutableNotificationContent()
-    content.title = "Average Collection Update"
-    content.body = "Check latest values"
+    content.title = "5 minute update"
+    content.body = "Check the AQI Report for latest updates"
     content.sound = UNNotificationSound.default
 
     // Trigger the notification in 5 seconds

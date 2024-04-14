@@ -29,8 +29,6 @@ class PersistenceController {
                do {
                    try context.save()
                } catch {
-                   // Replace this implementation with code to handle the error appropriately.
-                   // fatalError() causes the application to generate a crash log and terminate.
                    let nserror = error as NSError
                    fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
                }

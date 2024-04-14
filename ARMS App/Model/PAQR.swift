@@ -169,10 +169,15 @@ class PAQR: ObservableObject {
         
         DispatchQueue.main.async { [weak self] in
             self?.value = mod
+            
         }
     
     }
     
+    
+   // func setNotify(_ value: Double) {
+        
+   // }
     func calculateScore(value: Int, minValue: Int, maxValue: Int, minScore: Double, maxScore: Double) -> Double {
 
         let clampedValue = min(max(value, minValue), maxValue)

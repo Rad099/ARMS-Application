@@ -26,7 +26,7 @@
 		516232EB2B41657800186E99 /* ARMS_AppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516232EA2B41657800186E99 /* ARMS_AppUITestsLaunchTests.swift */; };
 		516232F82B420DB500186E99 /* CBUUIDs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516232F72B420DB500186E99 /* CBUUIDs.swift */; };
 		516865842B50DC5D0017316B /* ICloudManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516865832B50DC5D0017316B /* ICloudManager.swift */; };
-		516865862B5102640017316B /* Thresholds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516865852B5102640017316B /* Thresholds.swift */; };
+		516865862B5102640017316B /* PollutantTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516865852B5102640017316B /* PollutantTypes.swift */; };
 		516865882B53B4BB0017316B /* NewUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516865872B53B4BB0017316B /* NewUserViewController.swift */; };
 		5168658A2B53C5A80017316B /* AQINotify.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516865892B53C5A80017316B /* AQINotify.swift */; };
 		518039582B5D12DB00F536E7 /* AQINotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518039572B5D12DB00F536E7 /* AQINotificationViewController.swift */; };
@@ -46,7 +46,6 @@
 		51C3F2F82B906D51000A143F /* GraphViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C3F2F72B906D51000A143F /* GraphViewModel.swift */; };
 		51C57AE42B6A0C0C00B114AF /* UVMeter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C57AE32B6A0C0C00B114AF /* UVMeter.swift */; };
 		51C57AE62B6D8EEF00B114AF /* FullAQIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C57AE52B6D8EEF00B114AF /* FullAQIView.swift */; };
-		51D2E61D2BB3F8D200DB5437 /* HealthStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D2E61C2BB3F8D200DB5437 /* HealthStatus.swift */; };
 		51D2E61F2BB829A400DB5437 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D2E61E2BB829A400DB5437 /* OnboardingView.swift */; };
 /* End PBXBuildFile section */
 
@@ -92,7 +91,7 @@
 		516232F72B420DB500186E99 /* CBUUIDs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBUUIDs.swift; sourceTree = "<group>"; };
 		516865822B50BB150017316B /* ARMS App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "ARMS App.entitlements"; sourceTree = "<group>"; };
 		516865832B50DC5D0017316B /* ICloudManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICloudManager.swift; sourceTree = "<group>"; };
-		516865852B5102640017316B /* Thresholds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Thresholds.swift; sourceTree = "<group>"; };
+		516865852B5102640017316B /* PollutantTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollutantTypes.swift; sourceTree = "<group>"; };
 		516865872B53B4BB0017316B /* NewUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewUserViewController.swift; sourceTree = "<group>"; };
 		516865892B53C5A80017316B /* AQINotify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AQINotify.swift; sourceTree = "<group>"; };
 		518039572B5D12DB00F536E7 /* AQINotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AQINotificationViewController.swift; sourceTree = "<group>"; };
@@ -111,7 +110,6 @@
 		51C3F2F72B906D51000A143F /* GraphViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphViewModel.swift; sourceTree = "<group>"; };
 		51C57AE32B6A0C0C00B114AF /* UVMeter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UVMeter.swift; sourceTree = "<group>"; };
 		51C57AE52B6D8EEF00B114AF /* FullAQIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullAQIView.swift; sourceTree = "<group>"; };
-		51D2E61C2BB3F8D200DB5437 /* HealthStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthStatus.swift; sourceTree = "<group>"; };
 		51D2E61E2BB829A400DB5437 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -236,10 +234,9 @@
 				516865892B53C5A80017316B /* AQINotify.swift */,
 				5134E6152B4B947A00AD9F01 /* BLEManager.swift */,
 				5134E6112B4A57A900AD9F01 /* User.swift */,
-				516865852B5102640017316B /* Thresholds.swift */,
+				516865852B5102640017316B /* PollutantTypes.swift */,
 				5134E6132B4A5B7700AD9F01 /* Pollutant.swift */,
 				519D891F2B76062400A8D275 /* PAQR.swift */,
-				51D2E61C2BB3F8D200DB5437 /* HealthStatus.swift */,
 				519D89212B76148B00A8D275 /* BreakpointDataCollection.swift */,
 				51A4B9F42B468E6600CCF637 /* ParseAQI.swift */,
 				51154C112B749E5E003BB12A /* PersistenceController.swift */,
@@ -420,9 +417,8 @@
 				51A4B9F32B468AF700CCF637 /* ExposureViewController.swift in Sources */,
 				5133D49A2B4F24DE0024419F /* GradientView.swift in Sources */,
 				51A4B9F12B46859700CCF637 /* SettingsViewController.swift in Sources */,
-				516865862B5102640017316B /* Thresholds.swift in Sources */,
+				516865862B5102640017316B /* PollutantTypes.swift in Sources */,
 				5198265F2B78BE2A00C76558 /* NotificationView.swift in Sources */,
-				51D2E61D2BB3F8D200DB5437 /* HealthStatus.swift in Sources */,
 				51154C122B749E5E003BB12A /* PersistenceController.swift in Sources */,
 				516865882B53B4BB0017316B /* NewUserViewController.swift in Sources */,
 				51A4B9F52B468E6600CCF637 /* ParseAQI.swift in Sources */,
