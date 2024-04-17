@@ -55,10 +55,12 @@ private func calculateCircleOffset(from uvIndex: CGFloat, for meterHeight: CGFlo
 }
 
 struct cutLines: View {
+    var text: String
     var body: some View {
         ZStack {
             Rectangle()
                 .frame(width: 2, height: 100, alignment: .center).rotationEffect(.degrees(90)).padding(.leading, 54)
+            Text(text).offset(CGSize(width: 60.0, height: 20.0)).frame(width: 100, alignment: .leading).font(Font.system(size: 15)).bold()
             
         }
     }
@@ -80,13 +82,13 @@ struct UVContentView: View {
             
             ZStack {
                 HStack(spacing: 100) {
-                        UVIndexMeter(uvIndex: progress).padding(.trailing).overlay(VStack {
-                            cutLines().offset(CGSize(width: 0, height: 35))
-                            cutLines().offset(CGSize(width: 0, height: 5))
- 
-                            cutLines().offset(CGSize(width: 0, height: -50))
-                            cutLines().offset(CGSize(width: 0, height: -80))
-                        }
+                    UVIndexMeter(uvIndex: progress).padding(.trailing).overlay(VStack {
+                        cutLines(text: "Very high").offset(CGSize(width: 0, height: 35))
+                        cutLines(text: "High").offset(CGSize(width: 0, height: 5))
+                        
+                        cutLines(text: "Mild").offset(CGSize(width: 0, height: -50))
+                        cutLines(text: "Safe").offset(CGSize(width: 0, height: -80))
+                    }
                 )
                     VStack(spacing: 30) {
                         Text("UV Index:").font(Font.system(size: 30))
@@ -105,16 +107,16 @@ struct UVContentView: View {
                                 .bold()
                                 .foregroundColor(Color.init(hex: "EEED56"))
                         } else if progress > 5 && progress <= 7 {
-                            Text("unsafe UV exposure.")
+                            Text("High UV exposure.")
                                 .bold()
                                 .foregroundColor(Color.init(.yellow))
                             
                         } else if progress > 7 && progress <= 10 {
-                            Text("UV exposure is high.")
+                            Text("Very high exposure.")
                                 .bold()
                                 .foregroundColor(Color.init(.orange))
                         } else {
-                            Text("UV exposure extremely high.")
+                            Text("Extremely high exposure.")
                                 .bold()
                                 .foregroundColor(Color.init(.red))
                         }

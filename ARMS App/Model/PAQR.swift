@@ -154,7 +154,6 @@ class PAQR: ObservableObject {
     
     func setValue() {
         var mod = 100.0
-       // self.applyWeights()
         for pollutant in pollutants {
             let (con, min, max, minscore, maxscore) = pollutant.getData()
             var score = calculateScore(value: con, minValue: Int(min), maxValue: Int(max), minScore: minscore, maxScore: maxscore)
@@ -175,9 +174,6 @@ class PAQR: ObservableObject {
     }
     
     
-   // func setNotify(_ value: Double) {
-        
-   // }
     func calculateScore(value: Int, minValue: Int, maxValue: Int, minScore: Double, maxScore: Double) -> Double {
 
         let clampedValue = min(max(value, minValue), maxValue)

@@ -1,10 +1,3 @@
-//
-//  GraphViewModel.swift
-//  ARMS App
-//
-//  Created by Radwan Alrefai on 2/29/24.
-//
-
 import Foundation
 import CoreData
 import Combine
@@ -20,7 +13,7 @@ class GraphViewModel: ObservableObject {
     var pollutantType: PollutantType
     var timeFrame: TimeFrame
     private var cancellables = Set<AnyCancellable>()
-    
+
     @Published var chartData: [(date: Date, value: Double)] = []
 
     init(context: NSManagedObjectContext, pollutantType: PollutantType, timeFrame: TimeFrame) {
@@ -38,11 +31,11 @@ class GraphViewModel: ObservableObject {
         let fetchRequest: NSFetchRequest<ConcentrationRecord> = ConcentrationRecord.fetchRequest()
         fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "type == %@", pollutantType.rawValue), timeFramePredicate()])
         fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \ConcentrationRecord.timestamp, ascending: true)]
-        
+
         do {
             let results = try managedObjectContext.fetch(fetchRequest)
             DispatchQueue.main.async {
-                self.chartData = results.map { (date: $0.timestamp!, value: Double($0.concentration)) }
+                self.chartData = self.aggregateData(results: results)
             }
         } catch {
             print("Failed to fetch data: \(error)")
@@ -70,5 +63,41 @@ class GraphViewModel: ObservableObject {
 
         return NSPredicate(format: "(timestamp >= %@) AND (timestamp < %@)", argumentArray: [startDate!, endDate!])
     }
+
+    private func aggregateData(results: [ConcentrationRecord]) -> [(date: Date, value: Double)] {
+        switch timeFrame {
+        case .daily:
+            return results.map { (date: $0.timestamp!, value: Double($0.concentration)) }
+        case .weekly, .monthly:
+            let groupedResults = Dictionary(grouping: results, by: { $0.timestamp!.startOfPeriod(for: timeFrame) })
+            return groupedResults.map { (key, values) in
+                let average = values.map { Double($0.concentration) }.reduce(0.0, +) / Double(values.count)
+                return (date: key, value: average)
+            }.sorted(by: { $0.date < $1.date })
+        }
+    }
 }
 
+extension Date {
+    func startOfPeriod(for timeFrame: TimeFrame) -> Date {
+        let calendar = Calendar.current
+        switch timeFrame {
+        case .weekly:
+            return calendar.startOfWeek(for: self)
+        case .monthly:
+            return calendar.startOfMonth(for: self)
+        default:
+            return self
+        }
+    }
+}
+
+extension Calendar {
+    func startOfWeek(for date: Date) -> Date {
+        return self.date(from: self.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date))!
+    }
+
+    func startOfMonth(for date: Date) -> Date {
+        return self.date(from: self.dateComponents([.year, .month], from: date))!
+    }
+}

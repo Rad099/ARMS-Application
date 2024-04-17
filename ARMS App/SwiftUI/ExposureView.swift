@@ -36,7 +36,7 @@ struct ExposureView: View {
             self.managedObjectContext = managedObjectContext
         }
     
-    let items = [Item(title: "PAQR", color: Color.red), Item(title: "Particle Exposure", color: Color.blue), Item(title: "VOC Exposure", color: Color.green), Item(title: "CO Exposure", color: Color.gray), Item(title: "CO2 Exposure", color: Color.yellow ), Item(title: "UV Exposure", color: Color.orange)]
+    let items = [Item(title: "PM1", color: Color.red), Item(title: "PM2.5", color: Color.blue), Item(title: "PM10", color: Color.teal), Item(title: "VOC Exposure", color: Color.green), Item(title: "CO Exposure", color: Color.orange), Item(title: "CO2 Exposure", color: Color.yellow )]
     
         @State private var showDetailView = false
         @State private var selectedTab = "Daily" // For the tabs in the detail view
@@ -48,10 +48,14 @@ struct ExposureView: View {
                 CustomCell(item: item)
                     .onTapGesture {
                         switch item.title {
-                                               case "Particle Exposure":
+                                               case "PM1":
+                                                   selectedPollutantType = .pm1
+                                               case "PM2.5":
+                                                   selectedPollutantType = .pm2_5
+                                               case "PM10":
                                                    selectedPollutantType = .pm10
                                                case "VOC Exposure":
-                                                    selectedPollutantType = .voc
+                                                   selectedPollutantType = .voc
                                                case "CO Exposure":
                                                    selectedPollutantType = .co
                                                case "CO2 Exposure":
@@ -63,12 +67,15 @@ struct ExposureView: View {
                     }
             }
             .navigationTitle("Exposure")
+            
         }
         .sheet(isPresented: $showDetailView) {
             if let pollutantType = selectedPollutantType {
                 DetailView(selectedTab: $selectedTab, managedObjectContext: managedObjectContext, type: pollutantType)
             }
-        }
+        } 
+        
+     
     }
 }
 

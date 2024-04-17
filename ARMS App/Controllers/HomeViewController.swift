@@ -48,7 +48,7 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         bleManager = BLEManager()
         batteryLabel.text = "---"
-        connectionLabal.text = "Not Connected"
+        connectionLabal.text = "Device Not Connected"
         batteryProgress.isHidden = true
         configureStatusIndicator(isConnected: false)
         batteryProgress.progressTintColor = UIColor.green
@@ -89,7 +89,7 @@ class HomeViewController: UIViewController {
  */
 @objc func toggleConnected(_ notification: Notification) {
     if let isConnected = notification.userInfo?["isConnected"] as? Bool {
-        connectionLabal.text = isConnected ? "Connected" : "Not Connected"
+        connectionLabal.text = isConnected ? "Device Connected" : "Device Not Connected"
         isConnected ? configureStatusIndicator(isConnected: true) : configureStatusIndicator(isConnected: false)
     }
 }
@@ -108,9 +108,18 @@ class HomeViewController: UIViewController {
         batteryProgress.isHidden = battLevel == -1 ? true : false
         if (battLevel != -1) {
             batteryProgress.setProgress((Float(battLevel))/100, animated: true)
+            if (battLevel > 50) {
+                batteryProgress.progressTintColor = UIColor.green
+            }
+            else if (battLevel < 50 && battLevel > 20) {
+                batteryProgress.progressTintColor = UIColor.yellow
+            } else if (battLevel < 20) {
+                batteryProgress.progressTintColor = UIColor.red
+            }
         }
     }
 }
+
     
     deinit {
             NotificationCenter.default.removeObserver(self)

@@ -113,7 +113,7 @@ struct aqiStats: View {
                 }
                 .frame(width: 100, alignment: .leading)
 
-                VStack(alignment: .leading, spacing: 0) {
+                VStack(alignment: .leading, spacing: 20) {
                     DisclosureGroup("What is \(pollutant.type.rawValue)?", isExpanded: $isExpanded) {
                         ScrollView {
                             Text(pollutantDetail(type))
@@ -126,16 +126,19 @@ struct aqiStats: View {
                     .animation(.easeInOut, value: isExpanded)
                     .padding(.top, 1)
                     
+                    
+                    Text("EPA Index: 5 ").padding(.top).bold()
+                    
                     Spacer()
                 }
             }
 
             // Clean and organized Status and Warning section
             VStack(alignment: .leading, spacing: 10) {
-                Text("Status:")
-                    .font(.title2)
-                    .bold()
-                    .foregroundColor(.blue)
+                //Text("Status:")
+                  //  .font(.title2)
+                  //  .bold()
+                   // .foregroundColor(.blue)
                 Text(warningText(type, concentrationValue, pollutant.isSensitive))
                     .padding()
                     .background(getColorForValue(concentrationValue, pollutant.type).opacity(0.2))
@@ -179,7 +182,7 @@ func warningText(_ type: PollutantType, _ value: Int, _ sensitive: Bool) -> Stri
         message += "The current concentration is normal. No safety measures needed"
         break
     case 1:
-        message += "The current concentraion is above normal. Consider shorter time in the area or limit exertion"
+        message += "The current concentration is above normal. Consider shorter time in the area or limit exertion"
         break
     case 2:
         message += "Concentration levels are a bit high. It is recommended to leave the area or limit exertion."
@@ -191,7 +194,7 @@ func warningText(_ type: PollutantType, _ value: Int, _ sensitive: Bool) -> Stri
         message += "WARNING: LEAVE THE AREA IMMEDIATELY! You will feel symptoms!"
         break
     default:
-        message += "not working"
+        message += "not working" // TODO: Make sure this never appears
         break
     }
     

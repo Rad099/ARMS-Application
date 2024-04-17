@@ -48,6 +48,7 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     func startScanning() {
         guard centralManager.state == .poweredOn else {
             customLog("Bluetooth is not powered on")
+            isConnected = false
             return
         }
         
@@ -92,9 +93,6 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
                     photon = restoredPhoton
                     photon.delegate = self
                     
-                    // Optionally, if your app logic requires immediate interaction with the peripheral,
-                    // you might start by discovering services, reading characteristics, or any other action here.
-                    //centralManager?.connect(photon, options: nil)
                 }
             }
         }
@@ -121,19 +119,39 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         photon.discoverServices(nil)
     }
     
+    
+    /*
     func centralManager(_ central: CBCentralManager, didDisconnect peripheral: CBPeripheral) {
         isConnected = false
         batteryLevel = -1
+        customLog("Disconnected from \(peripheral.name ?? "unknown device")")
+        ensureConnectionToPhoton()
+    }
+     
+     */
+    
+    func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
+        if let error = error {
+            print("Disconnected with error: \(error.localizedDescription)")
+        } else {
+            print("Disconnected without error.")
+        }
+        
+        isConnected = false
+        batteryLevel = -1
+        customLog("Disconnected from \(peripheral.name ?? "unknown device")")
         ensureConnectionToPhoton()
     }
     
     func ensureConnectionToPhoton() {
         if photon == nil || photon.state != .connected {
-            // Your scanning logic here
-            startScanning()
+            // Consider adding a delay here
+            isConnected = false
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { // wait 1 second before retrying
+                self.startScanning()
+            }
         }
     }
-
     
     // peripheral
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {

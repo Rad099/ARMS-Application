@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreData
+import UIKit
 
 
 // pollutant class to populate pollutant values
@@ -26,10 +27,7 @@ class Pollutant:  ObservableObject {
     var hourbreakpoints: [AQIBreakpoints]?
     var customBreakpoints: [Breakpoints]?
     var weight: Double = 0
-    var lastNotifyTime: Date? = nil
-   
- 
-    
+
    @Published var type: PollutantType
    @Published var currentHourIndex: Int = 0
    @Published var currentIndoorIndex: Int = 0
@@ -187,17 +185,34 @@ extension UV {
             print("Invalid uv value. Skipping save operation.")
             return
         }
+        
+        var taskID: UIBackgroundTaskIdentifier = .invalid
+        taskID = UIApplication.shared.beginBackgroundTask(withName: "Save UV Index") {
+              // This closure is called when the background time is about to expire
+              UIApplication.shared.endBackgroundTask(taskID)
+          }
         let newRecord = UVRecord(context: context)
         newRecord.value = self.currentValue
         newRecord.timestamp = Date()
         newRecord.type = self.type.rawValue
-        do {
-            try context.save()
-        } catch {
-            print("Failed to save uv record: \(error)")
+        
+        context.perform {
+            do {
+                try context.save()
+                print("Concentration record saved successfully.")
+            } catch let saveError as NSError {
+                print("Failed to save pollutant record: \(saveError), \(saveError.userInfo)")
+            }
+            
+            UIApplication.shared.endBackgroundTask(taskID)
         }
+        
+     
     }
     
+    private func saveContext(_ context: NSManagedObjectContext) {
+       
+    }
     func fetchMostRecentUVRecord(ofType type: PollutantType, context: NSManagedObjectContext) -> UVRecord? {
         let fetchRequest: NSFetchRequest<UVRecord> = UVRecord.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "type == %@", type.rawValue)
@@ -221,6 +236,12 @@ extension Pollutant {
             print("Invalid or nil concentration value. Skipping save operation.")
             return
         }
+        
+        var taskID: UIBackgroundTaskIdentifier = .invalid
+        taskID = UIApplication.shared.beginBackgroundTask(withName: "Save Concentration") {
+              // This closure is called when the background time is about to expire
+              UIApplication.shared.endBackgroundTask(taskID)
+          }
 
         let newRecord = ConcentrationRecord(context: context)
         newRecord.type = self.type.rawValue
@@ -228,10 +249,6 @@ extension Pollutant {
         newRecord.timestamp = Date()
 
         // Avoid nesting performAndWait blocks
-        saveContext(context)
-    }
-
-    private func saveContext(_ context: NSManagedObjectContext) {
         context.perform {
             do {
                 try context.save()
@@ -239,8 +256,13 @@ extension Pollutant {
             } catch let saveError as NSError {
                 print("Failed to save pollutant record: \(saveError), \(saveError.userInfo)")
             }
+            UIApplication.shared.endBackgroundTask(taskID)
         }
+        
+        
     }
+
+   
 
 
     func saveHourIndex(for index: Int, context: NSManagedObjectContext) {
@@ -325,6 +347,7 @@ class PollutantManager: ObservableObject {
     @Published var concentrationMRD: Date? = nil
     var hourMRD: Date? = nil
     var lastNotifyTime: Date? = nil
+    var isBackground: Bool = false
     
     @Published private var pollutants: [PollutantType: Pollutant]
     
@@ -341,49 +364,26 @@ class PollutantManager: ObservableObject {
         
     }
     
-    func monitorPollutants() {
-        
-        /*
-         NotificationCenter.default.post(name: .highPollutant, object: nil, userInfo: ["highPollutant": selectedType!])
-         */
-    }
-    
-    func checkHighest() {
-        var highPollutant: Pollutant?
-        var highestValue = 0
-      
-        for (type, pollutant) in self.pollutants {
-            let max = pollutant.concentration
-            if max > highestValue {
-                highestValue = max
-                highPollutant = pollutant
+    // TODO: verfiy that this works 04/17/24
+    func notifyHazards() {
+        if !isBackground { return }
+        for (_, pollutant) in self.pollutants {
+            let (_, _, _, minscore, maxscore) = pollutant.getData()
+            if maxscore >= 0.4 {
+                print("High pollutant: \(pollutant.type.rawValue) with concentration \(pollutant.concentration)")
+                scheduleNotification(maxscore, pollutant.type)
             }
         }
-        
-    
-    
-        guard let highPollutant = highPollutant else { return }
-        let (con, min, max, minscore, maxscore) = highPollutant.getData()
-
-        if canScheduleNotificationFor(pollutant: highPollutant) && maxscore >= 0.6 {
-            scheduleNotification(maxscore, highPollutant.type)
-            highPollutant.lastNotifyTime = Date()
-        }
     }
-    
-    // Function to check if enough time has passed since the last notification for this pollutant
-        private func canScheduleNotificationFor(pollutant: Pollutant) -> Bool {
-            guard let lastNotificationTime = pollutant.lastNotifyTime else { return true }
-            let currentTime = Date()
-            let timePassed = Calendar.current.dateComponents([.minute], from: lastNotificationTime, to: currentTime).minute ?? 0
-     
-            return timePassed >= 1 // minute
-        }
+        
     
     func getconcMRD() -> Date? {
         return self.concentrationMRD
     }
     
+    func checkState(background_state: Bool) {
+        isBackground = background_state
+    }
     func getArray() -> [Pollutant] {
         var array: Array<Pollutant> = []
         for pollutant in pollutants {
@@ -425,14 +425,6 @@ class PollutantManager: ObservableObject {
             }
         }
 }
-
-extension Notification.Name {
-    static let isHigh = Notification.Name("isHigh")
-    static let highPollutant = Notification.Name("highPollutant")
-    
-
-}
-
 
 class UVManager: ObservableObject {
     let context = PersistenceController.shared.container.viewContext
